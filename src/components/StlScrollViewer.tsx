@@ -26,10 +26,10 @@ export function StlScrollViewer({ src, alt, background = false }: StlScrollViewe
     }
 
     let frame: number | null = null
-    let mesh: THREE.Mesh | undefined
+    let mesh: THREE.LineSegments | undefined
     let targetRotation = 0
     let targetTilt = 0
-    let targetRoll = 0
+    let targetYaw = 0
     let isVisible = false
     let mounted = true
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -37,14 +37,6 @@ export function StlScrollViewer({ src, alt, background = false }: StlScrollViewe
     const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 100)
     const modelGroup = new THREE.Group()
     scene.add(modelGroup)
-    scene.add(new THREE.HemisphereLight(0xe9f6d2, 0x142029, 2.2))
-
-    const keyLight = new THREE.DirectionalLight(0xffffff, 3.3)
-    keyLight.position.set(3, 5, 4)
-    scene.add(keyLight)
-    const rimLight = new THREE.DirectionalLight(0x75bdd5, 2.2)
-    rimLight.position.set(-4, 2, -3)
-    scene.add(rimLight)
 
     const draw = () => renderer.render(scene, camera)
 
@@ -61,20 +53,20 @@ export function StlScrollViewer({ src, alt, background = false }: StlScrollViewe
         if (isVisible) draw()
         return
       }
-      const desiredTilt = -Math.PI / 2 + targetTilt
-      const rotationDistance = Math.abs(targetRotation - mesh.rotation.y)
+      const desiredTilt = -Math.PI / 4 + targetTilt
+      const rotationDistance = Math.abs(targetRotation - mesh.rotation.z)
       const tiltDistance = Math.abs(desiredTilt - mesh.rotation.x)
-      const rollDistance = Math.abs(targetRoll - mesh.rotation.z)
-      if (rotationDistance < 0.001 && tiltDistance < 0.001 && rollDistance < 0.001) {
-        mesh.rotation.y = targetRotation
+      const yawDistance = Math.abs(targetYaw - mesh.rotation.y)
+      if (rotationDistance < 0.001 && tiltDistance < 0.001 && yawDistance < 0.001) {
+        mesh.rotation.z = targetRotation
         mesh.rotation.x = desiredTilt
-        mesh.rotation.z = targetRoll
+        mesh.rotation.y = targetYaw
         draw()
         return
       }
-      mesh.rotation.y += (targetRotation - mesh.rotation.y) * 0.08
+      mesh.rotation.z += (targetRotation - mesh.rotation.z) * 0.08
       mesh.rotation.x += (desiredTilt - mesh.rotation.x) * 0.08
-      mesh.rotation.z += (targetRoll - mesh.rotation.z) * 0.08
+      mesh.rotation.y += (targetYaw - mesh.rotation.y) * 0.08
       draw()
       frame = window.requestAnimationFrame(render)
     }
@@ -104,8 +96,8 @@ export function StlScrollViewer({ src, alt, background = false }: StlScrollViewe
             return Math.min(1, Math.max(0, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)))
           })()
       targetRotation = progress * Math.PI * 4.5 + Math.sin(progress * Math.PI * 3) * 0.55
-      targetTilt = Math.sin(progress * Math.PI * 2.2) * 0.48 + (progress - 0.5) * 0.55
-      targetRoll = Math.sin(progress * Math.PI * 2.8) * 0.32 + (progress - 0.5) * 0.28
+      targetTilt = Math.sin(progress * Math.PI * 2.2) * 0.3 + (progress - 0.5) * 0.35
+      targetYaw = Math.sin(progress * Math.PI * 2.8) * 0.24
       startAnimation()
     }
 
@@ -129,14 +121,15 @@ export function StlScrollViewer({ src, alt, background = false }: StlScrollViewe
           return
         }
         geometry.center()
-        geometry.computeVertexNormals()
         geometry.computeBoundingSphere()
         const radius = geometry.boundingSphere?.radius || 1
-        const material = new THREE.MeshStandardMaterial({ color: 0xb9e84d, metalness: 0.45, roughness: 0.3 })
-        mesh = new THREE.Mesh(geometry, material)
-        mesh.rotation.x = -Math.PI / 2
+        const outlineGeometry = new THREE.EdgesGeometry(geometry, 18)
+        geometry.dispose()
+        const material = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.92 })
+        mesh = new THREE.LineSegments(outlineGeometry, material)
+        mesh.rotation.x = -Math.PI / 4
         modelGroup.add(mesh)
-        camera.position.set(0, 0, radius * 3.6)
+        camera.position.set(0, 0, radius * 2.4)
         camera.near = Math.max(radius / 100, 0.01)
         camera.far = radius * 20
         camera.updateProjectionMatrix()
