@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { MediaFrame } from '../components/MediaFrame'
+import { StlScrollViewer } from '../components/StlScrollViewer'
 import { ProjectCard } from '../components/ProjectCard'
 import { Reveal } from '../components/Reveal'
 import { SectionHeading } from '../components/SectionHeading'
 import { getProjectsByCategory, projects } from '../content/projects'
+import { legoStlAsset } from '../content/archive'
 import { siteProfile } from '../content/site'
 
 const engineeringProjects = getProjectsByCategory('engineering')
@@ -26,6 +28,9 @@ function ToolCloud({ tools }: { tools: string[] }) {
 export function HomePage() {
   return (
     <main id="top" className="home-page">
+      <div className="home-background-model" aria-label={`Interactive ${legoStlAsset.title} background model`}>
+        <StlScrollViewer src={legoStlAsset.src} alt={legoStlAsset.alt} title={legoStlAsset.title} background />
+      </div>
       <section className="hero page-shell" aria-labelledby="hero-title">
         <div className="hero-copy">
           <p className="eyebrow"><span className="signal-dot" aria-hidden="true" />Engineering + Blender</p>

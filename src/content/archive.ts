@@ -78,6 +78,12 @@ export const bottleStlAsset = {
   alt: "Rotating Mike and Patty's bottle STL model",
 }
 
+export const legoStlAsset = {
+  src: `${archiveMedia}/lego.stl`,
+  title: 'LEGO model',
+  alt: 'Rotating LEGO model STL asset',
+}
+
 export type CadProject = {
   slug: string
   title: string

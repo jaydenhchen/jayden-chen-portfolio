@@ -7,9 +7,12 @@ type StlScrollViewerProps = {
   alt: string
   title?: string
   background?: boolean
+  lineOpacity?: number
+  cameraDistance?: number
+  edgeThreshold?: number
 }
 
-export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', background = false }: StlScrollViewerProps) {
+export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', background = false, lineOpacity = 0.4, cameraDistance = 1.7, edgeThreshold = 18 }: StlScrollViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
 
@@ -126,17 +129,16 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
         geometry.computeBoundingSphere()
         modelRadius = geometry.boundingSphere?.radius || 1
         const radius = modelRadius
-        const outlineGeometry = new THREE.EdgesGeometry(geometry, 18)
+        const outlineGeometry = new THREE.EdgesGeometry(geometry, edgeThreshold)
         geometry.dispose()
-        material = new THREE.LineBasicMaterial({ color: modelColor(), transparent: true, opacity: 0.4 })
+        material = new THREE.LineBasicMaterial({ color: modelColor(), transparent: true, opacity: lineOpacity })
         mesh = new THREE.LineSegments(outlineGeometry, material)
         mesh.rotation.x = -Math.PI / 4
         modelGroup.add(mesh)
-        camera.position.set(0, 0, radius * 1.7)
+        camera.position.set(0, 0, radius * cameraDistance)
         camera.near = Math.max(radius / 100, 0.01)
         camera.far = radius * 20
         camera.updateProjectionMatrix()
-        setStatus('ready')
         updateScrollTarget()
         startAnimation()
       },
