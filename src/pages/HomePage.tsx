@@ -28,7 +28,7 @@ export function HomePage() {
     <main id="top" className="home-page">
       <section className="hero page-shell" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <p className="eyebrow"><span className="signal-dot" aria-hidden="true" />Engineering + Animation</p>
+          <p className="eyebrow"><span className="signal-dot" aria-hidden="true" />Engineering + Blender</p>
           <h1 id="hero-title">{siteProfile.headline}</h1>
           <p className="hero-intro">{siteProfile.intro}</p>
           <div className="hero-actions">
@@ -62,7 +62,7 @@ export function HomePage() {
           <div className="work-row">
             <div className="work-row-heading">
               <span className="row-number">02</span>
-              <div><h3 id="cgi-work-title">Animation</h3><p>Light, movement, and images that stay with you.</p></div>
+              <div><h3 id="cgi-work-title">Blender</h3><p>Light, movement, and images that stay with you.</p></div>
               <span className="row-count">{String(cgiProjects.length).padStart(2, '0')} studies</span>
             </div>
             <div className="project-grid" aria-labelledby="cgi-work-title">

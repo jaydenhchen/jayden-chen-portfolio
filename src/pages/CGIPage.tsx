@@ -9,17 +9,22 @@ function VideoGrid({ videos }: { videos: ArchiveVideo[] }) {
   return (
     <div className="archive-video-grid">
       {videos.map((video) => (
-        <article className={`archive-video-card${video.orientation === 'portrait' ? ' is-portrait' : ''}`} key={video.src}>
+        <article className={`project-card project-card-cgi archive-video-card${video.orientation === 'portrait' ? ' is-portrait' : ''}`} key={video.src}>
           <Link
-            className="archive-video-link"
+            className="project-card-link archive-video-link"
             to={`/cgi/${video.slug}`}
             aria-label={`View ${video.title} details`}
           >
             <MediaFrame asset={{ src: video.src, alt: video.alt, kind: 'video' }} variant="detail" autoplayPreview hoverAudio />
+            <div className="project-card-body archive-card-copy">
+              <div className="project-card-meta">
+                <span className="category-label">CGI video</span>
+                <span className="project-arrow" aria-hidden="true">↗</span>
+              </div>
+              <h3>{video.title}</h3>
+              <p>{video.alt}</p>
+            </div>
           </Link>
-          <div className="archive-card-copy">
-            <h3>{video.title}</h3>
-          </div>
         </article>
       ))}
     </div>
