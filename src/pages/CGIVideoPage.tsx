@@ -26,7 +26,7 @@ export function CGIVideoPage() {
         <Link className="back-link" to="/cgi"><span aria-hidden="true">←</span> Back to CGI archive</Link>
         <div className="project-hero-copy">
           <div>
-            <p className="eyebrow"><span className="category-dot" aria-hidden="true" />CGI / Video archive</p>
+            <p className="eyebrow"><span className="category-dot" aria-hidden="true" />CGI video</p>
             <h1 id="cgi-video-title">{video.title}</h1>
           </div>
           <p className="project-summary">{video.alt}</p>

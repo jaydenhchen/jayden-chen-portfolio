@@ -31,9 +31,9 @@ export function CGIPage() {
     <main className="archive-page cgi-page">
       <section className="archive-hero page-shell" aria-labelledby="cgi-title">
         <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
-        <p className="eyebrow"><span className="category-dot" aria-hidden="true" />CGI / Video archive</p>
-        <h1 id="cgi-title">Moving images.</h1>
-        <p className="archive-lede">The full animation set: short studies, product motion, and LEGO stories.</p>
+        <p className="eyebrow"><span className="category-dot" aria-hidden="true" />CGI videos</p>
+        <h1 id="cgi-title">CGI videos.</h1>
+        <p className="archive-lede">A collection of CGI videos, short studies, product motion, and LEGO stories.</p>
       </section>
       <section className="archive-video-group page-shell" aria-labelledby="cgi-landscape-title">
         <h2 id="cgi-landscape-title" className="archive-group-title">Landscape work</h2>
