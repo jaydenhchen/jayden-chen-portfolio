@@ -4,24 +4,19 @@ import { cgiVideos, type ArchiveVideo } from '../content/archive'
 
 const landscapeVideos = cgiVideos.filter((video) => video.orientation !== 'portrait')
 const portraitVideos = cgiVideos.filter((video) => video.orientation === 'portrait')
-function videoLink(video: ArchiveVideo) {
-  return video.youtubeUrl ?? video.src
-}
 
 function VideoGrid({ videos }: { videos: ArchiveVideo[] }) {
   return (
     <div className="archive-video-grid">
       {videos.map((video) => (
         <article className={`archive-video-card${video.orientation === 'portrait' ? ' is-portrait' : ''}`} key={video.src}>
-          <a
+          <Link
             className="archive-video-link"
-            href={videoLink(video)}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={video.youtubeUrl ? `Open ${video.title} on YouTube` : `Open ${video.title} video`}
+            to={`/cgi/${video.slug}`}
+            aria-label={`View ${video.title} details`}
           >
             <MediaFrame asset={{ src: video.src, alt: video.alt, kind: 'video' }} variant="detail" autoplayPreview hoverAudio />
-          </a>
+          </Link>
           <div className="archive-card-copy">
             <h3>{video.title}</h3>
           </div>

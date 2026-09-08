@@ -3,6 +3,7 @@ import { Link, Route, Routes, useLocation } from 'react-router-dom'
 import { Footer } from './components/Footer'
 import { SiteNav } from './components/SiteNav'
 import { CGIPage } from './pages/CGIPage'
+import { CGIVideoPage } from './pages/CGIVideoPage'
 import { HomePage } from './pages/HomePage'
 import { ProjectPage } from './pages/ProjectPage'
 const LazyCADPage = lazy(() => import('./pages/CADPage').then(({ CADPage }) => ({ default: CADPage })))
@@ -46,7 +47,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/cgi" element={<CGIPage />} />
-          <Route path="/cad" element={<LazyCADPage />} />
+          <Route path="/cgi/:slug" element={<CGIVideoPage />} />
           <Route path="/work/:slug" element={<ProjectPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

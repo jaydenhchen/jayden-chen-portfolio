@@ -317,3 +317,9 @@ body::before, body::after { display: none; }
 @media (max-width: 800px) {
   .archive-video-group-portrait .archive-video-grid { grid-template-columns: 1fr; }
 }
+
+.archive-video-page .media-frame-detail .media-frame-visual video { object-fit: contain; background: #0e0e0e; }
+.archive-video-page-portrait .project-hero-media { max-width: 34rem; margin-inline: auto; }
+.archive-video-page-portrait .media-frame-detail .media-frame-visual { aspect-ratio: 9 / 16; }
+.archive-video-page .project-meta-grid a { color: inherit; text-decoration-color: var(--lime); text-underline-offset: .2em; }
+.archive-video-page .project-meta-grid a:hover { color: var(--lime); }

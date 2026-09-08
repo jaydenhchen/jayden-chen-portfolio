@@ -6,10 +6,11 @@ type MediaFrameProps = {
   variant?: 'hero' | 'card' | 'detail'
   autoplayPreview?: boolean
   hoverAudio?: boolean
+  controls?: boolean
   loading?: 'eager' | 'lazy'
 }
 
-export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false, hoverAudio = false, loading = 'lazy' }: MediaFrameProps) {
+export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false, hoverAudio = false, controls = false, loading = 'lazy' }: MediaFrameProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [hasError, setHasError] = useState(!asset?.src)
   const [posterFailed, setPosterFailed] = useState(false)
@@ -68,7 +69,7 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
             poster={asset.poster}
             muted={autoplayPreview}
             playsInline
-            controls={false}
+            controls={controls}
             autoPlay={autoplayPreview}
             loop={autoplayPreview}
             tabIndex={hoverAudio ? 0 : undefined}
