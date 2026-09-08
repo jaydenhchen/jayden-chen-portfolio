@@ -7,8 +7,6 @@ const links = [
   { label: 'CAD', href: '/cad' },
   { label: 'CGI', href: '/cgi' },
   { label: 'Other projects', href: '/other' },
-  { label: 'About', href: '/#about' },
-  { label: 'Contact', href: '/#contact' },
 ]
 
 export function SiteNav() {
@@ -68,7 +66,7 @@ export function SiteNav() {
   return (
     <header className="site-nav">
       <div className="nav-inner">
-        <Link className="wordmark" to="/" aria-label={`${siteProfile.name} home`}>
+        <Link className={`wordmark${isLogoIntro ? ' logo-intro' : ''}`} to="/" aria-label={`${siteProfile.name} home`}>
           <span className="wordmark-mark" aria-hidden="true">{siteProfile.monogram}</span>
           <span className="wordmark-name">{siteProfile.name}</span>
         </Link>

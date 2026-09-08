@@ -27,7 +27,6 @@ export function CADProjectPage() {
         <Link className="back-link" to="/cad"><span aria-hidden="true">←</span> Back to CAD archive</Link>
         <div className="project-hero-copy">
           <div>
-            <p className="eyebrow"><span className="signal-dot" aria-hidden="true" />CAD project</p>
             <h1 id="cad-project-title">{project.title}</h1>
           </div>
           <p className="project-summary">{project.alt}</p>
@@ -48,9 +47,6 @@ export function CADProjectPage() {
         </dl>
       </section>
 
-      <nav className="project-next page-shell" aria-label="CAD project navigation">
-        <Link className="back-link" to="/cad"><span aria-hidden="true">←</span> Back to CAD archive</Link>
-      </nav>
     </main>
   )
 }

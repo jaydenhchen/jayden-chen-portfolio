@@ -10,9 +10,23 @@ type StlScrollViewerProps = {
   lineOpacity?: number
   cameraDistance?: number
   edgeThreshold?: number
+  rotationAxis?: 'x' | 'z'
+  initialRotationX?: number
+  initialRotationZ?: number
 }
 
-export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', background = false, lineOpacity = 0.4, cameraDistance = 1.7, edgeThreshold = 18 }: StlScrollViewerProps) {
+export function StlScrollViewer({
+  src,
+  alt,
+  title = 'Tiny Whoop Drone',
+  background = false,
+  lineOpacity = 0.4,
+  cameraDistance = 1.7,
+  edgeThreshold = 18,
+  rotationAxis = 'z',
+  initialRotationX = -Math.PI / 4,
+  initialRotationZ = 0,
+}: StlScrollViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
 
@@ -42,6 +56,13 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
     const modelGroup = new THREE.Group()
     scene.add(modelGroup)
 
+    const getRotation = () => rotationAxis === 'x' ? mesh?.rotation.x ?? 0 : mesh?.rotation.z ?? 0
+    const setRotation = (value: number) => {
+      if (!mesh) return
+      if (rotationAxis === 'x') mesh.rotation.x = value
+      else mesh.rotation.z = value
+    }
+
     const draw = () => renderer.render(scene, camera)
 
     const modelColor = () => document.documentElement.dataset.theme === 'light' ? 0x173a63 : 0xffffff
@@ -67,13 +88,13 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
         if (isVisible) draw()
         return
       }
-      const rotationDistance = Math.abs(targetRotation - mesh.rotation.z)
+      const rotationDistance = Math.abs(targetRotation - getRotation())
       if (rotationDistance < 0.001) {
-        mesh.rotation.z = targetRotation
+        setRotation(targetRotation)
         draw()
         return
       }
-      mesh.rotation.z += (targetRotation - mesh.rotation.z) * 0.05
+      setRotation(getRotation() + (targetRotation - getRotation()) * 0.05)
       draw()
       frame = window.requestAnimationFrame(render)
     }
@@ -133,7 +154,8 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
         geometry.dispose()
         material = new THREE.LineBasicMaterial({ color: modelColor(), transparent: true, opacity: lineOpacity })
         mesh = new THREE.LineSegments(outlineGeometry, material)
-        mesh.rotation.x = -Math.PI / 4
+        mesh.rotation.x = initialRotationX
+        mesh.rotation.z = initialRotationZ
         modelGroup.add(mesh)
         camera.position.set(0, 0, radius * cameraDistance)
         camera.near = Math.max(radius / 100, 0.01)
@@ -167,7 +189,7 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
       }
       renderer.dispose()
     }
-  }, [src, background])
+  }, [src, background, lineOpacity, cameraDistance, edgeThreshold, rotationAxis, initialRotationX, initialRotationZ])
 
   return (
     <figure className="stl-viewer">
