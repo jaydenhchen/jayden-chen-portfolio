@@ -5,10 +5,11 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js'
 type StlScrollViewerProps = {
   src: string
   alt: string
+  title?: string
   background?: boolean
 }
 
-export function StlScrollViewer({ src, alt, background = false }: StlScrollViewerProps) {
+export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', background = false }: StlScrollViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
 
@@ -27,9 +28,12 @@ export function StlScrollViewer({ src, alt, background = false }: StlScrollViewe
 
     let frame: number | null = null
     let mesh: THREE.LineSegments | undefined
+    let modelRadius = 1
     let targetRotation = 0
     let targetTilt = 0
     let targetYaw = 0
+    let targetOffsetX = 0
+    let targetOffsetY = 0
     let isVisible = false
     let mounted = true
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -57,16 +61,28 @@ export function StlScrollViewer({ src, alt, background = false }: StlScrollViewe
       const rotationDistance = Math.abs(targetRotation - mesh.rotation.z)
       const tiltDistance = Math.abs(desiredTilt - mesh.rotation.x)
       const yawDistance = Math.abs(targetYaw - mesh.rotation.y)
-      if (rotationDistance < 0.001 && tiltDistance < 0.001 && yawDistance < 0.001) {
+      const offsetXDistance = Math.abs(targetOffsetX - modelGroup.position.x)
+      const offsetYDistance = Math.abs(targetOffsetY - modelGroup.position.y)
+      if (
+        rotationDistance < 0.001
+        && tiltDistance < 0.001
+        && yawDistance < 0.001
+        && offsetXDistance < 0.001
+        && offsetYDistance < 0.001
+      ) {
         mesh.rotation.z = targetRotation
         mesh.rotation.x = desiredTilt
         mesh.rotation.y = targetYaw
+        modelGroup.position.x = targetOffsetX
+        modelGroup.position.y = targetOffsetY
         draw()
         return
       }
       mesh.rotation.z += (targetRotation - mesh.rotation.z) * 0.08
       mesh.rotation.x += (desiredTilt - mesh.rotation.x) * 0.08
       mesh.rotation.y += (targetYaw - mesh.rotation.y) * 0.08
+      modelGroup.position.x += (targetOffsetX - modelGroup.position.x) * 0.08
+      modelGroup.position.y += (targetOffsetY - modelGroup.position.y) * 0.08
       draw()
       frame = window.requestAnimationFrame(render)
     }
@@ -98,6 +114,8 @@ export function StlScrollViewer({ src, alt, background = false }: StlScrollViewe
       targetRotation = progress * Math.PI * 4.5 + Math.sin(progress * Math.PI * 3) * 0.55
       targetTilt = Math.sin(progress * Math.PI * 2.2) * 0.3 + (progress - 0.5) * 0.35
       targetYaw = Math.sin(progress * Math.PI * 2.8) * 0.24
+      targetOffsetX = background ? (progress - 0.5) * modelRadius * 1.1 : 0
+      targetOffsetY = background ? (0.5 - progress) * modelRadius * 0.7 : 0
       startAnimation()
     }
 
@@ -122,14 +140,15 @@ export function StlScrollViewer({ src, alt, background = false }: StlScrollViewe
         }
         geometry.center()
         geometry.computeBoundingSphere()
-        const radius = geometry.boundingSphere?.radius || 1
+        modelRadius = geometry.boundingSphere?.radius || 1
+        const radius = modelRadius
         const outlineGeometry = new THREE.EdgesGeometry(geometry, 18)
         geometry.dispose()
-        const material = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.92 })
+        const material = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.92 })
         mesh = new THREE.LineSegments(outlineGeometry, material)
         mesh.rotation.x = -Math.PI / 4
         modelGroup.add(mesh)
-        camera.position.set(0, 0, radius * 2.4)
+        camera.position.set(0, 0, radius * 1.9)
         camera.near = Math.max(radius / 100, 0.01)
         camera.far = radius * 20
         camera.updateProjectionMatrix()
@@ -173,7 +192,7 @@ export function StlScrollViewer({ src, alt, background = false }: StlScrollViewe
           {status === 'error' && '3D preview unavailable'}
         </div>
       </div>
-      <figcaption>Drone January STL · scroll to turn the model</figcaption>
+      <figcaption>{title} STL · scroll to turn the model</figcaption>
     </figure>
   )
 }

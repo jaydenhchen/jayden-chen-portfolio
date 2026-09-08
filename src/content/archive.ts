@@ -68,6 +68,28 @@ export const cadImages: MediaAsset[] = [
 
 export const stlAsset = {
   src: `${archiveMedia}/drone-january.stl`,
-  title: 'Drone January',
-  alt: 'Rotating ducted drone frame STL model',
+  title: 'Tiny Whoop Drone',
+  alt: 'Rotating Tiny Whoop drone frame STL model',
+}
+
+export type CadProject = {
+  slug: string
+  title: string
+  alt: string
+  media?: MediaAsset
+  stl?: typeof stlAsset
+}
+
+export const cadProjects: CadProject[] = [
+  { slug: 'ducted-drone-frame', title: 'Ducted drone frame', alt: cadImages[0].alt, media: cadImages[0] },
+  { slug: 'drone-prototypes', title: 'Ducted drone prototypes', alt: cadImages[1].alt, media: cadImages[1] },
+  { slug: 'mobile-kiosk-study', title: 'Mobile kiosk study', alt: cadImages[2].alt, media: cadImages[2] },
+  { slug: 'bamboo-vessel', title: 'Bamboo vessel', alt: cadImages[3].alt, media: cadImages[3] },
+  { slug: 'product-render', title: 'Product render', alt: cadImages[4].alt, media: cadImages[4] },
+  { slug: 'design-study', title: 'Design study', alt: cadImages[5].alt, media: cadImages[5] },
+  { slug: 'tiny-whoop-drone', title: stlAsset.title, alt: stlAsset.alt, stl: stlAsset },
+]
+
+export function getCadProjectBySlug(slug?: string) {
+  return cadProjects.find((project) => project.slug === slug)
 }

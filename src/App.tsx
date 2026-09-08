@@ -4,6 +4,7 @@ import { Footer } from './components/Footer'
 import { SiteNav } from './components/SiteNav'
 import { CGIPage } from './pages/CGIPage'
 import { CGIVideoPage } from './pages/CGIVideoPage'
+import { CADProjectPage } from './pages/CADProjectPage'
 import { HomePage } from './pages/HomePage'
 import { OtherProjectsPage } from './pages/OtherProjectsPage'
 import { ProjectPage } from './pages/ProjectPage'
@@ -48,6 +49,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/cad" element={<LazyCADPage />} />
+          <Route path="/cad/:slug" element={<CADProjectPage />} />
           <Route path="/cgi" element={<CGIPage />} />
           <Route path="/cgi/:slug" element={<CGIVideoPage />} />
           <Route path="/other" element={<OtherProjectsPage />} />
