@@ -11,8 +11,7 @@ export function CADPage() {
       </div>
       <section className="archive-hero page-shell" aria-labelledby="cad-title">
         <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
-        <p className="eyebrow"><span className="signal-dot" aria-hidden="true" />CAD / Object archive</p>
-        <h1 id="cad-title">Things that take shape.</h1>
+        <h1 id="cad-title">CAD.</h1>
         <p className="archive-lede">Models, prototypes, and process images from the design archive.</p>
       </section>
       <section className="stl-section cad-model-intro page-shell" aria-labelledby="stl-title">
@@ -44,9 +43,6 @@ export function CADPage() {
           </article>
         ))}
       </section>
-      <div className="archive-footer page-shell">
-        <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
-      </div>
     </main>
   )
 }

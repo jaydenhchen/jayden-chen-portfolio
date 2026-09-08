@@ -39,7 +39,7 @@ export const projects: Project[] = [
     eyebrow: 'Drone / Design',
     summary: 'A drone frame shaped in Fusion 360 and tested as a physical build.',
     role: 'Design and build',
-    tools: ['Fusion 360', 'CAD', 'Prototype'],
+    tools: ['Fusion 360'],
     thumbnail: {
       src: `${suppliedMedia}/drone-cad.png`,
       alt: 'Four-rotor ducted drone frame shown in a Fusion 360 CAD workspace',
@@ -79,7 +79,7 @@ export const projects: Project[] = [
     eyebrow: 'Object / Design',
     summary: 'A bamboo-inspired vessel, from first sketch to cast test.',
     role: 'Object design',
-    tools: ['CAD', 'Mold design', 'Casting'],
+    tools: ['Fusion 360'],
     thumbnail: {
       src: `${suppliedMedia}/bamboo-process.png`,
       alt: 'Bamboo vessel design process from inspiration through mold and cast prototype',
@@ -144,7 +144,7 @@ export const projects: Project[] = [
     eyebrow: 'Animation / Motion',
     summary: 'A moving image study built around timing, light, and atmosphere.',
     role: 'Animation',
-    tools: ['Blender', 'Animation', 'Motion'],
+    tools: ['Blender', 'Premiere Pro', 'Nuke', 'Photoshop'],
     thumbnail: {
       src: `${suppliedMedia}/animation1.mp4`,
       alt: 'Animation study video preview',
@@ -175,7 +175,7 @@ export const projects: Project[] = [
     eyebrow: 'Object / 3D image',
     summary: 'A wheeled kiosk brought to life with light, color, and shape.',
     role: '3D design',
-    tools: ['3D design', 'Materials', 'Lighting'],
+    tools: ['Blender', 'Premiere Pro', 'Nuke', 'Photoshop'],
     thumbnail: {
       src: `${suppliedMedia}/generic-logo.png`,
       alt: 'Studio-lit render of a wheeled mobile kiosk with a raised display',
@@ -208,7 +208,7 @@ export const projects: Project[] = [
     eyebrow: 'Animation / Motion',
     summary: 'Another moving image study from the archive.',
     role: 'Animation',
-    tools: ['Blender', 'Animation', 'Compositing'],
+    tools: ['Blender', 'Premiere Pro', 'Nuke', 'Photoshop'],
     thumbnail: {
       src: `${suppliedMedia}/0001.mp4`,
       alt: 'Motion study 0001 video preview',

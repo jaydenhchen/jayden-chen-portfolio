@@ -26,7 +26,6 @@ export function CGIVideoPage() {
         <Link className="back-link" to="/cgi"><span aria-hidden="true">←</span> Back to CGI archive</Link>
         <div className="project-hero-copy">
           <div>
-            <p className="eyebrow"><span className="category-dot" aria-hidden="true" />CGI video</p>
             <h1 id="cgi-video-title">{video.title}</h1>
           </div>
           <p className="project-summary">{video.alt}</p>
@@ -51,16 +50,15 @@ export function CGIVideoPage() {
         </dl>
       </section>
 
-      <nav className="project-next page-shell" aria-label="CGI video navigation">
-        <Link className="back-link" to="/cgi"><span aria-hidden="true">←</span> Back to CGI archive</Link>
-        {video.youtubeUrl && (
+      {video.youtubeUrl && (
+        <nav className="project-next page-shell" aria-label="CGI video navigation">
           <a className="next-project-link" href={video.youtubeUrl} target="_blank" rel="noreferrer">
             <span className="eyebrow">External video</span>
             <strong>Watch on YouTube</strong>
             <span className="next-arrow" aria-hidden="true">↗</span>
           </a>
-        )}
-      </nav>
+        </nav>
+      )}
     </main>
   )
 }

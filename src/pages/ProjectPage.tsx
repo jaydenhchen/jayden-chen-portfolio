@@ -34,7 +34,6 @@ export function ProjectPage() {
       <section className="project-hero page-shell" aria-labelledby="project-title">
         <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
         <div className="project-hero-copy">
-          <p className="eyebrow"><span className="category-dot" aria-hidden="true" />{project.eyebrow}</p>
           <h1 id="project-title">{project.title}</h1>
           <p className="project-summary">{project.summary}</p>
         </div>
@@ -52,17 +51,6 @@ export function ProjectPage() {
         </dl>
       </section>
 
-      <section className="case-study-section page-shell" aria-labelledby="case-study-title">
-        <div className="case-study-intro"><p className="eyebrow">About the project</p><h2 id="case-study-title">How it came together.</h2></div>
-        <div className="case-study-sections">
-          {project.sections.map((section, index) => (
-            <Reveal key={section.heading} className="case-study-block" delay={index * 70}>
-              <span className="case-study-number">0{index + 1}</span>
-              <div><h3>{section.heading}</h3><p>{section.body}</p></div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
 
       {project.gallery.length > 0 && (
         <section className="project-gallery page-shell" aria-labelledby="gallery-title">
@@ -71,10 +59,11 @@ export function ProjectPage() {
         </section>
       )}
 
-      <nav className="project-next page-shell" aria-label="Project navigation">
-        <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
-        {nextProject && <Link className="next-project-link" to={`/work/${nextProject.slug}`}><span className="eyebrow">Next / {getCategoryLabel(nextProject.category)}</span><strong>{nextProject.title}</strong><span className="next-arrow" aria-hidden="true">↗</span></Link>}
-      </nav>
+      {nextProject && (
+        <nav className="project-next page-shell" aria-label="Project navigation">
+          <Link className="next-project-link" to={`/work/${nextProject.slug}`}><span className="eyebrow">Next / {getCategoryLabel(nextProject.category)}</span><strong>{nextProject.title}</strong><span className="next-arrow" aria-hidden="true">↗</span></Link>
+        </nav>
+      )}
     </main>
   )
 }
