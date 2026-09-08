@@ -59,7 +59,7 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
         draw()
         return
       }
-      mesh.rotation.z += (targetRotation - mesh.rotation.z) * 0.08
+      mesh.rotation.z += (targetRotation - mesh.rotation.z) * 0.05
       draw()
       frame = window.requestAnimationFrame(render)
     }
@@ -88,7 +88,7 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
             const bounds = canvas.getBoundingClientRect()
             return Math.min(1, Math.max(0, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)))
           })()
-      targetRotation = progress * Math.PI * 4.5 + Math.sin(progress * Math.PI * 3) * 0.55
+      targetRotation = progress * Math.PI * 2.4 + Math.sin(progress * Math.PI * 2) * 0.3
       startAnimation()
     }
 
@@ -117,7 +117,7 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
         const radius = modelRadius
         const outlineGeometry = new THREE.EdgesGeometry(geometry, 18)
         geometry.dispose()
-        const material = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.92 })
+        const material = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.4 })
         mesh = new THREE.LineSegments(outlineGeometry, material)
         mesh.rotation.x = -Math.PI / 4
         modelGroup.add(mesh)
