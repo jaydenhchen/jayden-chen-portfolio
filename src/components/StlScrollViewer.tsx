@@ -125,11 +125,11 @@ export function StlScrollViewer({ src, alt, background = false }: StlScrollViewe
         const radius = geometry.boundingSphere?.radius || 1
         const outlineGeometry = new THREE.EdgesGeometry(geometry, 18)
         geometry.dispose()
-        const material = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.92 })
+        const material = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.92 })
         mesh = new THREE.LineSegments(outlineGeometry, material)
         mesh.rotation.x = -Math.PI / 4
         modelGroup.add(mesh)
-        camera.position.set(0, 0, radius * 2.4)
+        camera.position.set(0, 0, radius * 1.9)
         camera.near = Math.max(radius / 100, 0.01)
         camera.far = radius * 20
         camera.updateProjectionMatrix()
