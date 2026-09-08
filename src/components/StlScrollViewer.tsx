@@ -30,10 +30,6 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
     let mesh: THREE.LineSegments | undefined
     let modelRadius = 1
     let targetRotation = 0
-    let targetTilt = 0
-    let targetYaw = 0
-    let targetOffsetX = 0
-    let targetOffsetY = 0
     let isVisible = false
     let mounted = true
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -57,32 +53,13 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
         if (isVisible) draw()
         return
       }
-      const desiredTilt = -Math.PI / 4 + targetTilt
       const rotationDistance = Math.abs(targetRotation - mesh.rotation.z)
-      const tiltDistance = Math.abs(desiredTilt - mesh.rotation.x)
-      const yawDistance = Math.abs(targetYaw - mesh.rotation.y)
-      const offsetXDistance = Math.abs(targetOffsetX - modelGroup.position.x)
-      const offsetYDistance = Math.abs(targetOffsetY - modelGroup.position.y)
-      if (
-        rotationDistance < 0.001
-        && tiltDistance < 0.001
-        && yawDistance < 0.001
-        && offsetXDistance < 0.001
-        && offsetYDistance < 0.001
-      ) {
+      if (rotationDistance < 0.001) {
         mesh.rotation.z = targetRotation
-        mesh.rotation.x = desiredTilt
-        mesh.rotation.y = targetYaw
-        modelGroup.position.x = targetOffsetX
-        modelGroup.position.y = targetOffsetY
         draw()
         return
       }
       mesh.rotation.z += (targetRotation - mesh.rotation.z) * 0.08
-      mesh.rotation.x += (desiredTilt - mesh.rotation.x) * 0.08
-      mesh.rotation.y += (targetYaw - mesh.rotation.y) * 0.08
-      modelGroup.position.x += (targetOffsetX - modelGroup.position.x) * 0.08
-      modelGroup.position.y += (targetOffsetY - modelGroup.position.y) * 0.08
       draw()
       frame = window.requestAnimationFrame(render)
     }
@@ -112,10 +89,6 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
             return Math.min(1, Math.max(0, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)))
           })()
       targetRotation = progress * Math.PI * 4.5 + Math.sin(progress * Math.PI * 3) * 0.55
-      targetTilt = Math.sin(progress * Math.PI * 2.2) * 0.3 + (progress - 0.5) * 0.35
-      targetYaw = Math.sin(progress * Math.PI * 2.8) * 0.24
-      targetOffsetX = background ? (progress - 0.5) * modelRadius * 1.1 : 0
-      targetOffsetY = background ? (0.5 - progress) * modelRadius * 0.7 : 0
       startAnimation()
     }
 
@@ -148,7 +121,7 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
         mesh = new THREE.LineSegments(outlineGeometry, material)
         mesh.rotation.x = -Math.PI / 4
         modelGroup.add(mesh)
-        camera.position.set(0, 0, radius * 1.9)
+        camera.position.set(0, 0, radius * 1.7)
         camera.near = Math.max(radius / 100, 0.01)
         camera.far = radius * 20
         camera.updateProjectionMatrix()
