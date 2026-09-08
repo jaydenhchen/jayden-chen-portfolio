@@ -38,7 +38,7 @@ export function CGIPage() {
   return (
     <main className="archive-page cgi-page">
       <div className="cgi-background-model" aria-label={`Interactive ${bottleStlAsset.title} background model`}>
-        <StlScrollViewer src={bottleStlAsset.src} alt={bottleStlAsset.alt} title={bottleStlAsset.title} background />
+        <StlScrollViewer src={bottleStlAsset.src} alt={bottleStlAsset.alt} title={bottleStlAsset.title} background lineOpacity={0.8} cameraDistance={3.5} edgeThreshold={1} />
       </div>
       <section className="archive-hero page-shell" aria-labelledby="cgi-title">
         <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>

@@ -126,9 +126,10 @@ figcaption { margin-top: .7rem; color: var(--quiet); font-size: .6rem; letter-sp
 .work-row-heading p { margin-bottom: 0; font-size: .88rem; }
 .row-count { padding-top: .35rem; white-space: nowrap; }
 .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem; padding-top: 1.4rem; }
-.project-card { min-width: 0; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(17, 22, 20, .72); transition: border-color .25s ease, transform .25s ease, background .25s ease; }
+.project-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(17, 22, 20, .72); transition: border-color .25s ease, transform .25s ease, background .25s ease; }
 .project-card:hover { border-color: var(--line-strong); background: var(--surface-raised); transform: translateY(-4px); }
 .project-card-cgi { border-color: rgba(117, 189, 213, .2); }
+.project-card .media-frame-visual { border-radius: var(--radius) var(--radius) 0 0; }
 .project-card-link { display: block; height: 100%; color: inherit; text-decoration: none; }
 .project-card-body { padding: 1.35rem 1.4rem 1.5rem; }
 .project-card-meta { display: flex; justify-content: space-between; margin-bottom: 1.1rem; }
@@ -350,6 +351,14 @@ body::before, body::after { display: none; }
 .archive-video-page .project-meta-grid a { color: inherit; text-decoration-color: var(--lime); text-underline-offset: .2em; }
 .archive-video-page .project-meta-grid a:hover { color: var(--lime); }
 
+.home-page { position: relative; isolation: isolate; overflow: clip; }
+.home-page > section { position: relative; z-index: 1; }
+.home-background-model { position: fixed; inset: 4rem 0 0; z-index: 0; isolation: isolate; pointer-events: none; opacity: .9; }
+.home-background-model .stl-viewer { position: relative; z-index: 1; height: 100%; margin: 0; }
+.home-background-model .stl-canvas-wrap { height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; background: transparent; }
+.home-background-model .stl-canvas-wrap::after { display: none; }
+.home-background-model .stl-status { display: none; }
+.home-background-model figcaption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .cgi-page { position: relative; isolation: isolate; overflow: clip; }
 .cgi-page > section, .cgi-page > .archive-footer { position: relative; z-index: 1; }
 .cgi-background-model { position: fixed; inset: 4rem 0 0; z-index: 0; isolation: isolate; pointer-events: none; opacity: .9; }
@@ -368,11 +377,13 @@ body::before, body::after { display: none; }
 .cad-background-model figcaption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .cad-page .archive-hero { min-height: min(72svh, 52rem); }
 .cad-model-intro { min-height: 0; }
-.cad-model-intro .cad-model-link { display: block; width: min(100%, 32rem); max-width: 32rem; border-color: var(--line-strong); }
+.cad-model-intro .cad-model-link { display: block; width: calc((100% - 1.4rem) / 2); max-width: none; border-color: var(--line-strong); color: inherit; text-decoration: none; }
 .cad-page .archive-image-grid { padding-top: 1rem; }
 @media (max-width: 800px) {
   .cad-background-model { inset: 3.8rem 0 0; opacity: .9; }
+  .home-background-model { inset: 3.8rem 0 0; opacity: .9; }
   .cgi-background-model { inset: 3.8rem 0 0; opacity: .9; }
   .cad-page .archive-hero { min-height: 64svh; }
   .cad-model-intro { min-height: 0; }
+  .cad-model-intro .cad-model-link { width: 100%; }
 }
