@@ -12,6 +12,7 @@ type StlScrollViewerProps = {
   edgeThreshold?: number
   rotationAxis?: 'x' | 'y' | 'z'
   rotationDirection?: 1 | -1
+  modelOffsetY?: number
   initialRotationX?: number
   initialRotationZ?: number
 }
@@ -26,6 +27,7 @@ export function StlScrollViewer({
   edgeThreshold = 18,
   rotationAxis = 'z',
   rotationDirection = 1,
+  modelOffsetY = 0,
   initialRotationX = -Math.PI / 4,
   initialRotationZ = 0,
 }: StlScrollViewerProps) {
@@ -158,6 +160,7 @@ export function StlScrollViewer({
         geometry.computeBoundingSphere()
         modelRadius = geometry.boundingSphere?.radius || 1
         const radius = modelRadius
+        modelGroup.position.y = radius * modelOffsetY
         const outlineGeometry = new THREE.EdgesGeometry(geometry, edgeThreshold)
         geometry.dispose()
         material = new THREE.LineBasicMaterial({ color: modelColor(), transparent: true, opacity: lineOpacity })
@@ -197,7 +200,7 @@ export function StlScrollViewer({
       }
       renderer.dispose()
     }
-  }, [src, background, lineOpacity, cameraDistance, edgeThreshold, rotationAxis, rotationDirection, initialRotationX, initialRotationZ])
+  }, [src, background, lineOpacity, cameraDistance, edgeThreshold, rotationAxis, rotationDirection, modelOffsetY, initialRotationX, initialRotationZ])
 
   return (
     <figure className="stl-viewer">

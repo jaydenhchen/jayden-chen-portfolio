@@ -46,6 +46,7 @@ export function CGIPage() {
           edgeThreshold={1}
           rotationAxis="y"
           rotationDirection={-1}
+          modelOffsetY={-0.15}
           initialRotationX={0}
           initialRotationZ={Math.PI / 2}
         />
