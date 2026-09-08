@@ -31,17 +31,9 @@ export function HomePage() {
           <p className="eyebrow"><span className="signal-dot" aria-hidden="true" />Engineering + Blender</p>
           <h1 id="hero-title">{siteProfile.headline}</h1>
           <p className="hero-intro">{siteProfile.intro}</p>
-          <div className="hero-actions">
-            <a className="button button-primary" href="#work">View selected work <span aria-hidden="true">↓</span></a>
-            <a className="button button-quiet" href="#showreel"><span className="play-icon" aria-hidden="true">▶</span> Play showreel</a>
-          </div>
-          <div className="hero-aside">
-            <span>01 — 02</span>
-            <span>Scroll to explore</span>
-          </div>
         </div>
         <Reveal className="hero-media-wrap">
-          <div id="showreel" className="hero-media-label"><span>Featured work</span><span>Motion study</span></div>
+          <div className="hero-media-label"><span>Featured work</span><span>Motion study</span></div>
           <MediaFrame asset={featuredProject?.heroMedia} variant="hero" autoplayPreview={featuredProject?.heroMedia.kind === 'video'} hoverAudio={featuredProject?.heroMedia.kind === 'video'} loading="eager" />
         </Reveal>
       </section>

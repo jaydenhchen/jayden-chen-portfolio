@@ -72,6 +72,12 @@ export const stlAsset = {
   alt: 'Rotating Tiny Whoop drone frame STL model',
 }
 
+export const bottleStlAsset = {
+  src: `${archiveMedia}/mike-and-pattys-bottle.stl`,
+  title: "Mike & Patty's Bottle",
+  alt: "Rotating Mike and Patty's bottle STL model",
+}
+
 export type CadProject = {
   slug: string
   title: string

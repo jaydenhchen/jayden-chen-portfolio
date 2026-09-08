@@ -154,7 +154,6 @@ export const projects: Project[] = [
       src: `${suppliedMedia}/animation1.mp4`,
       alt: 'Animation study video',
       kind: 'video',
-      caption: 'Supplied animation export.',
     },
     sections: [
       {

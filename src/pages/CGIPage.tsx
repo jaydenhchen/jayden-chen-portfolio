@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom'
 import { MediaFrame } from '../components/MediaFrame'
-import { cgiVideos, type ArchiveVideo } from '../content/archive'
+import { StlScrollViewer } from '../components/StlScrollViewer'
+import { bottleStlAsset, cgiVideos, type ArchiveVideo } from '../content/archive'
 
-const landscapeVideos = cgiVideos.filter((video) => video.orientation !== 'portrait')
-const portraitVideos = cgiVideos.filter((video) => video.orientation === 'portrait')
+const legoVideos = cgiVideos.filter((video) => video.slug.startsWith('lego-'))
+const nonLegoVideos = cgiVideos.filter((video) => !video.slug.startsWith('lego-'))
+const landscapeVideos = nonLegoVideos.filter((video) => video.orientation !== 'portrait')
+const portraitVideos = nonLegoVideos.filter((video) => video.orientation === 'portrait')
 
 function VideoGrid({ videos }: { videos: ArchiveVideo[] }) {
   return (
@@ -34,18 +37,25 @@ function VideoGrid({ videos }: { videos: ArchiveVideo[] }) {
 export function CGIPage() {
   return (
     <main className="archive-page cgi-page">
+      <div className="cgi-background-model" aria-label={`Interactive ${bottleStlAsset.title} background model`}>
+        <StlScrollViewer src={bottleStlAsset.src} alt={bottleStlAsset.alt} title={bottleStlAsset.title} background />
+      </div>
       <section className="archive-hero page-shell" aria-labelledby="cgi-title">
         <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
-        <p className="eyebrow"><span className="category-dot" aria-hidden="true" />CGI videos</p>
+        <p className="eyebrow"><span className="category-dot" aria-hidden="true" />Blender / Motion archive</p>
         <h1 id="cgi-title">CGI videos.</h1>
-        <p className="archive-lede">A collection of CGI videos, short studies, product motion, and LEGO stories.</p>
+        <p className="archive-lede">A collection of short studies, product motion, and LEGO stories.</p>
+      </section>
+      <section className="archive-video-group page-shell" aria-labelledby="cgi-lego-title">
+        <h2 id="cgi-lego-title" className="archive-group-title">LEGO CGI</h2>
+        <VideoGrid videos={legoVideos} />
       </section>
       <section className="archive-video-group page-shell" aria-labelledby="cgi-landscape-title">
-        <h2 id="cgi-landscape-title" className="archive-group-title">Landscape work</h2>
+        <h2 id="cgi-landscape-title" className="archive-group-title">Other landscape work</h2>
         <VideoGrid videos={landscapeVideos} />
       </section>
       <section className="archive-video-group archive-video-group-portrait page-shell" aria-labelledby="cgi-portrait-title">
-        <h2 id="cgi-portrait-title" className="archive-group-title">Vertical work</h2>
+        <h2 id="cgi-portrait-title" className="archive-group-title">Other vertical work</h2>
         <VideoGrid videos={portraitVideos} />
       </section>
       <div className="archive-footer page-shell">
