@@ -67,7 +67,6 @@ export function SiteNav() {
     <header className="site-nav">
       <div className="nav-inner">
         <Link className={`wordmark${isLogoIntro ? ' logo-intro' : ''}`} to="/" aria-label={`${siteProfile.name} home`}>
-          <span className="wordmark-mark" aria-hidden="true">{siteProfile.monogram}</span>
           <span className="wordmark-name">{siteProfile.name}</span>
         </Link>
 

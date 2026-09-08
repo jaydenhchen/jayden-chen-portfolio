@@ -58,7 +58,7 @@ export function HomePage() {
       <section id="contact" className="contact-section page-shell" aria-labelledby="contact-title">
         <div className="contact-panel">
           <div>
-            <p className="eyebrow"><span className="signal-dot" aria-hidden="true" />02 / Contact</p>
+            <p className="eyebrow"><span className="signal-dot" aria-hidden="true" />Contact</p>
             <h2 id="contact-title">Have something in mind?</h2>
           </div>
           <div className="contact-action">

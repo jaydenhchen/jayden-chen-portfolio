@@ -10,7 +10,7 @@ type StlScrollViewerProps = {
   lineOpacity?: number
   cameraDistance?: number
   edgeThreshold?: number
-  rotationAxis?: 'x' | 'z'
+  rotationAxis?: 'x' | 'y' | 'z'
   initialRotationX?: number
   initialRotationZ?: number
 }
@@ -56,10 +56,16 @@ export function StlScrollViewer({
     const modelGroup = new THREE.Group()
     scene.add(modelGroup)
 
-    const getRotation = () => rotationAxis === 'x' ? mesh?.rotation.x ?? 0 : mesh?.rotation.z ?? 0
+    const getRotation = () => {
+      if (!mesh) return 0
+      if (rotationAxis === 'x') return mesh.rotation.x
+      if (rotationAxis === 'y') return mesh.rotation.y
+      return mesh.rotation.z
+    }
     const setRotation = (value: number) => {
       if (!mesh) return
       if (rotationAxis === 'x') mesh.rotation.x = value
+      else if (rotationAxis === 'y') mesh.rotation.y = value
       else mesh.rotation.z = value
     }
 
