@@ -326,11 +326,11 @@ body::before, body::after { display: none; }
 
 .cad-page { position: relative; isolation: isolate; overflow: clip; }
 .cad-page > section, .cad-page > .archive-footer { position: relative; z-index: 1; }
-.cad-background-model { position: fixed; inset: 4rem 0 0; z-index: 0; pointer-events: none; opacity: .42; }
-.cad-background-model .stl-viewer { height: 100%; margin: 0; }
-.cad-background-model .stl-canvas-wrap { height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; background: radial-gradient(circle at 50% 40%, rgba(117, 189, 213, .12), transparent 45%), transparent; }
+.cad-background-model { position: fixed; inset: 4rem 0 0; z-index: 0; isolation: isolate; pointer-events: none; opacity: .9; }
+.cad-background-model::before { position: absolute; inset: 4% 2% 8% 38%; z-index: 0; border-radius: 50%; background: radial-gradient(circle, rgba(239, 239, 232, .96) 0%, rgba(239, 239, 232, .86) 38%, rgba(239, 239, 232, 0) 72%); content: ""; filter: blur(10px); }
+.cad-background-model .stl-viewer { position: relative; z-index: 1; height: 100%; margin: 0; }
+.cad-background-model .stl-canvas-wrap { height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; background: transparent; }
 .cad-background-model .stl-canvas-wrap::after { display: none; }
-.cad-background-model .stl-canvas-wrap canvas { opacity: .9; }
 .cad-background-model .stl-status { display: none; }
 .cad-background-model figcaption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .cad-page .archive-hero { min-height: min(72svh, 52rem); }
@@ -338,7 +338,7 @@ body::before, body::after { display: none; }
 .cad-model-intro .stl-heading { width: min(100%, 32rem); margin-bottom: 0; padding: 1.2rem; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(16, 16, 16, .72); backdrop-filter: blur(8px); }
 
 @media (max-width: 800px) {
-  .cad-background-model { inset: 3.8rem 0 0; opacity: .28; }
+  .cad-background-model { inset: 3.8rem 0 0; opacity: .9; }
   .cad-page .archive-hero { min-height: 64svh; }
   .cad-model-intro { min-height: 14rem; }
 }
