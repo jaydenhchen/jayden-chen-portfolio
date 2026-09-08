@@ -4,22 +4,23 @@ export type ArchiveVideo = {
   src: string
   title: string
   alt: string
+  orientation?: 'landscape' | 'portrait'
+  youtubeUrl?: string
 }
 
 const archiveMedia = '/media/archive'
 const streamMedia = '/media/stream'
-
 export const cgiVideos: ArchiveVideo[] = [
   { src: `${streamMedia}/animation1.mp4`, title: 'Bottle study', alt: 'Bottle animation study' },
   { src: `${streamMedia}/figma-showcase.mp4`, title: 'Figma showcase', alt: 'Figma showcase video' },
-  { src: `${streamMedia}/invincible4final.mp4`, title: 'Invincible', alt: 'Invincible animation' },
+  { src: `${streamMedia}/invincible4final.mp4`, title: 'Invincible', alt: 'Invincible animation', youtubeUrl: 'https://www.youtube.com/watch?v=MD6KvNZ-Djc' },
   { src: `${streamMedia}/final.mp4`, title: 'Final animation', alt: 'Final animation export' },
   { src: `${streamMedia}/0001.mp4`, title: 'Drone animation', alt: 'Drone animation study' },
-  { src: `${streamMedia}/debate2-final.mp4`, title: 'LEGO debate', alt: 'LEGO debate animation' },
-  { src: `${streamMedia}/grammy-final.mp4`, title: 'LEGO Grammy', alt: 'LEGO Grammy animation' },
-  { src: `${streamMedia}/field-trip.mp4`, title: 'LEGO Field Trip', alt: 'LEGO Field Trip animation' },
-  { src: `${streamMedia}/bomb-final.mp4`, title: 'LEGO Bomb', alt: 'LEGO Bomb animation' },
-  { src: `${streamMedia}/shortform.mp4`, title: 'Shortform', alt: 'Shortform animation' },
+  { src: `${streamMedia}/debate2-final.mp4`, title: 'LEGO debate', alt: 'LEGO debate animation', youtubeUrl: 'https://www.youtube.com/watch?v=YlhEZTxmDlA' },
+  { src: `${streamMedia}/grammy-final.mp4`, title: 'LEGO Grammy', alt: 'LEGO Grammy animation', orientation: 'portrait', youtubeUrl: 'https://www.youtube.com/watch?v=7DuW4mAjFag' },
+  { src: `${streamMedia}/field-trip.mp4`, title: 'LEGO Field Trip', alt: 'LEGO Field Trip animation', youtubeUrl: 'https://www.youtube.com/watch?v=LMruuUC5wAw' },
+  { src: `${streamMedia}/bomb-final.mp4`, title: 'LEGO Bomb', alt: 'LEGO Bomb animation', youtubeUrl: 'https://www.youtube.com/watch?v=8mdvX56404U' },
+  { src: `${streamMedia}/shortform.mp4`, title: 'Shortform', alt: 'Shortform animation', orientation: 'portrait' },
 ]
 
 export const cadImages: MediaAsset[] = [

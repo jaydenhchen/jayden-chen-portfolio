@@ -1,6 +1,35 @@
 import { Link } from 'react-router-dom'
 import { MediaFrame } from '../components/MediaFrame'
-import { cgiVideos } from '../content/archive'
+import { cgiVideos, type ArchiveVideo } from '../content/archive'
+
+const landscapeVideos = cgiVideos.filter((video) => video.orientation !== 'portrait')
+const portraitVideos = cgiVideos.filter((video) => video.orientation === 'portrait')
+function videoLink(video: ArchiveVideo) {
+  return video.youtubeUrl ?? video.src
+}
+
+function VideoGrid({ videos }: { videos: ArchiveVideo[] }) {
+  return (
+    <div className="archive-video-grid">
+      {videos.map((video) => (
+        <article className={`archive-video-card${video.orientation === 'portrait' ? ' is-portrait' : ''}`} key={video.src}>
+          <a
+            className="archive-video-link"
+            href={videoLink(video)}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={video.youtubeUrl ? `Open ${video.title} on YouTube` : `Open ${video.title} video`}
+          >
+            <MediaFrame asset={{ src: video.src, alt: video.alt, kind: 'video' }} variant="detail" autoplayPreview hoverAudio />
+          </a>
+          <div className="archive-card-copy">
+            <h3>{video.title}</h3>
+          </div>
+        </article>
+      ))}
+    </div>
+  )
+}
 
 export function CGIPage() {
   return (
@@ -11,16 +40,13 @@ export function CGIPage() {
         <h1 id="cgi-title">Moving images.</h1>
         <p className="archive-lede">The full animation set: short studies, product motion, and LEGO stories.</p>
       </section>
-      <section className="archive-video-grid page-shell" aria-label="CGI videos">
-        {cgiVideos.map((video, index) => (
-          <article className="archive-video-card" key={video.src}>
-            <MediaFrame asset={{ src: video.src, alt: video.alt, kind: 'video' }} variant="detail" autoplayPreview hoverAudio />
-            <div className="archive-card-copy">
-              <span className="archive-number">{String(index + 1).padStart(2, '0')}</span>
-              <h2>{video.title}</h2>
-            </div>
-          </article>
-        ))}
+      <section className="archive-video-group page-shell" aria-labelledby="cgi-landscape-title">
+        <h2 id="cgi-landscape-title" className="archive-group-title">Landscape work</h2>
+        <VideoGrid videos={landscapeVideos} />
+      </section>
+      <section className="archive-video-group archive-video-group-portrait page-shell" aria-labelledby="cgi-portrait-title">
+        <h2 id="cgi-portrait-title" className="archive-group-title">Vertical work</h2>
+        <VideoGrid videos={portraitVideos} />
       </section>
       <div className="archive-footer page-shell">
         <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
