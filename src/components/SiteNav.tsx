@@ -6,6 +6,7 @@ const links = [
   { label: 'Work', href: '/#work' },
   { label: 'CAD', href: '/cad' },
   { label: 'CGI', href: '/cgi' },
+  { label: 'Other projects', href: '/other' },
   { label: 'About', href: '/#about' },
   { label: 'Contact', href: '/#contact' },
 ]

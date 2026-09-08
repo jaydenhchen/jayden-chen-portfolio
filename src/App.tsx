@@ -5,6 +5,7 @@ import { SiteNav } from './components/SiteNav'
 import { CGIPage } from './pages/CGIPage'
 import { CGIVideoPage } from './pages/CGIVideoPage'
 import { HomePage } from './pages/HomePage'
+import { OtherProjectsPage } from './pages/OtherProjectsPage'
 import { ProjectPage } from './pages/ProjectPage'
 const LazyCADPage = lazy(() => import('./pages/CADPage').then(({ CADPage }) => ({ default: CADPage })))
 
@@ -46,8 +47,10 @@ export default function App() {
       <Suspense fallback={<main className="archive-loading page-shell">Loading archive…</main>}>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/cad" element={<LazyCADPage />} />
           <Route path="/cgi" element={<CGIPage />} />
           <Route path="/cgi/:slug" element={<CGIVideoPage />} />
+          <Route path="/other" element={<OtherProjectsPage />} />
           <Route path="/work/:slug" element={<ProjectPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

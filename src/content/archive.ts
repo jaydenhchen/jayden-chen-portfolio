@@ -13,7 +13,6 @@ const archiveMedia = '/media/archive'
 const streamMedia = '/media/stream'
 export const cgiVideos: ArchiveVideo[] = [
   { slug: 'bottle-study', src: `${streamMedia}/animation1.mp4`, title: 'Bottle study', alt: 'Bottle animation study' },
-  { slug: 'figma-showcase', src: `${streamMedia}/figma-showcase.mp4`, title: 'Figma showcase', alt: 'Figma showcase video' },
   { slug: 'invincible', src: `${streamMedia}/invincible4final.mp4`, title: 'Invincible - Season 4 Unofficial Teaser Trailer', alt: 'Invincible animation', youtubeUrl: 'https://www.youtube.com/watch?v=MD6KvNZ-Djc' },
   { slug: 'final-animation', src: `${streamMedia}/final.mp4`, title: 'Arcane - Ma Meilleure Ennemie but in LEGO', alt: 'Final animation export', youtubeUrl: 'https://www.youtube.com/watch?v=8ZDylshw-cs' },
   { slug: 'drone-animation', src: `${streamMedia}/0001.mp4`, title: 'Drone animation', alt: 'Drone animation study' },

@@ -5,9 +5,10 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js'
 type StlScrollViewerProps = {
   src: string
   alt: string
+  background?: boolean
 }
 
-export function StlScrollViewer({ src, alt }: StlScrollViewerProps) {
+export function StlScrollViewer({ src, alt, background = false }: StlScrollViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
 
@@ -28,6 +29,7 @@ export function StlScrollViewer({ src, alt }: StlScrollViewerProps) {
     let mesh: THREE.Mesh | undefined
     let targetRotation = 0
     let targetTilt = 0
+    let targetRoll = 0
     let isVisible = false
     let mounted = true
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -62,14 +64,17 @@ export function StlScrollViewer({ src, alt }: StlScrollViewerProps) {
       const desiredTilt = -Math.PI / 2 + targetTilt
       const rotationDistance = Math.abs(targetRotation - mesh.rotation.y)
       const tiltDistance = Math.abs(desiredTilt - mesh.rotation.x)
-      if (rotationDistance < 0.001 && tiltDistance < 0.001) {
+      const rollDistance = Math.abs(targetRoll - mesh.rotation.z)
+      if (rotationDistance < 0.001 && tiltDistance < 0.001 && rollDistance < 0.001) {
         mesh.rotation.y = targetRotation
         mesh.rotation.x = desiredTilt
+        mesh.rotation.z = targetRoll
         draw()
         return
       }
       mesh.rotation.y += (targetRotation - mesh.rotation.y) * 0.08
       mesh.rotation.x += (desiredTilt - mesh.rotation.x) * 0.08
+      mesh.rotation.z += (targetRoll - mesh.rotation.z) * 0.08
       draw()
       frame = window.requestAnimationFrame(render)
     }
@@ -92,10 +97,15 @@ export function StlScrollViewer({ src, alt }: StlScrollViewerProps) {
 
     const updateScrollTarget = () => {
       if (reducedMotion || !mesh) return
-      const bounds = canvas.getBoundingClientRect()
-      const progress = Math.min(1, Math.max(0, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)))
-      targetRotation = progress * Math.PI * 4
-      targetTilt = (progress - 0.5) * 0.35
+      const progress = background
+        ? Math.min(1, Math.max(0, window.scrollY / Math.max(document.documentElement.scrollHeight - window.innerHeight, 1)))
+        : (() => {
+            const bounds = canvas.getBoundingClientRect()
+            return Math.min(1, Math.max(0, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)))
+          })()
+      targetRotation = progress * Math.PI * 4.5 + Math.sin(progress * Math.PI * 3) * 0.55
+      targetTilt = Math.sin(progress * Math.PI * 2.2) * 0.48 + (progress - 0.5) * 0.55
+      targetRoll = Math.sin(progress * Math.PI * 2.8) * 0.32 + (progress - 0.5) * 0.28
       startAnimation()
     }
 
@@ -158,7 +168,7 @@ export function StlScrollViewer({ src, alt }: StlScrollViewerProps) {
       }
       renderer.dispose()
     }
-  }, [src])
+  }, [src, background])
 
   return (
     <figure className="stl-viewer">
