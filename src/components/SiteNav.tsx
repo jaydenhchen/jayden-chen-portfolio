@@ -3,10 +3,10 @@ import { Link, useLocation } from 'react-router-dom'
 import { siteProfile } from '../content/site'
 
 const links = [
-  { label: 'Work', href: '/#work' },
-  { label: 'CAD', href: '/cad' },
-  { label: 'CGI', href: '/cgi' },
-  { label: 'Other projects', href: '/other' },
+  { label: 'Work', to: '/#work' },
+  { label: 'CAD', to: '/cad' },
+  { label: 'CGI', to: '/cgi' },
+  { label: 'Other projects', to: '/other' },
 ]
 
 export function SiteNav() {
@@ -87,9 +87,9 @@ export function SiteNav() {
           aria-label="Primary navigation"
         >
           {links.map((link) => (
-            <a key={link.href} href={link.href} onClick={() => setIsOpen(false)}>
+            <Link key={link.to} to={link.to} onClick={() => setIsOpen(false)}>
               {link.label}
-            </a>
+            </Link>
           ))}
           <button
             className="theme-toggle"

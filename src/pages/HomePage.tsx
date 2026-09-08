@@ -68,7 +68,12 @@ export function HomePage() {
             ) : (
               <p className="empty-note">Contact details will appear here once supplied.</p>
             )}
-            {siteProfile.socials.length > 0 && <div className="contact-socials">{siteProfile.socials.map((social) => <a key={social.href} href={social.href} target="_blank" rel="noreferrer">{social.label} <span aria-hidden="true">↗</span></a>)}</div>}
+            {(siteProfile.resumeUrl || siteProfile.socials.length > 0) && (
+              <div className="contact-socials">
+                {siteProfile.socials.map((social) => <a key={social.href} href={social.href} target="_blank" rel="noreferrer">{social.label} <span aria-hidden="true">↗</span></a>)}
+                {siteProfile.resumeUrl && <a href={siteProfile.resumeUrl} target="_blank" rel="noreferrer">Résumé <span aria-hidden="true">↗</span></a>}
+              </div>
+            )}
           </div>
         </div>
       </section>

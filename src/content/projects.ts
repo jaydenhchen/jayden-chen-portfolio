@@ -29,7 +29,7 @@ export type Project = {
   nextSlug?: string
 }
 
-const suppliedMedia = '/media/stream'
+const suppliedMedia = `${import.meta.env.BASE_URL}media/stream`
 
 export const projects: Project[] = [
   {

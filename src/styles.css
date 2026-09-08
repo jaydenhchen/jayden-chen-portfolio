@@ -170,12 +170,12 @@ figcaption { margin-top: .7rem; color: var(--quiet); font-size: .6rem; letter-sp
 .project-hero { padding-top: clamp(3.5rem, 8vw, 7rem); }
 .back-link { display: inline-flex; align-items: center; gap: .65rem; min-height: 44px; margin-bottom: clamp(3rem, 7vw, 6rem); color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .68rem; letter-spacing: .1em; text-decoration: none; text-transform: uppercase; }
 .back-link:hover { color: var(--lime); }
-.project-hero-copy { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 2rem; align-items: end; margin-bottom: clamp(2rem, 5vw, 4rem); }
-.project-hero-copy h1 { max-width: 9ch; margin: 1.4rem 0 0; }
+.project-hero-copy { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 2rem; align-items: center; margin-bottom: clamp(2rem, 5vw, 4rem); }
+.project-hero-copy h1 { max-width: none; margin: 1.4rem 0 0; font-size: clamp(3.2rem, 6vw, 6.5rem); line-height: .95; }
 .project-summary { max-width: 30rem; margin-bottom: .2rem; font-size: clamp(1rem, 1.6vw, 1.3rem); }
 .project-hero-media { width: 100%; }
 .project-meta-section { padding-top: 1.5rem; }
-.project-meta-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; padding: 1.3rem 0; margin: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.project-meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem; padding: 1.3rem 0; margin: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .project-meta-grid div { min-width: 0; }
 dt { margin-bottom: .55rem; color: var(--quiet); }
 dd { margin: 0; color: var(--ink); font-size: .9rem; line-height: 1.5; }
@@ -343,23 +343,26 @@ body::before, body::after { display: none; }
 .archive-video-page .project-meta-grid a { color: inherit; text-decoration-color: var(--lime); text-underline-offset: .2em; }
 .archive-video-page .project-meta-grid a:hover { color: var(--lime); }
 
-.home-page { position: relative; isolation: isolate; overflow: clip; }
+.home-page { position: relative; isolation: isolate; overflow: visible; }
 .home-page > section { position: relative; z-index: 1; }
 .home-background-model { position: fixed; inset: 0; z-index: 0; isolation: isolate; pointer-events: none; opacity: .9; }
+.home-background-model .stl-viewer { position: relative; z-index: 1; height: 100%; margin: 0; }
 .home-background-model .stl-canvas-wrap { height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; background: transparent; }
 .home-background-model .stl-canvas-wrap::after { display: none; }
 .home-background-model .stl-status { display: none; }
 .home-background-model figcaption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.cgi-page { position: relative; isolation: isolate; overflow: clip; }
+.cgi-page { position: relative; isolation: isolate; overflow: visible; }
 .cgi-page > section, .cgi-page > .archive-footer { position: relative; z-index: 1; }
 .cgi-background-model { position: fixed; inset: 0; z-index: 0; isolation: isolate; pointer-events: none; opacity: .9; }
+.cgi-background-model .stl-viewer { position: relative; z-index: 1; height: 100%; margin: 0; }
 .cgi-background-model .stl-canvas-wrap { height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; background: transparent; }
 .cgi-background-model .stl-canvas-wrap::after { display: none; }
 .cgi-background-model .stl-status { display: none; }
 .cgi-background-model figcaption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.cad-page { position: relative; isolation: isolate; overflow: clip; }
+.cad-page { position: relative; isolation: isolate; overflow: visible; }
 .cad-page > section, .cad-page > .archive-footer { position: relative; z-index: 1; }
 .cad-background-model { position: fixed; inset: 0; z-index: 0; isolation: isolate; pointer-events: none; opacity: .9; }
+.cad-background-model .stl-viewer { position: relative; z-index: 1; height: 100%; margin: 0; }
 .cad-background-model .stl-canvas-wrap { height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; background: transparent; }
 .cad-background-model .stl-canvas-wrap::after { display: none; }
 .cad-background-model .stl-status { display: none; }
