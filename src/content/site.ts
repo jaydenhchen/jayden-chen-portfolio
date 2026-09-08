@@ -22,7 +22,7 @@ export const siteProfile: SiteProfile = {
   intro:
     'I make products, objects, and animations — from first sketch to final frame.',
   email: 'jayden.h.chen@gmail.com',
-  resumeUrl: '/media/ChenJayden_Resume.pdf',
+  resumeUrl: `${import.meta.env.BASE_URL}media/ChenJayden_Resume.pdf`,
   socials: [
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/jayden-chen-945679211/' },
     { label: 'YouTube', href: 'https://youtube.com/atticanimations' },

@@ -45,16 +45,15 @@ export function CGIPage() {
           cameraDistance={2}
           edgeThreshold={1}
           rotationAxis="y"
-          rotationDirection={-1}
+          rotationDirection={1}
           modelOffsetY={-0.15}
           initialRotationX={0}
           initialRotationZ={Math.PI / 2}
         />
       </div>
       <section className="archive-hero page-shell" aria-labelledby="cgi-title">
-        <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
         <h1 id="cgi-title">CGI.</h1>
-        <p className="archive-lede">A collection of short studies, product motion, and LEGO stories.</p>
+        <p className="archive-lede">Created with Blender, Premiere Pro, and Nuke</p>
       </section>
       <section className="archive-video-group page-shell" aria-labelledby="cgi-landscape-title">
         <h2 id="cgi-landscape-title" className="archive-group-title">Horizontal videos</h2>

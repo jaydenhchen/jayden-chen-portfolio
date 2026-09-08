@@ -9,8 +9,8 @@ export type ArchiveVideo = {
   youtubeUrl?: string
 }
 
-const archiveMedia = '/media/archive'
-const streamMedia = '/media/stream'
+const archiveMedia = `${import.meta.env.BASE_URL}media/archive`
+const streamMedia = `${import.meta.env.BASE_URL}media/stream`
 export const cgiVideos: ArchiveVideo[] = [
   { slug: 'bottle-study', src: `${streamMedia}/animation1.mp4`, title: 'Bottle study', alt: 'Bottle animation study' },
   { slug: 'invincible', src: `${streamMedia}/invincible4final.mp4`, title: 'Invincible - Season 4 Unofficial Teaser Trailer', alt: 'Invincible animation', youtubeUrl: 'https://www.youtube.com/watch?v=MD6KvNZ-Djc' },
