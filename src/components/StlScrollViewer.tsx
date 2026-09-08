@@ -56,17 +56,27 @@ export function StlScrollViewer({ src, alt }: StlScrollViewerProps) {
     const render = () => {
       frame = null
       if (!mesh || !isVisible || reducedMotion) {
+        if (isVisible) draw()
+        return
+      }
+      const desiredTilt = -Math.PI / 2 + targetTilt
+      const rotationDistance = Math.abs(targetRotation - mesh.rotation.y)
+      const tiltDistance = Math.abs(desiredTilt - mesh.rotation.x)
+      if (rotationDistance < 0.001 && tiltDistance < 0.001) {
+        mesh.rotation.y = targetRotation
+        mesh.rotation.x = desiredTilt
         draw()
         return
       }
       mesh.rotation.y += (targetRotation - mesh.rotation.y) * 0.08
-      mesh.rotation.x += (-Math.PI / 2 + targetTilt - mesh.rotation.x) * 0.08
+      mesh.rotation.x += (desiredTilt - mesh.rotation.x) * 0.08
       draw()
       frame = window.requestAnimationFrame(render)
     }
 
     const startAnimation = () => {
-      if (!reducedMotion && isVisible && frame === null) frame = window.requestAnimationFrame(render)
+      if (!isVisible) return
+      if (!reducedMotion && frame === null) frame = window.requestAnimationFrame(render)
       else draw()
     }
 
