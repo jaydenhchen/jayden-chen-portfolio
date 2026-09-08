@@ -330,7 +330,7 @@ body::before, body::after { display: none; }
 .cad-background-model figcaption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .cad-page .archive-hero { min-height: min(72svh, 52rem); }
 .cad-model-intro { min-height: 0; }
-.cad-model-intro .cad-model-link { max-width: 32rem; }
+.cad-model-intro .cad-model-link { display: block; width: min(100%, 32rem); max-width: 32rem; border-color: var(--line-strong); }
 .cad-page .archive-image-grid { padding-top: 1rem; }
 @media (max-width: 800px) {
   .cad-background-model { inset: 3.8rem 0 0; opacity: .9; }
