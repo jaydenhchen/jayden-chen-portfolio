@@ -28,6 +28,7 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
 
     let frame: number | null = null
     let mesh: THREE.LineSegments | undefined
+    let material: THREE.LineBasicMaterial | undefined
     let modelRadius = 1
     let targetRotation = 0
     let isVisible = false
@@ -39,6 +40,16 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
     scene.add(modelGroup)
 
     const draw = () => renderer.render(scene, camera)
+
+    const modelColor = () => document.documentElement.dataset.theme === 'light' ? 0x173a63 : 0xffffff
+    const themeObserver = 'MutationObserver' in window
+      ? new MutationObserver(() => {
+          material?.color.set(modelColor())
+          draw()
+        })
+      : undefined
+
+    themeObserver?.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
 
     const stopAnimation = () => {
       if (frame !== null) {
@@ -117,7 +128,7 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
         const radius = modelRadius
         const outlineGeometry = new THREE.EdgesGeometry(geometry, 18)
         geometry.dispose()
-        const material = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.4 })
+        material = new THREE.LineBasicMaterial({ color: modelColor(), transparent: true, opacity: 0.4 })
         mesh = new THREE.LineSegments(outlineGeometry, material)
         mesh.rotation.x = -Math.PI / 4
         modelGroup.add(mesh)
@@ -143,6 +154,7 @@ export function StlScrollViewer({ src, alt, title = 'Tiny Whoop Drone', backgrou
       mounted = false
       stopAnimation()
       visibilityObserver?.disconnect()
+      themeObserver?.disconnect()
       window.removeEventListener('resize', resize)
       window.removeEventListener('scroll', updateScrollTarget)
       if (mesh) {

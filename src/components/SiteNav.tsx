@@ -13,7 +13,42 @@ const links = [
 
 export function SiteNav() {
   const [isOpen, setIsOpen] = useState(false)
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    if (typeof window === 'undefined') return 'dark'
+    return window.localStorage.getItem('portfolio-theme') === 'light' ? 'light' : 'dark'
+  })
+  const [isLogoIntro, setIsLogoIntro] = useState(() => {
+    if (typeof window === 'undefined') return false
+    try {
+      return !window.localStorage.getItem('portfolio-logo-intro-seen')
+    } catch {
+      return false
+    }
+  })
   const location = useLocation()
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    window.localStorage.setItem('portfolio-theme', theme)
+  }, [theme])
+
+  useEffect(() => {
+    if (!isLogoIntro) return
+    const finishIntro = () => {
+      setIsLogoIntro(false)
+      try {
+        window.localStorage.setItem('portfolio-logo-intro-seen', 'true')
+      } catch {
+        // Local storage is optional; the animation still completes.
+      }
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      finishIntro()
+      return
+    }
+    const timeout = window.setTimeout(finishIntro, 1500)
+    return () => window.clearTimeout(timeout)
+  }, [isLogoIntro])
 
   useEffect(() => {
     setIsOpen(false)
@@ -56,10 +91,19 @@ export function SiteNav() {
         >
           {links.map((link) => (
             <a key={link.href} href={link.href} onClick={() => setIsOpen(false)}>
-              <span className="nav-index" aria-hidden="true">0{links.indexOf(link) + 1}</span>
               {link.label}
             </a>
           ))}
+          <button
+            className="theme-toggle"
+            type="button"
+            aria-pressed={theme === 'light'}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            onClick={() => setTheme((current) => current === 'dark' ? 'light' : 'dark')}
+          >
+            <span className="theme-toggle-swatch" aria-hidden="true" />
+            {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          </button>
         </nav>
       </div>
     </header>
