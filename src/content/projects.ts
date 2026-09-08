@@ -1,4 +1,4 @@
-export type ProjectCategory = 'engineering' | 'cgi'
+export type ProjectCategory = 'engineering' | 'cgi' | 'other'
 
 export type MediaAsset = {
   src: string
@@ -108,7 +108,7 @@ export const projects: Project[] = [
   {
     slug: 'figma-showcase',
     title: 'Figma showcase',
-    category: 'engineering',
+    category: 'other',
     eyebrow: 'Interface / Design',
     summary: 'A short look at a digital product in motion.',
     role: 'Interface design',

@@ -7,7 +7,7 @@ type ProjectCardProps = {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
-  const categoryLabel = project.category === 'cgi' ? 'CGI / Animation' : 'Engineering'
+  const categoryLabel = project.category === 'cgi' ? 'CGI / Animation' : project.category === 'other' ? 'Other project' : 'Engineering'
 
   return (
     <article className={`project-card project-card-${project.category}`}>

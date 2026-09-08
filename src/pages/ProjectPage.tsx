@@ -1,7 +1,13 @@
 import { Link, useParams } from 'react-router-dom'
 import { MediaFrame } from '../components/MediaFrame'
 import { Reveal } from '../components/Reveal'
-import { getProjectBySlug } from '../content/projects'
+import { getProjectBySlug, type ProjectCategory } from '../content/projects'
+
+function getCategoryLabel(category: ProjectCategory) {
+  if (category === 'cgi') return 'CGI / Animation'
+  if (category === 'other') return 'Other project'
+  return 'Engineering'
+}
 
 function MissingProject() {
   return (
@@ -21,7 +27,7 @@ export function ProjectPage() {
   if (!project) return <MissingProject />
 
   const nextProject = getProjectBySlug(project.nextSlug)
-  const categoryLabel = project.category === 'cgi' ? 'CGI / Animation' : 'Engineering'
+  const categoryLabel = getCategoryLabel(project.category)
 
   return (
     <main className={`project-page project-page-${project.category}`}>
@@ -67,7 +73,7 @@ export function ProjectPage() {
 
       <nav className="project-next page-shell" aria-label="Project navigation">
         <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
-        {nextProject && <Link className="next-project-link" to={`/work/${nextProject.slug}`}><span className="eyebrow">Next / {nextProject.category === 'cgi' ? 'Animation' : 'Engineering'}</span><strong>{nextProject.title}</strong><span className="next-arrow" aria-hidden="true">↗</span></Link>}
+        {nextProject && <Link className="next-project-link" to={`/work/${nextProject.slug}`}><span className="eyebrow">Next / {getCategoryLabel(nextProject.category)}</span><strong>{nextProject.title}</strong><span className="next-arrow" aria-hidden="true">↗</span></Link>}
       </nav>
     </main>
   )
