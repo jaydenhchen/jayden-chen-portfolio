@@ -42,7 +42,7 @@ export function HomePage() {
         </div>
         <Reveal className="hero-media-wrap">
           <div id="showreel" className="hero-media-label"><span>Featured work</span><span>Motion study</span></div>
-          <MediaFrame asset={featuredProject?.heroMedia} variant="hero" autoplayPreview={featuredProject?.heroMedia.kind === 'video'} loading="eager" />
+          <MediaFrame asset={featuredProject?.heroMedia} variant="hero" autoplayPreview={featuredProject?.heroMedia.kind === 'video'} hoverAudio={featuredProject?.heroMedia.kind === 'video'} loading="eager" />
         </Reveal>
       </section>
 

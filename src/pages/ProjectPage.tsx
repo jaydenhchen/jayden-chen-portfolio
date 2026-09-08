@@ -33,7 +33,7 @@ export function ProjectPage() {
           <p className="project-summary">{project.summary}</p>
         </div>
         <Reveal className="project-hero-media">
-          <MediaFrame asset={project.heroMedia} variant="detail" loading="eager" />
+          <MediaFrame asset={project.heroMedia} variant="detail" autoplayPreview={project.heroMedia.kind === 'video'} hoverAudio={project.heroMedia.kind === 'video'} loading="eager" />
         </Reveal>
       </section>
 

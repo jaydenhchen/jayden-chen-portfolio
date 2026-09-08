@@ -14,7 +14,7 @@ export function CGIPage() {
       <section className="archive-video-grid page-shell" aria-label="CGI videos">
         {cgiVideos.map((video, index) => (
           <article className="archive-video-card" key={video.src}>
-            <MediaFrame asset={{ src: video.src, alt: video.alt, kind: 'video' }} variant="detail" />
+            <MediaFrame asset={{ src: video.src, alt: video.alt, kind: 'video' }} variant="detail" autoplayPreview hoverAudio />
             <div className="archive-card-copy">
               <span className="archive-number">{String(index + 1).padStart(2, '0')}</span>
               <h2>{video.title}</h2>
