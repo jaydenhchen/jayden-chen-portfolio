@@ -45,6 +45,7 @@ export function CGIPage() {
           cameraDistance={2}
           edgeThreshold={1}
           rotationAxis="y"
+          rotationDirection={-1}
           initialRotationX={0}
           initialRotationZ={Math.PI / 2}
         />

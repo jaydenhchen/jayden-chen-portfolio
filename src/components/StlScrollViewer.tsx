@@ -11,6 +11,7 @@ type StlScrollViewerProps = {
   cameraDistance?: number
   edgeThreshold?: number
   rotationAxis?: 'x' | 'y' | 'z'
+  rotationDirection?: 1 | -1
   initialRotationX?: number
   initialRotationZ?: number
 }
@@ -24,6 +25,7 @@ export function StlScrollViewer({
   cameraDistance = 1.7,
   edgeThreshold = 18,
   rotationAxis = 'z',
+  rotationDirection = 1,
   initialRotationX = -Math.PI / 4,
   initialRotationZ = 0,
 }: StlScrollViewerProps) {
@@ -129,7 +131,7 @@ export function StlScrollViewer({
             const bounds = canvas.getBoundingClientRect()
             return Math.min(1, Math.max(0, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)))
           })()
-      targetRotation = progress * Math.PI * 2.4 + Math.sin(progress * Math.PI * 2) * 0.3
+      targetRotation = rotationDirection * (progress * Math.PI * 2.4 + Math.sin(progress * Math.PI * 2) * 0.3)
       startAnimation()
     }
 
@@ -195,7 +197,7 @@ export function StlScrollViewer({
       }
       renderer.dispose()
     }
-  }, [src, background, lineOpacity, cameraDistance, edgeThreshold, rotationAxis, initialRotationX, initialRotationZ])
+  }, [src, background, lineOpacity, cameraDistance, edgeThreshold, rotationAxis, rotationDirection, initialRotationX, initialRotationZ])
 
   return (
     <figure className="stl-viewer">
