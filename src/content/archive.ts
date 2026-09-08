@@ -7,53 +7,54 @@ export type ArchiveVideo = {
 }
 
 const archiveMedia = '/media/archive'
+const streamMedia = '/media/stream'
 
 export const cgiVideos: ArchiveVideo[] = [
-  { src: `${archiveMedia}/animation1.mp4`, title: 'Bottle study', alt: 'Bottle animation study' },
-  { src: `${archiveMedia}/figma-showcase.mp4`, title: 'Figma showcase', alt: 'Figma showcase video' },
-  { src: `${archiveMedia}/invincible4final.mp4`, title: 'Invincible', alt: 'Invincible animation' },
-  { src: `${archiveMedia}/final.mp4`, title: 'Final animation', alt: 'Final animation export' },
-  { src: `${archiveMedia}/0001.mp4`, title: 'Drone animation', alt: 'Drone animation study' },
-  { src: `${archiveMedia}/debate2-final.mp4`, title: 'Debate 02', alt: 'LEGO debate animation' },
-  { src: `${archiveMedia}/grammy-final.mp4`, title: 'Grammy', alt: 'LEGO Grammy animation' },
-  { src: `${archiveMedia}/field-trip.mp4`, title: 'Field Trip', alt: 'Field Trip animation' },
-  { src: `${archiveMedia}/bomb-final.mp4`, title: 'Bomb', alt: 'LEGO Bomb animation' },
-  { src: `${archiveMedia}/shortform.mp4`, title: 'Shortform', alt: 'Shortform animation' },
+  { src: `${streamMedia}/animation1.mp4`, title: 'Bottle study', alt: 'Bottle animation study' },
+  { src: `${streamMedia}/figma-showcase.mp4`, title: 'Figma showcase', alt: 'Figma showcase video' },
+  { src: `${streamMedia}/invincible4final.mp4`, title: 'Invincible', alt: 'Invincible animation' },
+  { src: `${streamMedia}/final.mp4`, title: 'Final animation', alt: 'Final animation export' },
+  { src: `${streamMedia}/0001.mp4`, title: 'Drone animation', alt: 'Drone animation study' },
+  { src: `${streamMedia}/debate2-final.mp4`, title: 'LEGO debate', alt: 'LEGO debate animation' },
+  { src: `${streamMedia}/grammy-final.mp4`, title: 'LEGO Grammy', alt: 'LEGO Grammy animation' },
+  { src: `${streamMedia}/field-trip.mp4`, title: 'LEGO Field Trip', alt: 'LEGO Field Trip animation' },
+  { src: `${streamMedia}/bomb-final.mp4`, title: 'LEGO Bomb', alt: 'LEGO Bomb animation' },
+  { src: `${streamMedia}/shortform.mp4`, title: 'Shortform', alt: 'Shortform animation' },
 ]
 
 export const cadImages: MediaAsset[] = [
   {
-    src: `${archiveMedia}/drone-cad.png`,
+    src: `${streamMedia}/drone-cad.png`,
     alt: 'Ducted drone frame in a CAD workspace',
     kind: 'image',
     caption: 'Drone frame study.',
   },
   {
-    src: `${archiveMedia}/img-1638.jpeg`,
+    src: `${streamMedia}/img-1638.jpeg`,
     alt: 'Three ducted quadcopter prototypes on a workbench',
     kind: 'image',
     caption: 'Prototype build.',
   },
   {
-    src: `${archiveMedia}/img-1639.jpg`,
+    src: `${streamMedia}/img-1639.jpg`,
     alt: 'Wheeled mobile kiosk render',
     kind: 'image',
     caption: 'Kiosk study.',
   },
   {
-    src: `${archiveMedia}/bamboo-process.png`,
+    src: `${streamMedia}/bamboo-process.png`,
     alt: 'Bamboo vessel design and casting process board',
     kind: 'image',
     caption: 'Bamboo vessel process.',
   },
   {
-    src: `${archiveMedia}/generic-logo.png`,
+    src: `${streamMedia}/generic-logo.png`,
     alt: 'Studio-lit mobile kiosk render',
     kind: 'image',
     caption: 'Product render.',
   },
   {
-    src: `${archiveMedia}/test4.png`,
+    src: `${streamMedia}/test4.png`,
     alt: 'Supplied design study image',
     kind: 'image',
     caption: 'Additional supplied study.',

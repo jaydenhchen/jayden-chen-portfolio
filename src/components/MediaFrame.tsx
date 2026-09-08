@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { MediaAsset } from '../content/projects'
 
 type MediaFrameProps = {
@@ -11,6 +11,10 @@ type MediaFrameProps = {
 export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false, loading = 'lazy' }: MediaFrameProps) {
   const [hasError, setHasError] = useState(!asset?.src)
   const [posterFailed, setPosterFailed] = useState(false)
+  useEffect(() => {
+    setHasError(!asset?.src)
+    setPosterFailed(false)
+  }, [asset?.src, asset?.poster])
 
   const showPoster = hasError && Boolean(asset?.poster) && !posterFailed
 
@@ -36,10 +40,10 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
         ) : asset.kind === 'video' ? (
           <video
             src={asset.src}
+            preload={variant === 'card' ? 'none' : 'metadata'}
             poster={asset.poster}
             muted={autoplayPreview}
             playsInline
-            preload="metadata"
             controls={!autoplayPreview}
             autoPlay={autoplayPreview}
             loop={autoplayPreview}

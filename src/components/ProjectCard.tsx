@@ -12,7 +12,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <article className={`project-card project-card-${project.category}`}>
       <Link className="project-card-link" to={`/work/${project.slug}`}>
-        <MediaFrame asset={project.thumbnail} variant="card" autoplayPreview={project.thumbnail.kind === 'video'} />
+        <MediaFrame asset={project.thumbnail} variant="card" />
         <div className="project-card-body">
           <div className="project-card-meta">
             <span className="category-label">{categoryLabel}</span>

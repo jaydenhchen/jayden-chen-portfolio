@@ -41,7 +41,7 @@ export function HomePage() {
           </div>
         </div>
         <Reveal className="hero-media-wrap">
-          <div id="showreel" className="hero-media-label"><span>Featured work</span><span>00:00 / 00:42</span></div>
+          <div id="showreel" className="hero-media-label"><span>Featured work</span><span>Motion study</span></div>
           <MediaFrame asset={featuredProject?.heroMedia} variant="hero" autoplayPreview={featuredProject?.heroMedia.kind === 'video'} loading="eager" />
         </Reveal>
       </section>

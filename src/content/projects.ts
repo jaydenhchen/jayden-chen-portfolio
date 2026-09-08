@@ -29,7 +29,7 @@ export type Project = {
   nextSlug?: string
 }
 
-const suppliedMedia = '/media/supplied'
+const suppliedMedia = '/media/stream'
 
 export const projects: Project[] = [
   {
@@ -64,7 +64,7 @@ export const projects: Project[] = [
     ],
     gallery: [
       {
-        src: `${suppliedMedia}/drone-prototype.jpeg`,
+        src: `${suppliedMedia}/img-1638.jpeg`,
         alt: 'Three small ducted quadcopter prototypes arranged on a wooden workbench',
         kind: 'image',
         caption: 'Supplied prototype photograph.',
@@ -81,13 +81,13 @@ export const projects: Project[] = [
     role: 'Object design',
     tools: ['CAD', 'Mold design', 'Casting'],
     thumbnail: {
-      src: `${suppliedMedia}/bamboo-vessel-process.png`,
+      src: `${suppliedMedia}/bamboo-process.png`,
       alt: 'Bamboo vessel design process from inspiration through mold and cast prototype',
       kind: 'image',
       caption: 'Supplied process board: inspiration, design, mold, and cast prototype.',
     },
     heroMedia: {
-      src: `${suppliedMedia}/bamboo-vessel-process.png`,
+      src: `${suppliedMedia}/bamboo-process.png`,
       alt: 'Bamboo vessel design process from inspiration through mold and cast prototype',
       kind: 'image',
       caption: 'Supplied process board: inspiration, design, mold, and cast prototype.',
@@ -146,12 +146,12 @@ export const projects: Project[] = [
     role: 'Animation',
     tools: ['Blender', 'Animation', 'Motion'],
     thumbnail: {
-      src: `${suppliedMedia}/animation-study.mp4`,
+      src: `${suppliedMedia}/animation1.mp4`,
       alt: 'Animation study video preview',
       kind: 'video',
     },
     heroMedia: {
-      src: `${suppliedMedia}/animation-study.mp4`,
+      src: `${suppliedMedia}/animation1.mp4`,
       alt: 'Animation study video',
       kind: 'video',
       caption: 'Supplied animation export.',
@@ -178,13 +178,13 @@ export const projects: Project[] = [
     role: '3D design',
     tools: ['3D design', 'Materials', 'Lighting'],
     thumbnail: {
-      src: `${suppliedMedia}/mobile-kiosk-render.png`,
+      src: `${suppliedMedia}/generic-logo.png`,
       alt: 'Studio-lit render of a wheeled mobile kiosk with a raised display',
       kind: 'image',
       caption: 'Supplied product render.',
     },
     heroMedia: {
-      src: `${suppliedMedia}/mobile-kiosk-render.png`,
+      src: `${suppliedMedia}/generic-logo.png`,
       alt: 'Studio-lit render of a wheeled mobile kiosk with a raised display',
       kind: 'image',
       caption: 'Supplied product render.',
@@ -211,12 +211,12 @@ export const projects: Project[] = [
     role: 'Animation',
     tools: ['Blender', 'Animation', 'Compositing'],
     thumbnail: {
-      src: `${suppliedMedia}/motion-study-0001.mp4`,
+      src: `${suppliedMedia}/0001.mp4`,
       alt: 'Motion study 0001 video preview',
       kind: 'video',
     },
     heroMedia: {
-      src: `${suppliedMedia}/motion-study-0001.mp4`,
+      src: `${suppliedMedia}/0001.mp4`,
       alt: 'Motion study 0001 video',
       kind: 'video',
       caption: 'Supplied 0001 animation export.',
