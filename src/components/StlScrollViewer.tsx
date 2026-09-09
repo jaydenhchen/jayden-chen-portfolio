@@ -54,6 +54,8 @@ export function StlScrollViewer({
     let targetRotation = 0
     let idleRotation = 0
     let previousFrameTime: number | undefined
+    let isScrollGestureActive = false
+    let scrollEndTimeout: number | null = null
     let isVisible = false
     let mounted = true
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -97,7 +99,7 @@ export function StlScrollViewer({
       }
       const elapsed = previousFrameTime === undefined ? 0 : Math.min(timestamp - previousFrameTime, 100)
       previousFrameTime = timestamp
-      idleRotation += elapsed * 0.00012 * rotationDirection
+      if (!isScrollGestureActive) idleRotation += elapsed * 0.00012 * rotationDirection
       setRotation(targetRotation + idleRotation)
       draw()
       frame = window.requestAnimationFrame(render)
@@ -107,6 +109,23 @@ export function StlScrollViewer({
       if (!isVisible) return
       if (!reducedMotion && frame === null) frame = window.requestAnimationFrame(render)
       else draw()
+    }
+
+    const resumeIdleAfterScroll = () => {
+      isScrollGestureActive = false
+      scrollEndTimeout = null
+      startAnimation()
+    }
+
+    const pauseIdleForScroll = () => {
+      isScrollGestureActive = true
+      if (scrollEndTimeout !== null) window.clearTimeout(scrollEndTimeout)
+      scrollEndTimeout = window.setTimeout(resumeIdleAfterScroll, 400)
+    }
+
+    const resumeIdleAfterTouch = () => {
+      if (scrollEndTimeout !== null) window.clearTimeout(scrollEndTimeout)
+      resumeIdleAfterScroll()
     }
 
     const resize = () => {
@@ -175,17 +194,25 @@ export function StlScrollViewer({
       },
     )
 
-    resize()
     window.addEventListener('resize', resize)
     window.addEventListener('scroll', updateScrollTarget, { passive: true })
+    window.addEventListener('wheel', pauseIdleForScroll, { passive: true })
+    window.addEventListener('touchstart', pauseIdleForScroll, { passive: true })
+    window.addEventListener('touchend', resumeIdleAfterTouch, { passive: true })
+    window.addEventListener('touchcancel', resumeIdleAfterTouch, { passive: true })
 
     return () => {
       mounted = false
+      if (scrollEndTimeout !== null) window.clearTimeout(scrollEndTimeout)
       stopAnimation()
       visibilityObserver?.disconnect()
       themeObserver?.disconnect()
       window.removeEventListener('resize', resize)
       window.removeEventListener('scroll', updateScrollTarget)
+      window.removeEventListener('wheel', pauseIdleForScroll)
+      window.removeEventListener('touchstart', pauseIdleForScroll)
+      window.removeEventListener('touchend', resumeIdleAfterTouch)
+      window.removeEventListener('touchcancel', resumeIdleAfterTouch)
       if (mesh) {
         mesh.geometry.dispose()
         const material = mesh.material
