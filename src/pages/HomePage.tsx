@@ -30,7 +30,7 @@ export function HomePage() {
       </section>
 
       <section id="work" className="work-section page-shell" aria-labelledby="work-title">
-        <SectionHeading index="01" eyebrow="Selected work" title="A mix of things I make." titleId="work-title" intro="Objects, interfaces, and moving images." />
+        <SectionHeading index="01" eyebrow="Selected work" title="A mix of things I make." titleId="work-title" intro="A combination of engineering and art." />
         <div className="work-rows">
           <div className="work-row">
             <div className="work-row-heading">
