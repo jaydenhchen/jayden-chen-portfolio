@@ -52,6 +52,8 @@ export function StlScrollViewer({
     let material: THREE.LineBasicMaterial | undefined
     let modelRadius = 1
     let targetRotation = 0
+    let idleRotation = 0
+    let previousFrameTime: number | undefined
     let isVisible = false
     let mounted = true
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -86,25 +88,31 @@ export function StlScrollViewer({
     themeObserver?.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
 
     const stopAnimation = () => {
+      previousFrameTime = undefined
       if (frame !== null) {
         window.cancelAnimationFrame(frame)
         frame = null
       }
     }
 
-    const render = () => {
+    const render = (timestamp: number) => {
       frame = null
       if (!mesh || !isVisible || reducedMotion) {
         if (isVisible) draw()
         return
       }
-      const rotationDistance = Math.abs(targetRotation - getRotation())
+      const elapsed = previousFrameTime === undefined ? 0 : Math.min(timestamp - previousFrameTime, 100)
+      previousFrameTime = timestamp
+      idleRotation += elapsed * 0.00012 * rotationDirection
+      const desiredRotation = targetRotation + idleRotation
+      const rotationDistance = Math.abs(desiredRotation - getRotation())
       if (rotationDistance < 0.001) {
-        setRotation(targetRotation)
+        setRotation(desiredRotation)
         draw()
+        frame = window.requestAnimationFrame(render)
         return
       }
-      setRotation(getRotation() + (targetRotation - getRotation()) * 0.05)
+      setRotation(getRotation() + (desiredRotation - getRotation()) * 0.05)
       draw()
       frame = window.requestAnimationFrame(render)
     }
