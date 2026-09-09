@@ -33,17 +33,17 @@ export function HomePage() {
         <SectionHeading title="Selected work" titleId="work-title" intro="Combining constrained engineering and artistic freedom" />
         <div className="work-rows">
           <div className="work-row">
-            <div className="work-row-heading">
-              <div className="text-reveal"><Link className="work-row-title" to="/cad"><h3 id="engineering-work-title">Engineering</h3></Link><p>Fusion 360 and hands-on work</p></div>
-            </div>
+            <Reveal className="work-row-heading">
+              <div><Link className="work-row-title" to="/cad"><h3 id="engineering-work-title">Engineering</h3></Link><p>Fusion 360 and hands-on work</p></div>
+            </Reveal>
             <div className="project-grid" aria-labelledby="engineering-work-title">
               {engineeringProjects.length > 0 ? engineeringProjects.map((project) => <ProjectCard key={project.slug} project={project} />) : <p className="empty-state">Engineering projects will appear here.</p>}
             </div>
           </div>
           <div className="work-row">
-            <div className="work-row-heading">
-              <div className="text-reveal"><Link className="work-row-title" to="/cgi"><h3 id="cgi-work-title">Blender</h3></Link><p>Design, animate, render, composite</p></div>
-            </div>
+            <Reveal className="work-row-heading">
+              <div><Link className="work-row-title" to="/cgi"><h3 id="cgi-work-title">Blender</h3></Link><p>Design, animate, render, composite</p></div>
+            </Reveal>
             <div className="project-grid" aria-labelledby="cgi-work-title">
               {cgiProjects.length > 0 ? cgiProjects.map((project) => <ProjectCard key={project.slug} project={project} />) : <p className="empty-state">CGI projects will appear here.</p>}
             </div>
