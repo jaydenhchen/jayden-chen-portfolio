@@ -92,6 +92,7 @@ p { color: var(--muted); font-size: 1rem; line-height: 1.7; }
 .button-quiet:hover { border-color: var(--lime); color: var(--lime); }
 .play-icon { font-size: .6rem; }
 .hero-media-wrap { min-width: 0; }
+.featured-work-link { display: block; color: inherit; text-decoration: none; }
 .hero-media-label { display: flex; justify-content: space-between; margin-bottom: .7rem; }
 .media-frame { margin: 0; }
 .media-frame-visual { position: relative; overflow: hidden; min-height: 8rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
@@ -130,6 +131,9 @@ figcaption { margin-top: .7rem; color: var(--quiet); font-size: .6rem; letter-sp
 .project-card-cgi .project-arrow { color: var(--blue); }
 .project-card-body h3 { margin-bottom: .75rem; }
 .project-card-body p { min-height: 5rem; margin-bottom: 1.35rem; font-size: .92rem; }
+.project-card-made-with { display: grid; gap: .45rem; margin-top: 1.15rem; }
+.project-card-made-with-label { color: var(--quiet); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .66rem; letter-spacing: .05em; text-transform: uppercase; }
+.project-card-made-with .tool-list { display: flex; }
 .tool-list, .capability-tools { display: flex; flex-wrap: wrap; gap: .45rem; padding: 0; margin: 0; list-style: none; }
 .tool-list li, .capability-tools li { padding: .38rem .55rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .61rem; letter-spacing: .06em; }
 .empty-state, .empty-note { padding: 1.5rem; border: 1px dashed var(--line); color: var(--quiet); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .75rem; }
@@ -291,6 +295,7 @@ dd { margin: 0; color: var(--ink); font-size: .9rem; line-height: 1.5; }
   .work-row-heading { grid-template-columns: 1fr; }
   .about-grid, .case-study-section { grid-template-columns: 1fr; gap: 2.5rem; }
   .contact-panel { grid-template-columns: 1fr; }
+  .project-meta-year { grid-column: 2; }
   .project-meta-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1.5rem; }
   .project-next { grid-template-columns: 1fr; }
 }

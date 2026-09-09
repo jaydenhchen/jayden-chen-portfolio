@@ -33,7 +33,7 @@ export function CADProjectPage() {
         </div>
         <Reveal className={`project-hero-media${project.stl && (project.media || project.gallery?.length) ? ' cad-project-media-collection' : ''}`}>
           {project.stl && (
-            <StlScrollViewer src={project.stl.src} alt={project.stl.alt} lineOpacity={0.8} />
+            <StlScrollViewer src={project.stl.src} alt={project.stl.alt} lineOpacity={0.8} showCaption={false} />
           )}
           {project.media && <MediaFrame asset={project.media} variant="detail" showCaption={false} loading="eager" />}
           {project.gallery?.map((asset) => <MediaFrame key={asset.src} asset={asset} variant="detail" showCaption={false} loading="eager" />)}
@@ -44,7 +44,8 @@ export function CADProjectPage() {
         <dl className="project-meta-grid text-reveal" aria-label="CAD project details">
           <div><dt>Type</dt><dd>CAD project</dd></div>
           <div><dt>Format</dt><dd>{project.stl && (project.media || project.gallery?.length) ? 'Interactive STL + Design images' : project.stl ? 'Interactive STL' : project.media || project.gallery?.length ? 'Design images' : 'Design image'}</dd></div>
-          {project.year && <div><dt>Year</dt><dd>{project.year}</dd></div>}
+          {project.tools && project.tools.length > 0 && <div><dt>Made with</dt><dd>{project.tools.join(' · ')}</dd></div>}
+          {project.year && <div className="project-meta-year"><dt>Year</dt><dd>{project.year}</dd></div>}
         </dl>
       </section>
 
