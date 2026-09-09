@@ -11,7 +11,7 @@ function renderCadProjectCard(project: CadProject) {
     <Reveal className="project-card-reveal">
       <article className="project-card project-card-engineering cad-project-card">
         <Link className="project-card-link" to={project.href}>
-          <MediaFrame asset={project.media} variant="card" />
+          <MediaFrame asset={project.media} variant="card" autoplayPreview={project.media.kind === 'video'} hoverAudio={project.media.kind === 'video'} />
           <div className="project-card-body text-reveal">
             <div className="project-card-meta">
               <span className="project-arrow" aria-hidden="true">↗</span>
