@@ -196,6 +196,7 @@ export function StlScrollViewer({
 
     window.addEventListener('resize', resize)
     window.addEventListener('scroll', updateScrollTarget, { passive: true })
+    window.addEventListener('scrollend', resumeIdleAfterTouch)
     window.addEventListener('wheel', pauseIdleForScroll, { passive: true })
     window.addEventListener('touchstart', pauseIdleForScroll, { passive: true })
     window.addEventListener('touchend', resumeIdleAfterTouch, { passive: true })
@@ -209,6 +210,7 @@ export function StlScrollViewer({
       themeObserver?.disconnect()
       window.removeEventListener('resize', resize)
       window.removeEventListener('scroll', updateScrollTarget)
+      window.removeEventListener('scrollend', resumeIdleAfterTouch)
       window.removeEventListener('wheel', pauseIdleForScroll)
       window.removeEventListener('touchstart', pauseIdleForScroll)
       window.removeEventListener('touchend', resumeIdleAfterTouch)

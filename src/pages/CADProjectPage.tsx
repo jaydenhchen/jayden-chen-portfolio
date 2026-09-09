@@ -29,7 +29,6 @@ export function CADProjectPage() {
           <div>
             <h1 id="cad-project-title">{project.title}</h1>
           </div>
-          <p className="project-summary">{project.alt}</p>
         </div>
         <Reveal className="project-hero-media">
           {project.media ? (
