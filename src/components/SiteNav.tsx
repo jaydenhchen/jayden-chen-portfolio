@@ -3,11 +3,12 @@ import { Link, useLocation } from 'react-router-dom'
 import { siteProfile } from '../content/site'
 
 const links = [
-  { label: 'Work', to: '/' },
   { label: 'CAD', to: '/cad' },
   { label: 'CGI', to: '/cgi' },
   { label: 'Other projects', to: '/other' },
 ]
+const isCurrentPath = (pathname: string, destination: string) =>
+  pathname === destination || pathname.startsWith(`${destination}/`)
 
 export function SiteNav() {
   const [isOpen, setIsOpen] = useState(false)
@@ -64,9 +65,14 @@ export function SiteNav() {
   }, [isOpen])
 
   return (
-    <header className="site-nav">
+    <header id="top" className="site-nav">
       <div className="nav-inner">
-        <Link className={`wordmark${isLogoIntro ? ' logo-intro' : ''}`} to="/" aria-label={`${siteProfile.name} home`}>
+        <Link
+          className={`wordmark${isLogoIntro ? ' logo-intro' : ''}${location.pathname === '/' ? ' is-current' : ''}`}
+          to="/"
+          aria-label={`${siteProfile.name} home`}
+          aria-current={location.pathname === '/' ? 'page' : undefined}
+        >
           <span className="wordmark-name">{siteProfile.name}</span>
         </Link>
 
@@ -89,7 +95,9 @@ export function SiteNav() {
           {links.map((link) => (
             <Link
               key={link.to}
+              className={isCurrentPath(location.pathname, link.to) ? 'is-current' : undefined}
               to={link.to}
+              aria-current={isCurrentPath(location.pathname, link.to) ? 'page' : undefined}
               onClick={() => {
                 setIsOpen(false)
                 if (link.to === '/' && location.pathname === '/') window.scrollTo({ top: 0, behavior: 'auto' })

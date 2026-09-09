@@ -21,7 +21,8 @@ function ScrollToTop() {
       return () => window.cancelAnimationFrame(frame)
     }
 
-    window.scrollTo({ top: 0, behavior: 'auto' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
   }, [pathname, hash])
 
   return null
@@ -29,10 +30,10 @@ function ScrollToTop() {
 
 function NotFoundPage() {
   return (
-    <main className="not-found page-shell">
+    <main className="not-found page-shell text-reveal">
       <p className="eyebrow">404 / Signal lost</p>
-      <h1>That route is not in the archive.</h1>
-      <p>Return to the work index and choose a live project route.</p>
+      <h1>That route is not in the archive</h1>
+      <p>Return to the work index and choose a live project route</p>
       <Link className="button button-primary" to="/#work">
         Back to all work <span aria-hidden="true">↗</span>
       </Link>
