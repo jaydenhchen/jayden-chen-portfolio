@@ -35,10 +35,9 @@ export function ProjectPage() {
         <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
         <div className="project-hero-copy">
           <h1 id="project-title">{project.title}</h1>
-          <p className="project-summary">{project.summary}</p>
         </div>
         <Reveal className="project-hero-media">
-          <MediaFrame asset={project.heroMedia} variant="detail" autoplayPreview={project.heroMedia.kind === 'video'} hoverAudio={project.heroMedia.kind === 'video'} loading="eager" />
+          <MediaFrame asset={project.heroMedia} variant="detail" autoplayPreview={project.heroMedia.kind === 'video'} muteToggle={project.heroMedia.kind === 'video'} hoverAudio={project.heroMedia.kind === 'video'} loading="eager" />
         </Reveal>
       </section>
 

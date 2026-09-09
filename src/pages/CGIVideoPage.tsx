@@ -28,13 +28,13 @@ export function CGIVideoPage() {
           <div>
             <h1 id="cgi-video-title">{video.title}</h1>
           </div>
-          <p className="project-summary">{video.alt}</p>
         </div>
         <Reveal className="project-hero-media">
           <MediaFrame
             asset={{ src: video.src, alt: video.alt, kind: 'video' }}
             variant="detail"
-            controls
+            autoplayPreview
+            muteToggle
             loading="eager"
           />
         </Reveal>
@@ -44,9 +44,6 @@ export function CGIVideoPage() {
         <dl className="project-meta-grid">
           <div><dt>Type</dt><dd>CGI animation</dd></div>
           <div><dt>Format</dt><dd>{video.orientation === 'portrait' ? 'Vertical' : 'Landscape'}</dd></div>
-          {video.youtubeUrl && (
-            <div><dt>Watch</dt><dd><a href={video.youtubeUrl} target="_blank" rel="noreferrer">YouTube <span aria-hidden="true">↗</span></a></dd></div>
-          )}
         </dl>
       </section>
 
