@@ -29,7 +29,9 @@ export type Project = {
 }
 
 const suppliedMedia = `${import.meta.env.BASE_URL}media/stream`
-const completeCadCgiTools = ['Fusion 360', 'Blender', 'Premiere Pro', 'Photoshop', 'Nuke']
+export const fusion360Tools = ['Fusion 360']
+export const cgiTools = ['Blender', 'Premiere Pro', 'Nuke', 'Photoshop']
+const sharedCadCgiTools = [...fusion360Tools, ...cgiTools]
 export const getProjectPath = (slug: string) => `/work/${slug}`
 
 export const projects: Project[] = [
@@ -40,7 +42,7 @@ export const projects: Project[] = [
     eyebrow: 'Helmet / Design',
     summary: 'A custom helmet modeled in Fusion 360 as a focused design study',
     year: '2024',
-    tools: completeCadCgiTools,
+    tools: fusion360Tools,
     thumbnail: {
       src: `${suppliedMedia}/drone-cad.png`,
       alt: 'Custom helmet shown in a Fusion 360 CAD workspace',
@@ -72,7 +74,7 @@ export const projects: Project[] = [
     eyebrow: 'Object / Design',
     summary: 'A bamboo-inspired vessel, from first sketch to cast test',
     year: '2025',
-    tools: completeCadCgiTools,
+    tools: fusion360Tools,
     thumbnail: {
       src: `${suppliedMedia}/bamboo-process.png`,
       alt: 'Bamboo vessel design process from inspiration through mold and cast prototype',
@@ -135,7 +137,7 @@ export const projects: Project[] = [
     eyebrow: 'Animation / Motion',
     summary: 'A moving image study built around timing, light, and atmosphere',
     year: '2026',
-    tools: completeCadCgiTools,
+    tools: sharedCadCgiTools,
     thumbnail: {
       src: `${suppliedMedia}/animation1.mp4`,
       alt: 'Animation study video preview',
@@ -165,7 +167,7 @@ export const projects: Project[] = [
     eyebrow: 'Automotive / Rendering',
     summary: 'A studio render study of the Porche 911 GT3 RS',
     year: '2026',
-    tools: completeCadCgiTools,
+    tools: cgiTools,
     thumbnail: {
       src: `${suppliedMedia}/test4.png`,
       alt: 'Porche 911 GT3 RS rendering',
@@ -197,7 +199,7 @@ export const projects: Project[] = [
     eyebrow: 'Object / 3D image',
     summary: 'A wheeled kiosk brought to life with light, color, and shape',
     year: '2025',
-    tools: completeCadCgiTools,
+    tools: sharedCadCgiTools,
     thumbnail: {
       src: `${suppliedMedia}/generic-logo.png`,
       alt: 'Studio-lit render of a wheeled mobile kiosk with a raised display',
@@ -229,7 +231,7 @@ export const projects: Project[] = [
     eyebrow: 'Animation / Motion',
     summary: 'Another moving image study from the archive',
     year: '2025',
-    tools: completeCadCgiTools,
+    tools: sharedCadCgiTools,
     thumbnail: {
       src: `${suppliedMedia}/0001.mp4`,
       alt: 'Motion study 0001 video preview',
