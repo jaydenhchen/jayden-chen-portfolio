@@ -18,6 +18,14 @@ function renderCadProjectCard(project: CadProject) {
             </div>
             <h3>{project.title}</h3>
             <p>{project.year}</p>
+            {project.tools && project.tools.length > 0 && (
+              <div className="project-card-made-with">
+                <span className="project-card-made-with-label">Made with</span>
+                <ul className="tool-list project-card-tool-list" aria-label={`${project.title} tools`}>
+                  {project.tools.map((tool) => <li key={tool}>{tool}</li>)}
+                </ul>
+              </div>
+            )}
           </div>
         </Link>
       </article>
@@ -35,7 +43,7 @@ export function CADPage() {
       </div>
       <section className="archive-hero page-shell text-reveal" aria-labelledby="cad-title">
         <h1 id="cad-title">CAD</h1>
-        <p className="archive-lede">Designed in Fusion 360</p>
+        <p className="archive-lede">Designed in Fusion 360 and SolidWorks</p>
       </section>
       <section className="stl-section cad-model-intro page-shell" aria-labelledby="stl-title">
         <Link className="project-card project-card-engineering cad-model-link" to="/cad/tiny-whoop-drone">
@@ -44,7 +52,7 @@ export function CADPage() {
               <span className="project-arrow" aria-hidden="true">↗</span>
             </div>
             <h3 id="stl-title">{stlAsset.title}</h3>
-            <p>Scroll through the page to turn the model</p>
+            <p>Scroll through the page to rotate the model</p>
           </div>
         </Link>
       </section>

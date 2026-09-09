@@ -4,9 +4,10 @@ import { Reveal } from './Reveal'
 import { MediaFrame } from './MediaFrame'
 type ProjectCardProps = {
   project: Project
+  showTools?: boolean
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, showTools = false }: ProjectCardProps) {
 
   return (
     <Reveal className="project-card-reveal">
@@ -19,9 +20,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
             </div>
             <h3>{project.title}</h3>
             <p>{project.year}</p>
-            <ul className="tool-list" aria-label={`${project.title} tools`}>
-              {project.tools.map((tool) => <li key={tool}>{tool}</li>)}
-            </ul>
+            {showTools && project.tools.length > 0 && (
+              <div className="project-card-made-with">
+                <span className="project-card-made-with-label">Made with</span>
+                <ul className="tool-list project-card-tool-list" aria-label={`${project.title} tools`}>
+                  {project.tools.map((tool) => <li key={tool}>{tool}</li>)}
+                </ul>
+              </div>
+            )}
           </div>
         </Link>
       </article>

@@ -43,9 +43,9 @@ export function ProjectPage() {
       <section className="project-meta-section page-shell" aria-label="Project details">
         <dl className="project-meta-grid text-reveal">
           <div><dt>Type</dt><dd>{categoryLabel}</dd></div>
-          {project.year && <div><dt>Year</dt><dd>{project.year}</dd></div>}
           {project.role && <div><dt>Role</dt><dd>{project.role}</dd></div>}
           <div><dt>Made with</dt><dd>{project.tools.join(' · ')}</dd></div>
+          {project.year && <div className="project-meta-year"><dt>Year</dt><dd>{project.year}</dd></div>}
         </dl>
       </section>
 

@@ -18,6 +18,7 @@ type StlScrollViewerProps = {
   modelOffsetY?: number
   initialRotationX?: number
   initialRotationZ?: number
+  showCaption?: boolean
 }
 
 export function StlScrollViewer({
@@ -34,6 +35,7 @@ export function StlScrollViewer({
   modelOffsetY = 0,
   initialRotationX = -Math.PI / 4,
   initialRotationZ = 0,
+  showCaption = true,
 }: StlScrollViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [hasError, setHasError] = useState(false)
@@ -266,7 +268,7 @@ export function StlScrollViewer({
           </div>
         )}
       </div>
-      <figcaption>3D model</figcaption>
+      {showCaption && <figcaption>3D model</figcaption>}
     </figure>
   )
 }

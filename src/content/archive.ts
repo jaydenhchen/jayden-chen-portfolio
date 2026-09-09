@@ -9,6 +9,7 @@ export type ArchiveVideo = {
   href: string
   orientation?: 'landscape' | 'portrait'
   youtubeUrl?: string
+  tools?: string[]
 }
 
 const archiveMedia = `${import.meta.env.BASE_URL}media/archive`
@@ -27,6 +28,7 @@ const createProjectVideo = (slug: string): ArchiveVideo => {
     alt: project.thumbnail.alt,
     year: project.year,
     href: getProjectPath(project.slug),
+    tools: project.tools,
   }
 }
 
@@ -93,6 +95,7 @@ export type CadProject = {
   media?: MediaAsset
   gallery?: MediaAsset[]
   stl?: typeof stlAsset
+  tools?: string[]
 }
 
 const createCadProject = (slug: string): CadProject => {
@@ -105,6 +108,7 @@ const createCadProject = (slug: string): CadProject => {
     alt: project.thumbnail.alt,
     year: project.year,
     href: getProjectPath(project.slug),
+    tools: project.tools,
     media: project.thumbnail,
   }
 }

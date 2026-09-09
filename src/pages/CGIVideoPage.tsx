@@ -46,7 +46,8 @@ export function CGIVideoPage() {
         <dl className="project-meta-grid text-reveal">
           <div><dt>Type</dt><dd>CGI animation</dd></div>
           <div><dt>Format</dt><dd>{video.orientation === 'portrait' ? 'Vertical' : 'Landscape'}</dd></div>
-          <div><dt>Year</dt><dd>{video.year}</dd></div>
+          {video.tools && video.tools.length > 0 && <div><dt>Made with</dt><dd>{video.tools.join(' · ')}</dd></div>}
+          <div className="project-meta-year"><dt>Year</dt><dd>{video.year}</dd></div>
         </dl>
       </section>
 

@@ -4,12 +4,13 @@ import { StlScrollViewer } from '../components/StlScrollViewer'
 import { ProjectCard } from '../components/ProjectCard'
 import { Reveal } from '../components/Reveal'
 import { SectionHeading } from '../components/SectionHeading'
-import { getProjectsByCategory, projects } from '../content/projects'
+import { getProjectPath, getProjectsByCategory, projects } from '../content/projects'
 import { legoStlAsset } from '../content/archive'
 import { siteProfile } from '../content/site'
 
 const engineeringProjects = getProjectsByCategory('engineering')
 const cgiProjects = getProjectsByCategory('cgi')
+const homeCgiProjects = cgiProjects.filter((project) => !['bottle-animation', 'biomedical-cancer-locating-cart'].includes(project.slug))
 const featuredProject = cgiProjects[0] ?? projects[0]
 
 export function HomePage() {
@@ -25,7 +26,9 @@ export function HomePage() {
         </div>
         <Reveal className="hero-media-wrap">
           <div className="hero-media-label"><span>Featured work</span></div>
-          <MediaFrame asset={featuredProject?.heroMedia} variant="hero" autoplayPreview={featuredProject?.heroMedia.kind === 'video'} hoverAudio={featuredProject?.heroMedia.kind === 'video'} loading="eager" />
+          <Link className="featured-work-link" to={getProjectPath(featuredProject.slug)} aria-label={`View ${featuredProject.title} project`}>
+            <MediaFrame asset={featuredProject.heroMedia} variant="hero" autoplayPreview={featuredProject.heroMedia.kind === 'video'} hoverAudio={featuredProject.heroMedia.kind === 'video'} loading="eager" />
+          </Link>
         </Reveal>
       </section>
 
@@ -45,7 +48,7 @@ export function HomePage() {
               <div><Link className="work-row-title" to="/cgi"><h3 id="cgi-work-title">Blender</h3></Link><p>Design, animate, render, composite</p></div>
             </Reveal>
             <div className="project-grid" aria-labelledby="cgi-work-title">
-              {cgiProjects.length > 0 ? cgiProjects.map((project) => <ProjectCard key={project.slug} project={project} />) : <p className="empty-state">CGI projects will appear here.</p>}
+              {homeCgiProjects.length > 0 ? homeCgiProjects.map((project) => <ProjectCard key={project.slug} project={project} />) : <p className="empty-state">CGI projects will appear here.</p>}
             </div>
           </div>
         </div>
