@@ -1,6 +1,32 @@
 import { useEffect, useRef, useState } from 'react'
 import type { MediaAsset } from '../content/projects'
 
+type MobileAudioCandidate = {
+  video: HTMLVideoElement
+  visibleArea: number
+}
+
+const mobileAudioCandidates = new Map<HTMLVideoElement, MobileAudioCandidate>()
+let activeMobileAudioVideo: HTMLVideoElement | null = null
+
+const updateMobileAudio = () => {
+  const previousVideo = activeMobileAudioVideo
+  const nextVideo = [...mobileAudioCandidates.values()]
+    .filter(({ visibleArea }) => visibleArea > 0)
+    .sort((a, b) => b.visibleArea - a.visibleArea)[0]?.video ?? null
+
+  mobileAudioCandidates.forEach(({ video }) => {
+    video.muted = video !== nextVideo
+  })
+  activeMobileAudioVideo = nextVideo
+
+  if (!nextVideo || (nextVideo === previousVideo && !nextVideo.paused)) return
+  nextVideo.play().catch(() => {
+    nextVideo.muted = true
+    if (activeMobileAudioVideo === nextVideo) activeMobileAudioVideo = null
+  })
+}
+
 type MediaFrameProps = {
   asset?: MediaAsset
   variant?: 'hero' | 'card' | 'detail'
@@ -19,6 +45,15 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
   const [posterFailed, setPosterFailed] = useState(false)
   const [isMuted, setIsMuted] = useState(!muteToggle)
   const [isVisible, setIsVisible] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 800px)').matches)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 800px)')
+    const updateMobileState = () => setIsMobile(mediaQuery.matches)
+    updateMobileState()
+    mediaQuery.addEventListener?.('change', updateMobileState)
+    return () => mediaQuery.removeEventListener?.('change', updateMobileState)
+  }, [])
 
   useEffect(() => {
     setHasError(!asset?.src)
@@ -55,6 +90,33 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
 
   const showMuteToggle = asset?.kind === 'video' && muteToggle
   const usesHoverAudio = asset?.kind === 'video' && hoverAudio && !muteToggle
+
+  useEffect(() => {
+    if (!isMobile || !usesHoverAudio || !('IntersectionObserver' in window)) return
+    const element = mediaRef.current
+    const video = videoRef.current
+    if (!element || !video) return
+
+    mobileAudioCandidates.set(video, { video, visibleArea: 0 })
+    const observer = new IntersectionObserver(([entry]) => {
+      const candidate = mobileAudioCandidates.get(video)
+      if (!candidate) return
+      candidate.visibleArea = entry.isIntersecting ? entry.intersectionRect.width * entry.intersectionRect.height : 0
+      updateMobileAudio()
+    }, { threshold: [0, 0.25, 0.5, 0.75, 1] })
+    observer.observe(element)
+
+    return () => {
+      observer.disconnect()
+      mobileAudioCandidates.delete(video)
+      if (activeMobileAudioVideo === video) {
+        video.muted = true
+        activeMobileAudioVideo = null
+      }
+      updateMobileAudio()
+    }
+  }, [asset?.src, isMobile, usesHoverAudio])
+
 
   const playWithHoverAudio = async () => {
     const video = videoRef.current
@@ -114,9 +176,15 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
               loop={autoplayPreview}
               data-hover-audio={usesHoverAudio ? 'true' : undefined}
               aria-label={asset.alt}
-              onPointerEnter={usesHoverAudio ? playWithHoverAudio : undefined}
-              onPointerLeave={usesHoverAudio ? muteOnLeave : undefined}
-              onError={() => setHasError(true)}
+              onPointerEnter={usesHoverAudio && !isMobile ? playWithHoverAudio : undefined}
+              onPointerLeave={usesHoverAudio && !isMobile ? muteOnLeave : undefined}
+              onError={() => {
+                setHasError(true)
+                const video = videoRef.current
+                if (!video) return
+                mobileAudioCandidates.delete(video)
+                updateMobileAudio()
+              }}
             />
             {showMuteToggle && (
               <button
