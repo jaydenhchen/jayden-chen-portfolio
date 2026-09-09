@@ -41,7 +41,7 @@ export const cgiVideos: ArchiveVideo[] = [
   { slug: 'lego-debate', src: `${streamMedia}/debate2-final.mp4`, title: 'Trump and Harris Presidential Debate but in LEGO', alt: 'LEGO debate animation', year: '2024', href: '/cgi/lego-debate', tools: cgiOnlyTools, youtubeUrl: 'https://www.youtube.com/watch?v=YlhEZTxmDlA' },
   { slug: 'lego-grammy', src: `${streamMedia}/grammy-final.mp4`, title: 'Kanye West Wins Grammy Best Rap Album Speech but in LEGO', alt: 'LEGO Grammy animation', year: '2024', orientation: 'portrait', href: '/cgi/lego-grammy', tools: cgiOnlyTools, youtubeUrl: 'https://www.youtube.com/watch?v=7DuW4mAjFag' },
   { slug: 'lego-field-trip', src: `${streamMedia}/field-trip.mp4`, title: 'Kanye West – FIELD TRIP | Music Video', alt: 'LEGO Field Trip animation', year: '2024', href: '/cgi/lego-field-trip', tools: cgiOnlyTools, youtubeUrl: 'https://www.youtube.com/watch?v=LMruuUC5wAw', thumbnailFit: 'cover' },
-  { slug: 'lego-bomb', src: `${streamMedia}/bomb-final.mp4`, title: 'Kanye West - BOMB (feat. North West) | LEGO Music Video', alt: 'LEGO Bomb animation', year: '2024', href: '/cgi/lego-bomb', tools: cgiOnlyTools, youtubeUrl: 'https://www.youtube.com/watch?v=8mdvX56404U' },
+  { slug: 'lego-bomb', src: `${streamMedia}/bomb-final.mp4`, title: 'Kanye West - BOMB (feat. North West) | LEGO Music Video', alt: 'LEGO Bomb animation', year: '2024', href: '/cgi/lego-bomb', tools: cgiOnlyTools, youtubeUrl: 'https://www.youtube.com/watch?v=8mdvX56404U', thumbnailFit: 'cover' },
   { slug: 'shortform', src: `${streamMedia}/shortform.mp4`, title: 'Wholly Custom LEGO Set, Box, and Rendering', alt: 'Shortform animation', year: '2025', orientation: 'portrait', href: '/cgi/shortform', tools: cgiOnlyTools },
 ]
 
