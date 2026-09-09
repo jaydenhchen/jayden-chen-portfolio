@@ -36,10 +36,10 @@ export const cgiVideos: ArchiveVideo[] = [
   { slug: 'final-animation', src: `${streamMedia}/final.mp4`, title: 'Arcane - Ma Meilleure Ennemie but in LEGO', alt: 'Final animation export', year: '2025', href: '/cgi/final-animation', youtubeUrl: 'https://www.youtube.com/watch?v=8ZDylshw-cs' },
   createProjectVideo('drone-deconstruction-animation'),
   { slug: 'lego-debate', src: `${streamMedia}/debate2-final.mp4`, title: 'Trump and Harris Presidential Debate but in LEGO', alt: 'LEGO debate animation', year: '2024', href: '/cgi/lego-debate', youtubeUrl: 'https://www.youtube.com/watch?v=YlhEZTxmDlA' },
-  { slug: 'lego-grammy', src: `${streamMedia}/grammy-final.mp4`, title: 'Kanye West Wins Grammy Best Rap Album Speech But in LEGO', alt: 'LEGO Grammy animation', year: '2024', orientation: 'portrait', href: '/cgi/lego-grammy', youtubeUrl: 'https://www.youtube.com/watch?v=7DuW4mAjFag' },
+  { slug: 'lego-grammy', src: `${streamMedia}/grammy-final.mp4`, title: 'Kanye West Wins Grammy Best Rap Album Speech but in LEGO', alt: 'LEGO Grammy animation', year: '2024', orientation: 'portrait', href: '/cgi/lego-grammy', youtubeUrl: 'https://www.youtube.com/watch?v=7DuW4mAjFag' },
   { slug: 'lego-field-trip', src: `${streamMedia}/field-trip.mp4`, title: 'Kanye West – FIELD TRIP | Music Video', alt: 'LEGO Field Trip animation', year: '2024', href: '/cgi/lego-field-trip', youtubeUrl: 'https://www.youtube.com/watch?v=LMruuUC5wAw' },
   { slug: 'lego-bomb', src: `${streamMedia}/bomb-final.mp4`, title: 'Kanye West - BOMB (feat. North West) | LEGO Music Video', alt: 'LEGO Bomb animation', year: '2024', href: '/cgi/lego-bomb', youtubeUrl: 'https://www.youtube.com/watch?v=8mdvX56404U' },
-  { slug: 'shortform', src: `${streamMedia}/shortform.mp4`, title: 'Wholly custom LEGO set, box, and rendering', alt: 'Shortform animation', year: '2025', orientation: 'portrait', href: '/cgi/shortform' },
+  { slug: 'shortform', src: `${streamMedia}/shortform.mp4`, title: 'Wholly Custom LEGO Set, Box, and Rendering', alt: 'Shortform animation', year: '2025', orientation: 'portrait', href: '/cgi/shortform' },
 ]
 
 export function getArchiveVideoBySlug(slug?: string) {
@@ -74,13 +74,13 @@ export const bottleModelAsset = {
 }
 export const otherStlAsset = {
   src: `${archiveMedia}/in-class.stl`,
-  title: 'In class',
+  title: 'In Class',
   alt: 'Rotating in-class STL model',
 }
 
 export const legoStlAsset = {
   src: `${archiveMedia}/lego.stl`,
-  title: 'LEGO model',
+  title: 'LEGO Model',
   alt: 'Rotating LEGO model STL asset',
 }
 
@@ -110,7 +110,7 @@ const createCadProject = (slug: string): CadProject => {
 }
 
 export const cadProjects: CadProject[] = [
-  { slug: 'tiny-whoop-drone', title: '83mm Tiny Whoop drones', alt: cadImages[0].alt, year: '2026', href: '/cad/tiny-whoop-drone', media: cadImages[0], gallery: [cadImages[1]], stl: stlAsset },
+  { slug: 'tiny-whoop-drone', title: '83mm Tiny Whoop Drones', alt: cadImages[0].alt, year: '2026', href: '/cad/tiny-whoop-drone', media: cadImages[0], gallery: [cadImages[1]], stl: stlAsset },
   createCadProject('bamboo-cast-project'),
   createCadProject('biomedical-cancer-locating-cart'),
   createCadProject('custom-helmet'),

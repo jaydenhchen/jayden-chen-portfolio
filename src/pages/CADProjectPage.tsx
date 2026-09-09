@@ -44,6 +44,7 @@ export function CADProjectPage() {
         <dl className="project-meta-grid text-reveal" aria-label="CAD project details">
           <div><dt>Type</dt><dd>CAD project</dd></div>
           <div><dt>Format</dt><dd>{project.stl && (project.media || project.gallery?.length) ? 'Interactive STL + Design images' : project.stl ? 'Interactive STL' : project.media || project.gallery?.length ? 'Design images' : 'Design image'}</dd></div>
+          {project.year && <div><dt>Year</dt><dd>{project.year}</dd></div>}
         </dl>
       </section>
 

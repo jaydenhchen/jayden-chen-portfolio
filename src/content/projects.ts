@@ -34,7 +34,7 @@ export const getProjectPath = (slug: string) => `/work/${slug}`
 export const projects: Project[] = [
   {
     slug: 'custom-helmet',
-    title: 'Custom helmet',
+    title: 'Custom Helmet',
     category: 'engineering',
     eyebrow: 'Helmet / Design',
     summary: 'A custom helmet modeled in Fusion 360 as a focused design study',
@@ -66,7 +66,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'bamboo-cast-project',
-    title: 'Bamboo cast project',
+    title: 'Bamboo Cast Project',
     category: 'engineering',
     eyebrow: 'Object / Design',
     summary: 'A bamboo-inspired vessel, from first sketch to cast test',
@@ -98,7 +98,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'figma-showcase',
-    title: 'Figma showcase',
+    title: 'Figma Showcase',
     category: 'other',
     eyebrow: 'Interface / Design',
     summary: 'A short look at a digital product in motion',
@@ -129,7 +129,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'bottle-animation',
-    title: 'Bottle animation',
+    title: 'Bottle Animation',
     category: 'cgi',
     eyebrow: 'Animation / Motion',
     summary: 'A moving image study built around timing, light, and atmosphere',
@@ -191,7 +191,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'biomedical-cancer-locating-cart',
-    title: 'Biomedical cancer-locating cart',
+    title: 'Biomedical Cancer-Locating Cart',
     category: 'cgi',
     eyebrow: 'Object / 3D image',
     summary: 'A wheeled kiosk brought to life with light, color, and shape',
@@ -223,7 +223,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'drone-deconstruction-animation',
-    title: 'Drone deconstruction animation',
+    title: 'Drone Deconstruction Animation',
     category: 'cgi',
     eyebrow: 'Animation / Motion',
     summary: 'Another moving image study from the archive',
