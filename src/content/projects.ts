@@ -30,8 +30,8 @@ export type Project = {
 
 const suppliedMedia = `${import.meta.env.BASE_URL}media/stream`
 export const fusion360Tools = ['Fusion 360']
-export const cgiTools = ['Blender', 'Premiere Pro', 'Nuke', 'Photoshop']
-const sharedCadCgiTools = [...fusion360Tools, ...cgiTools]
+export const cgiOnlyTools = ['Blender', 'Premiere Pro', 'Nuke', 'Photoshop']
+export const sharedCadCgiTools = [...fusion360Tools, ...cgiOnlyTools]
 export const getProjectPath = (slug: string) => `/work/${slug}`
 
 export const projects: Project[] = [
@@ -167,7 +167,7 @@ export const projects: Project[] = [
     eyebrow: 'Automotive / Rendering',
     summary: 'A studio render study of the Porche 911 GT3 RS',
     year: '2026',
-    tools: cgiTools,
+    tools: cgiOnlyTools,
     thumbnail: {
       src: `${suppliedMedia}/test4.png`,
       alt: 'Porche 911 GT3 RS rendering',
