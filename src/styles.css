@@ -180,6 +180,7 @@ figcaption { margin-top: .7rem; color: var(--quiet); font-size: .6rem; letter-sp
 .cad-project-media-collection { display: grid; gap: 1.4rem; }
 .project-meta-section { padding-top: 1.5rem; }
 .project-meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem; padding: 1.3rem 0; margin: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.project-meta-year { grid-column: -1; }
 .project-meta-grid div { min-width: 0; }
 dt { margin-bottom: .55rem; color: var(--quiet); }
 dd { margin: 0; color: var(--ink); font-size: .9rem; line-height: 1.5; }
@@ -295,8 +296,8 @@ dd { margin: 0; color: var(--ink); font-size: .9rem; line-height: 1.5; }
   .work-row-heading { grid-template-columns: 1fr; }
   .about-grid, .case-study-section { grid-template-columns: 1fr; gap: 2.5rem; }
   .contact-panel { grid-template-columns: 1fr; }
-  .project-meta-year { grid-column: 2; }
   .project-meta-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1.5rem; }
+  .project-meta-year { grid-column: 2; }
   .project-next { grid-template-columns: 1fr; }
 }
 
