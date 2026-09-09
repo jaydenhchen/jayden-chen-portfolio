@@ -10,7 +10,6 @@ export function CADPage() {
         <StlScrollViewer src={stlAsset.src} alt={stlAsset.alt} title={stlAsset.title} background />
       </div>
       <section className="archive-hero page-shell" aria-labelledby="cad-title">
-        <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
         <h1 id="cad-title">CAD.</h1>
         <p className="archive-lede">Models, prototypes, and process images from the design archive.</p>
       </section>
