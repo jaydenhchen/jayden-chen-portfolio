@@ -14,7 +14,7 @@ export type ArchiveVideo = {
 
 const archiveMedia = `${import.meta.env.BASE_URL}media/archive`
 const streamMedia = `${import.meta.env.BASE_URL}media/stream`
-const archiveCgiTools = ['Blender', 'Premiere Pro', 'Nuke', 'Photoshop']
+const archiveTools = ['Fusion 360', 'Blender', 'Premiere Pro', 'Photoshop', 'Nuke']
 
 const createProjectVideo = (slug: string): ArchiveVideo => {
   const project = getProjectBySlug(slug)
@@ -35,14 +35,14 @@ const createProjectVideo = (slug: string): ArchiveVideo => {
 
 export const cgiVideos: ArchiveVideo[] = [
   createProjectVideo('bottle-animation'),
-  { slug: 'invincible', src: `${streamMedia}/invincible4final.mp4`, title: 'Invincible - Season 4 Unofficial Teaser Trailer', alt: 'Invincible animation', year: '2025', href: '/cgi/invincible', tools: archiveCgiTools, youtubeUrl: 'https://www.youtube.com/watch?v=MD6KvNZ-Djc' },
-  { slug: 'final-animation', src: `${streamMedia}/final.mp4`, title: 'Arcane - Ma Meilleure Ennemie but in LEGO', alt: 'Final animation export', year: '2025', href: '/cgi/final-animation', tools: archiveCgiTools, youtubeUrl: 'https://www.youtube.com/watch?v=8ZDylshw-cs' },
+  { slug: 'invincible', src: `${streamMedia}/invincible4final.mp4`, title: 'Invincible - Season 4 Unofficial Teaser Trailer', alt: 'Invincible animation', year: '2025', href: '/cgi/invincible', tools: archiveTools, youtubeUrl: 'https://www.youtube.com/watch?v=MD6KvNZ-Djc' },
+  { slug: 'final-animation', src: `${streamMedia}/final.mp4`, title: 'Arcane - Ma Meilleure Ennemie but in LEGO', alt: 'Final animation export', year: '2025', href: '/cgi/final-animation', tools: archiveTools, youtubeUrl: 'https://www.youtube.com/watch?v=8ZDylshw-cs' },
   createProjectVideo('drone-deconstruction-animation'),
-  { slug: 'lego-debate', src: `${streamMedia}/debate2-final.mp4`, title: 'Trump and Harris Presidential Debate but in LEGO', alt: 'LEGO debate animation', year: '2024', href: '/cgi/lego-debate', tools: archiveCgiTools, youtubeUrl: 'https://www.youtube.com/watch?v=YlhEZTxmDlA' },
-  { slug: 'lego-grammy', src: `${streamMedia}/grammy-final.mp4`, title: 'Kanye West Wins Grammy Best Rap Album Speech but in LEGO', alt: 'LEGO Grammy animation', year: '2024', orientation: 'portrait', href: '/cgi/lego-grammy', tools: archiveCgiTools, youtubeUrl: 'https://www.youtube.com/watch?v=7DuW4mAjFag' },
-  { slug: 'lego-field-trip', src: `${streamMedia}/field-trip.mp4`, title: 'Kanye West – FIELD TRIP | Music Video', alt: 'LEGO Field Trip animation', year: '2024', href: '/cgi/lego-field-trip', tools: archiveCgiTools, youtubeUrl: 'https://www.youtube.com/watch?v=LMruuUC5wAw' },
-  { slug: 'lego-bomb', src: `${streamMedia}/bomb-final.mp4`, title: 'Kanye West - BOMB (feat. North West) | LEGO Music Video', alt: 'LEGO Bomb animation', year: '2024', href: '/cgi/lego-bomb', tools: archiveCgiTools, youtubeUrl: 'https://www.youtube.com/watch?v=8mdvX56404U' },
-  { slug: 'shortform', src: `${streamMedia}/shortform.mp4`, title: 'Wholly Custom LEGO Set, Box, and Rendering', alt: 'Shortform animation', year: '2025', orientation: 'portrait', href: '/cgi/shortform', tools: archiveCgiTools },
+  { slug: 'lego-debate', src: `${streamMedia}/debate2-final.mp4`, title: 'Trump and Harris Presidential Debate but in LEGO', alt: 'LEGO debate animation', year: '2024', href: '/cgi/lego-debate', tools: archiveTools, youtubeUrl: 'https://www.youtube.com/watch?v=YlhEZTxmDlA' },
+  { slug: 'lego-grammy', src: `${streamMedia}/grammy-final.mp4`, title: 'Kanye West Wins Grammy Best Rap Album Speech but in LEGO', alt: 'LEGO Grammy animation', year: '2024', orientation: 'portrait', href: '/cgi/lego-grammy', tools: archiveTools, youtubeUrl: 'https://www.youtube.com/watch?v=7DuW4mAjFag' },
+  { slug: 'lego-field-trip', src: `${streamMedia}/field-trip.mp4`, title: 'Kanye West – FIELD TRIP | Music Video', alt: 'LEGO Field Trip animation', year: '2024', href: '/cgi/lego-field-trip', tools: archiveTools, youtubeUrl: 'https://www.youtube.com/watch?v=LMruuUC5wAw' },
+  { slug: 'lego-bomb', src: `${streamMedia}/bomb-final.mp4`, title: 'Kanye West - BOMB (feat. North West) | LEGO Music Video', alt: 'LEGO Bomb animation', year: '2024', href: '/cgi/lego-bomb', tools: archiveTools, youtubeUrl: 'https://www.youtube.com/watch?v=8mdvX56404U' },
+  { slug: 'shortform', src: `${streamMedia}/shortform.mp4`, title: 'Wholly Custom LEGO Set, Box, and Rendering', alt: 'Shortform animation', year: '2025', orientation: 'portrait', href: '/cgi/shortform', tools: archiveTools },
 ]
 
 export function getArchiveVideoBySlug(slug?: string) {
@@ -115,7 +115,7 @@ const createCadProject = (slug: string): CadProject => {
 }
 
 export const cadProjects: CadProject[] = [
-  { slug: 'tiny-whoop-drone', title: '83mm Tiny Whoop Drones', alt: cadImages[0].alt, year: '2026', href: '/cad/tiny-whoop-drone', tools: ['Fusion 360'], media: cadImages[0], gallery: [cadImages[1]], stl: stlAsset },
+  { slug: 'tiny-whoop-drone', title: '83mm Tiny Whoop Drones', alt: cadImages[0].alt, year: '2026', href: '/cad/tiny-whoop-drone', tools: archiveTools, media: cadImages[0], gallery: [cadImages[1]], stl: stlAsset },
   createCadProject('bamboo-cast-project'),
   createCadProject('bottle-animation'),
   createCadProject('drone-deconstruction-animation'),

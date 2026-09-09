@@ -29,14 +29,6 @@ function VideoGrid({ videos }: { videos: ArchiveVideo[] }) {
                 </div>
                 <h3>{video.title}</h3>
                 <p>{video.year}</p>
-              {video.tools && video.tools.length > 0 && (
-                <div className="project-card-made-with">
-                  <span className="project-card-made-with-label">Made with</span>
-                  <ul className="tool-list project-card-tool-list" aria-label={`${video.title} tools`}>
-                    {video.tools.map((tool) => <li key={tool}>{tool}</li>)}
-                  </ul>
-                </div>
-              )}
               </div>
             </Link>
           </article>
@@ -79,7 +71,7 @@ export function CGIPage() {
       </section>
       <section className="archive-video-group archive-image-group page-shell" aria-labelledby="cgi-image-title">
         <div className="text-reveal"><h2 id="cgi-image-title" className="archive-group-title">Rendered images</h2></div>
-        <div className="project-grid">{cgiImageProjects.map((project) => <ProjectCard key={project.slug} project={project} showTools />)}</div>
+        <div className="project-grid">{cgiImageProjects.map((project) => <ProjectCard key={project.slug} project={project} />)}</div>
       </section>
     </main>
   )
