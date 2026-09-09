@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { siteProfile } from '../content/site'
 
 const links = [
-  { label: 'Work', to: '/#work' },
+  { label: 'Work', to: '/' },
   { label: 'CAD', to: '/cad' },
   { label: 'CGI', to: '/cgi' },
   { label: 'Other projects', to: '/other' },
@@ -87,7 +87,14 @@ export function SiteNav() {
           aria-label="Primary navigation"
         >
           {links.map((link) => (
-            <Link key={link.to} to={link.to} onClick={() => setIsOpen(false)}>
+            <Link
+              key={link.to}
+              to={link.to}
+              onClick={() => {
+                setIsOpen(false)
+                if (link.to === '/' && location.pathname === '/') window.scrollTo({ top: 0, behavior: 'auto' })
+              }}
+            >
               {link.label}
             </Link>
           ))}

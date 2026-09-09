@@ -46,7 +46,7 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
   }
 
   return (
-    <figure className={`media-frame media-frame-${variant}`}>
+    <figure className={`media-frame media-frame-${variant} asset-rise`}>
       <div className="media-frame-visual">
         {!asset || hasError ? (
           showPoster && asset ? (
