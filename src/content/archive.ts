@@ -112,6 +112,8 @@ const createCadProject = (slug: string): CadProject => {
 export const cadProjects: CadProject[] = [
   { slug: 'tiny-whoop-drone', title: '83mm Tiny Whoop Drones', alt: cadImages[0].alt, year: '2026', href: '/cad/tiny-whoop-drone', media: cadImages[0], gallery: [cadImages[1]], stl: stlAsset },
   createCadProject('bamboo-cast-project'),
+  createCadProject('bottle-animation'),
+  createCadProject('drone-deconstruction-animation'),
   createCadProject('biomedical-cancer-locating-cart'),
   createCadProject('custom-helmet'),
 ]
