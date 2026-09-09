@@ -431,14 +431,13 @@ body::before, body::after { display: none; }
 .other-background-model .stl-status { display: none; }
 .other-background-model figcaption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .cad-page .archive-hero { min-height: min(56svh, 42rem); }
-.cad-model-intro { min-height: 0; }
-.cad-model-intro .cad-model-link { display: block; width: calc((100% - 1.4rem) / 2); max-width: none; border-color: var(--line-strong); color: inherit; text-decoration: none; }
+.cad-model-intro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem; min-height: 0; }
+.cad-model-intro .cad-model-link { display: block; width: auto; max-width: none; border-color: var(--line-strong); color: inherit; text-decoration: none; }
 .cad-page .archive-image-grid { padding-top: 1rem; }
 @media (max-width: 800px) {
   .cad-background-model { inset: 0; opacity: .9; }
   .home-background-model { inset: 0; opacity: .9; }
   .cgi-background-model { inset: 0; opacity: .9; }
   .other-background-model { inset: 0; opacity: .9; }
-  .cad-model-intro { min-height: 0; }
-  .cad-model-intro .cad-model-link { width: 100%; }
+  .cad-model-intro { grid-template-columns: 1fr; min-height: 0; }
 }
