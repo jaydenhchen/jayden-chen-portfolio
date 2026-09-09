@@ -30,13 +30,11 @@ export function HomePage() {
       </section>
 
       <section id="work" className="work-section page-shell" aria-labelledby="work-title">
-        <SectionHeading index="01" eyebrow="Selected work" title="A mix of things I make." titleId="work-title" intro="A combination of engineering and art." />
+        <SectionHeading eyebrow="Selected work" title="A mix of things I make." titleId="work-title" intro="A combination of engineering and art." />
         <div className="work-rows">
           <div className="work-row">
             <div className="work-row-heading">
-              <span className="row-number">01</span>
               <div><h3 id="engineering-work-title">Engineering</h3><p>Objects and interfaces that have to work.</p></div>
-              <span className="row-count">{String(engineeringProjects.length).padStart(2, '0')} studies</span>
             </div>
             <div className="project-grid" aria-labelledby="engineering-work-title">
               {engineeringProjects.length > 0 ? engineeringProjects.map((project) => <ProjectCard key={project.slug} project={project} />) : <p className="empty-state">Engineering projects will appear here.</p>}
@@ -44,9 +42,7 @@ export function HomePage() {
           </div>
           <div className="work-row">
             <div className="work-row-heading">
-              <span className="row-number">02</span>
               <div><h3 id="cgi-work-title">Blender</h3><p>Light, movement, and images that stay with you.</p></div>
-              <span className="row-count">{String(cgiProjects.length).padStart(2, '0')} studies</span>
             </div>
             <div className="project-grid" aria-labelledby="cgi-work-title">
               {cgiProjects.length > 0 ? cgiProjects.map((project) => <ProjectCard key={project.slug} project={project} />) : <p className="empty-state">CGI projects will appear here.</p>}
@@ -64,7 +60,7 @@ export function HomePage() {
           <div className="contact-action">
             <p>Send a brief, a sketch, or a question.</p>
             {siteProfile.email ? (
-              <a className="button button-primary" href={`mailto:${siteProfile.email}`}>Start a conversation <span aria-hidden="true">↗</span></a>
+              <a className="button button-primary" href={`mailto:${siteProfile.email}`}>Connect via email <span aria-hidden="true">↗</span></a>
             ) : (
               <p className="empty-note">Contact details will appear here once supplied.</p>
             )}
