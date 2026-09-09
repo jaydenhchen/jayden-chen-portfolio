@@ -42,7 +42,7 @@ export function CGIPage() {
           title={bottleStlAsset.title}
           background
           lineOpacity={0.8}
-          edgeThreshold={16}
+          edgeThreshold={5}
           rotationAxis="y"
           rotationDirection={1}
           modelOffsetY={-0.08}
