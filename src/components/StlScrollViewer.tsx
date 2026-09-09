@@ -1,17 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js'
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 
 type StlScrollViewerProps = {
   src: string
   alt: string
-  title?: string
   background?: boolean
   lineOpacity?: number
   cameraDistance?: number
   edgeThreshold?: number
-  rotationAxis?: 'x' | 'y' | 'z'
+  rotationAxis?: 'x' | 'y' | 'z' | 'yz' | 'xyz'
   rotationDirection?: 1 | -1
+  scrollRotationScale?: number
+  modelScale?: number
   modelOffsetY?: number
   initialRotationX?: number
   initialRotationZ?: number
@@ -20,11 +23,12 @@ type StlScrollViewerProps = {
 export function StlScrollViewer({
   src,
   alt,
-  title = 'Tiny Whoop Drone',
   background = false,
-  lineOpacity = 0.4,
+  lineOpacity = 0.8,
   cameraDistance = 1.9,
   edgeThreshold = 18,
+  scrollRotationScale = 1,
+  modelScale = 1,
   rotationAxis = 'z',
   rotationDirection = 1,
   modelOffsetY = 0,
@@ -32,7 +36,7 @@ export function StlScrollViewer({
   initialRotationZ = 0,
 }: StlScrollViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [hasError, setHasError] = useState(false)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -41,9 +45,8 @@ export function StlScrollViewer({
     let renderer: THREE.WebGLRenderer
     try {
       renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
-      renderer.setClearColor(0x000000, 0)
     } catch {
-      setStatus('error')
+      setHasError(true)
       return
     }
 
@@ -54,8 +57,6 @@ export function StlScrollViewer({
     let targetRotation = 0
     let idleRotation = 0
     let previousFrameTime: number | undefined
-    let isScrollGestureActive = false
-    let scrollEndTimeout: number | null = null
     let isVisible = false
     let mounted = true
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -63,22 +64,32 @@ export function StlScrollViewer({
     const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 100)
     const modelGroup = new THREE.Group()
     scene.add(modelGroup)
+    modelGroup.scale.setScalar(modelScale)
 
     const setRotation = (value: number) => {
       if (!mesh) return
       if (rotationAxis === 'x') mesh.rotation.x = value
       else if (rotationAxis === 'y') mesh.rotation.y = value
-      else mesh.rotation.z = value
+      else if (rotationAxis === 'z') mesh.rotation.z = value
+      else if (rotationAxis === 'yz') {
+        mesh.rotation.y = value
+        mesh.rotation.z = value
+      } else {
+        mesh.rotation.x = initialRotationX + value
+        mesh.rotation.y = value
+        mesh.rotation.z = initialRotationZ + value
+      }
     }
 
     const draw = () => renderer.render(scene, camera)
+    const getModelColor = () => document.documentElement.dataset.theme === 'light' ? 0x14213d : 0xffffff
+    const updateModelColor = () => {
+      material?.color.set(getModelColor())
+      draw()
+    }
 
-    const modelColor = () => document.documentElement.dataset.theme === 'light' ? 0x173a63 : 0xffffff
     const themeObserver = 'MutationObserver' in window
-      ? new MutationObserver(() => {
-          material?.color.set(modelColor())
-          draw()
-        })
+      ? new MutationObserver(updateModelColor)
       : undefined
 
     themeObserver?.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
@@ -99,7 +110,7 @@ export function StlScrollViewer({
       }
       const elapsed = previousFrameTime === undefined ? 0 : Math.min(timestamp - previousFrameTime, 100)
       previousFrameTime = timestamp
-      if (!isScrollGestureActive) idleRotation += elapsed * 0.00012 * rotationDirection
+      idleRotation += elapsed * 0.00012 * rotationDirection
       setRotation(targetRotation + idleRotation)
       draw()
       frame = window.requestAnimationFrame(render)
@@ -111,22 +122,6 @@ export function StlScrollViewer({
       else draw()
     }
 
-    const resumeIdleAfterScroll = () => {
-      isScrollGestureActive = false
-      scrollEndTimeout = null
-      startAnimation()
-    }
-
-    const pauseIdleForScroll = () => {
-      isScrollGestureActive = true
-      if (scrollEndTimeout !== null) window.clearTimeout(scrollEndTimeout)
-      scrollEndTimeout = window.setTimeout(resumeIdleAfterScroll, 400)
-    }
-
-    const resumeIdleAfterTouch = () => {
-      if (scrollEndTimeout !== null) window.clearTimeout(scrollEndTimeout)
-      resumeIdleAfterScroll()
-    }
 
     const resize = () => {
       const width = canvas.clientWidth || 1
@@ -146,7 +141,7 @@ export function StlScrollViewer({
             const bounds = canvas.getBoundingClientRect()
             return Math.min(1, Math.max(0, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)))
           })()
-      targetRotation = rotationDirection * (progress * Math.PI * 2.4 + Math.sin(progress * Math.PI * 2) * 0.3)
+      targetRotation = rotationDirection * (progress * Math.PI * 2.4 * scrollRotationScale + Math.sin(progress * Math.PI * 2) * 0.3 * scrollRotationScale)
       startAnimation()
     }
 
@@ -161,60 +156,96 @@ export function StlScrollViewer({
     if (visibilityObserver) visibilityObserver.observe(canvas)
     else isVisible = true
 
-    const loader = new STLLoader()
-    loader.load(
-      src,
-      (geometry) => {
-        if (!mounted) {
-          geometry.dispose()
-          return
-        }
-        geometry.center()
-        geometry.computeBoundingSphere()
-        modelRadius = geometry.boundingSphere?.radius || 1
-        const radius = modelRadius
-        modelGroup.position.y = radius * modelOffsetY
-        const outlineGeometry = new THREE.EdgesGeometry(geometry, edgeThreshold)
-        geometry.dispose()
-        material = new THREE.LineBasicMaterial({ color: modelColor(), transparent: true, opacity: lineOpacity })
-        mesh = new THREE.LineSegments(outlineGeometry, material)
-        mesh.rotation.x = initialRotationX
-        mesh.rotation.z = initialRotationZ
-        modelGroup.add(mesh)
-        camera.position.set(0, 0, radius * cameraDistance)
-        camera.near = Math.max(radius / 100, 0.01)
-        camera.far = radius * 20
-        camera.updateProjectionMatrix()
-        updateScrollTarget()
-        startAnimation()
-      },
-      undefined,
-      () => {
-        if (mounted) setStatus('error')
-      },
-    )
+    const addOutline = (outlineGeometry: THREE.BufferGeometry, radius: number) => {
+      if (!mounted) {
+        outlineGeometry.dispose()
+        return
+      }
+      modelRadius = radius
+      modelGroup.position.y = radius * modelOffsetY
+      material = new THREE.LineBasicMaterial({ color: getModelColor(), transparent: true, opacity: lineOpacity })
+      mesh = new THREE.LineSegments(outlineGeometry, material)
+      mesh.rotation.x = initialRotationX
+      mesh.rotation.z = initialRotationZ
+      modelGroup.add(mesh)
+      camera.position.set(0, 0, radius * cameraDistance)
+      camera.near = Math.max(radius / 100, 0.01)
+      camera.far = radius * 20
+      camera.updateProjectionMatrix()
+      updateScrollTarget()
+      startAnimation()
+    }
+    const loadError = () => {
+      if (mounted) setHasError(true)
+    }
 
+    if (src.toLowerCase().endsWith('.obj')) {
+      new OBJLoader().load(
+        src,
+        (object) => {
+          if (!mounted) return
+          object.updateMatrixWorld(true)
+          const outlineGeometries: THREE.BufferGeometry[] = []
+          object.traverse((child) => {
+            if (!(child instanceof THREE.Mesh)) return
+            const sourceGeometry = child.geometry.clone()
+            sourceGeometry.applyMatrix4(child.matrixWorld)
+            outlineGeometries.push(new THREE.EdgesGeometry(sourceGeometry, edgeThreshold))
+            sourceGeometry.dispose()
+          })
+          const outlineGeometry = outlineGeometries.length > 0 ? mergeGeometries(outlineGeometries) : null
+          outlineGeometries.forEach((geometry) => geometry.dispose())
+          object.traverse((child) => {
+            if (!(child instanceof THREE.Mesh)) return
+            child.geometry.dispose()
+            const childMaterial = child.material
+            if (Array.isArray(childMaterial)) childMaterial.forEach((item) => item.dispose())
+            else childMaterial.dispose()
+          })
+          if (!outlineGeometry) {
+            loadError()
+            return
+          }
+          outlineGeometry.computeBoundingBox()
+          const center = outlineGeometry.boundingBox?.getCenter(new THREE.Vector3()) || new THREE.Vector3()
+          outlineGeometry.translate(-center.x, -center.y, -center.z)
+          outlineGeometry.computeBoundingSphere()
+          addOutline(outlineGeometry, outlineGeometry.boundingSphere?.radius || 1)
+        },
+        undefined,
+        loadError,
+      )
+    } else {
+      new STLLoader().load(
+        src,
+        (geometry) => {
+          if (!mounted) {
+            geometry.dispose()
+            return
+          }
+          geometry.center()
+          geometry.computeBoundingSphere()
+          const radius = geometry.boundingSphere?.radius || 1
+          const outlineGeometry = new THREE.EdgesGeometry(geometry, edgeThreshold)
+          geometry.dispose()
+          addOutline(outlineGeometry, radius)
+        },
+        undefined,
+        loadError,
+      )
+    }
+
+    resize()
     window.addEventListener('resize', resize)
     window.addEventListener('scroll', updateScrollTarget, { passive: true })
-    window.addEventListener('scrollend', resumeIdleAfterTouch)
-    window.addEventListener('wheel', pauseIdleForScroll, { passive: true })
-    window.addEventListener('touchstart', pauseIdleForScroll, { passive: true })
-    window.addEventListener('touchend', resumeIdleAfterTouch, { passive: true })
-    window.addEventListener('touchcancel', resumeIdleAfterTouch, { passive: true })
 
     return () => {
       mounted = false
-      if (scrollEndTimeout !== null) window.clearTimeout(scrollEndTimeout)
       stopAnimation()
       visibilityObserver?.disconnect()
       themeObserver?.disconnect()
       window.removeEventListener('resize', resize)
       window.removeEventListener('scroll', updateScrollTarget)
-      window.removeEventListener('scrollend', resumeIdleAfterTouch)
-      window.removeEventListener('wheel', pauseIdleForScroll)
-      window.removeEventListener('touchstart', pauseIdleForScroll)
-      window.removeEventListener('touchend', resumeIdleAfterTouch)
-      window.removeEventListener('touchcancel', resumeIdleAfterTouch)
       if (mesh) {
         mesh.geometry.dispose()
         const material = mesh.material
@@ -223,19 +254,19 @@ export function StlScrollViewer({
       }
       renderer.dispose()
     }
-  }, [src, background, lineOpacity, cameraDistance, edgeThreshold, rotationAxis, rotationDirection, modelOffsetY, initialRotationX, initialRotationZ])
+  }, [src, background, lineOpacity, cameraDistance, edgeThreshold, scrollRotationScale, modelScale, rotationAxis, rotationDirection, modelOffsetY, initialRotationX, initialRotationZ])
 
   return (
     <figure className="stl-viewer">
       <div className="stl-canvas-wrap">
         <canvas ref={canvasRef} role="img" aria-label={alt} />
-        <div className={`stl-status stl-status-${status}`} aria-live="polite">
-          {status === 'loading' && 'Loading model'}
-          {status === 'ready' && 'Scroll to rotate'}
-          {status === 'error' && '3D preview unavailable'}
-        </div>
+        {hasError && (
+          <div className="stl-status stl-status-error" aria-live="polite">
+            3D preview unavailable
+          </div>
+        )}
       </div>
-      <figcaption>{title} STL · scroll to turn the model</figcaption>
+      <figcaption>3D model</figcaption>
     </figure>
   )
 }

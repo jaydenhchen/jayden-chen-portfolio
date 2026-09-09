@@ -8,22 +8,53 @@ type MediaFrameProps = {
   hoverAudio?: boolean
   controls?: boolean
   muteToggle?: boolean
+  showCaption?: boolean
   loading?: 'eager' | 'lazy'
 }
 
-export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false, hoverAudio = false, controls = false, muteToggle = false, loading = 'lazy' }: MediaFrameProps) {
+export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false, hoverAudio = false, controls = false, muteToggle = false, showCaption = true, loading = 'lazy' }: MediaFrameProps) {
+  const mediaRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [hasError, setHasError] = useState(!asset?.src)
   const [posterFailed, setPosterFailed] = useState(false)
-  const [isMuted, setIsMuted] = useState(true)
+  const [isMuted, setIsMuted] = useState(!muteToggle)
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     setHasError(!asset?.src)
     setPosterFailed(false)
-    setIsMuted(true)
-  }, [asset?.src, asset?.poster])
+    setIsMuted(!muteToggle)
+  }, [asset?.src, asset?.poster, muteToggle])
+  useEffect(() => {
+    const element = mediaRef.current
+    if (!element || !('IntersectionObserver' in window)) {
+      setIsVisible(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), { threshold: 0.1 })
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [asset?.src, variant])
+
+  useEffect(() => {
+    if (!autoplayPreview || asset?.kind !== 'video') return
+    const video = videoRef.current
+    if (!video) return
+
+    video.muted = !muteToggle
+    video.play().catch(() => {
+      if (!muteToggle) return
+      video.muted = true
+      setIsMuted(true)
+      video.play().catch(() => undefined)
+    })
+  }, [asset?.src, asset?.kind, autoplayPreview, muteToggle])
 
   const showPoster = hasError && Boolean(asset?.poster) && !posterFailed
+
+  const showMuteToggle = asset?.kind === 'video' && muteToggle
+  const usesHoverAudio = asset?.kind === 'video' && hoverAudio && !muteToggle
 
   const playWithHoverAudio = async () => {
     const video = videoRef.current
@@ -33,20 +64,25 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
       if (otherVideo !== video) otherVideo.muted = true
     })
     video.muted = false
-    try {
-      await video.play()
-    } catch {
-      video.muted = true
-      await video.play().catch(() => undefined)
-    }
+    await video.play().catch(() => undefined)
   }
 
   const muteOnLeave = () => {
     if (videoRef.current) videoRef.current.muted = true
   }
 
+  const toggleMute = async () => {
+    const video = videoRef.current
+    if (!video) return
+
+    const nextMuted = !video.muted
+    video.muted = nextMuted
+    setIsMuted(nextMuted)
+    if (!nextMuted) await video.play().catch(() => undefined)
+  }
+
   return (
-    <figure className={`media-frame media-frame-${variant} asset-rise`}>
+    <figure ref={mediaRef} className={`media-frame media-frame-${variant} asset-rise media-scroll-reveal${isVisible ? ' is-visible' : ''}`}>
       <div className="media-frame-visual">
         {!asset || hasError ? (
           showPoster && asset ? (
@@ -71,32 +107,27 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
               src={asset.src}
               preload={variant === 'card' ? 'none' : 'metadata'}
               poster={asset.poster}
-              muted={muteToggle ? isMuted : autoplayPreview}
+              muted={muteToggle ? isMuted : Boolean(autoplayPreview || usesHoverAudio)}
               playsInline
               controls={controls && !muteToggle}
               autoPlay={autoplayPreview}
               loop={autoplayPreview}
-              tabIndex={hoverAudio ? 0 : undefined}
-              data-hover-audio={hoverAudio ? 'true' : undefined}
+              data-hover-audio={usesHoverAudio ? 'true' : undefined}
               aria-label={asset.alt}
-              onPointerEnter={hoverAudio ? playWithHoverAudio : undefined}
-              onPointerLeave={hoverAudio ? muteOnLeave : undefined}
-              onFocus={hoverAudio ? playWithHoverAudio : undefined}
-              onBlur={hoverAudio ? muteOnLeave : undefined}
+              onPointerEnter={usesHoverAudio ? playWithHoverAudio : undefined}
+              onPointerLeave={usesHoverAudio ? muteOnLeave : undefined}
               onError={() => setHasError(true)}
             />
-            {muteToggle && (
+            {showMuteToggle && (
               <button
                 className="media-mute-toggle"
                 type="button"
                 aria-label={isMuted ? 'Unmute video' : 'Mute video'}
                 aria-pressed={!isMuted}
-                onClick={() => {
-                  const video = videoRef.current
-                  if (!video) return
-                  const nextMuted = !video.muted
-                  video.muted = nextMuted
-                  setIsMuted(nextMuted)
+                onClick={(event) => {
+                  event.preventDefault()
+                  event.stopPropagation()
+                  void toggleMute()
                 }}
               >
                 {isMuted ? 'Unmute' : 'Mute'}
@@ -112,9 +143,8 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
             onError={() => setHasError(true)}
           />
         )}
-        <span className="media-frame-corner" aria-hidden="true" />
       </div>
-      {asset?.caption && <figcaption>{asset.caption}</figcaption>}
+      {showCaption && asset?.caption && variant !== 'card' && <figcaption>{asset.caption}</figcaption>}
     </figure>
   )
 }

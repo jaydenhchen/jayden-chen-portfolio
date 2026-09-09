@@ -7,7 +7,6 @@ export type SiteProfile = {
   name: string
   monogram: string
   headline: string
-  intro: string
   location?: string
   email: string
   resumeUrl?: string
@@ -18,9 +17,7 @@ export type SiteProfile = {
 export const siteProfile: SiteProfile = {
   name: 'Jayden Chen',
   monogram: 'JC',
-  headline: 'Design, build, and make it move.',
-  intro:
-    'I make products, objects, and animations — from first sketch to final frame.',
+  headline: 'Design, create, then make it move',
   email: 'jayden.h.chen@gmail.com',
   resumeUrl: `${import.meta.env.BASE_URL}media/ChenJayden_Resume.pdf`,
   socials: [

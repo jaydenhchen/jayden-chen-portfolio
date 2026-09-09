@@ -1,16 +1,22 @@
-import { Link } from 'react-router-dom'
 import { ProjectCard } from '../components/ProjectCard'
+import { StlScrollViewer } from '../components/StlScrollViewer'
 import { getProjectsByCategory } from '../content/projects'
+import { otherStlAsset } from '../content/archive'
 
 const otherProjects = getProjectsByCategory('other')
 
 export function OtherProjectsPage() {
   return (
     <main className="archive-page other-page">
-      <section className="archive-hero page-shell" aria-labelledby="other-title">
-        <Link className="back-link" to="/#work"><span aria-hidden="true">←</span> Back to work</Link>
-        <h1 id="other-title">Other projects.</h1>
-        <p className="archive-lede">Interface work and projects that sit outside the CAD and CGI archives.</p>
+      <div className="other-background-model" aria-label={`Interactive ${otherStlAsset.title} background models`}>
+        <div className="other-background-model-pair">
+          <StlScrollViewer src={otherStlAsset.src} alt={`${otherStlAsset.alt} clockwise`} background lineOpacity={0.8} cameraDistance={3.2} rotationDirection={1} />
+          <StlScrollViewer src={otherStlAsset.src} alt={`${otherStlAsset.alt} counterclockwise`} background lineOpacity={0.8} cameraDistance={3.2} rotationDirection={-1} />
+        </div>
+      </div>
+      <section className="archive-hero page-shell text-reveal" aria-labelledby="other-title">
+        <h1 id="other-title">Other projects</h1>
+        <p className="archive-lede">Work and projects outside of CGI and CAD</p>
       </section>
       <section className="other-projects-grid page-shell" aria-label="Other projects">
         {otherProjects.length > 0 ? (

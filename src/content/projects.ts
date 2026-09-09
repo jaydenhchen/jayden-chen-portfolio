@@ -26,59 +26,51 @@ export type Project = {
   heroMedia: MediaAsset
   sections: ProjectSection[]
   gallery: MediaAsset[]
-  nextSlug?: string
 }
 
 const suppliedMedia = `${import.meta.env.BASE_URL}media/stream`
+export const getProjectPath = (slug: string) => `/work/${slug}`
 
 export const projects: Project[] = [
   {
-    slug: 'ducted-drone-frame',
-    title: 'Ducted drone frame',
+    slug: 'custom-helmet',
+    title: 'Custom helmet',
     category: 'engineering',
-    eyebrow: 'Drone / Design',
-    summary: 'A drone frame shaped in Fusion 360 and tested as a physical build.',
-    role: 'Design and build',
+    eyebrow: 'Helmet / Design',
+    summary: 'A custom helmet modeled in Fusion 360 as a focused design study',
+    year: '2024',
     tools: ['Fusion 360'],
     thumbnail: {
       src: `${suppliedMedia}/drone-cad.png`,
-      alt: 'Four-rotor ducted drone frame shown in a Fusion 360 CAD workspace',
+      alt: 'Custom helmet shown in a Fusion 360 CAD workspace',
       kind: 'image',
-      caption: 'Supplied CAD capture: drone january v7.',
+      caption: 'Supplied CAD capture: custom helmet study.',
     },
     heroMedia: {
       src: `${suppliedMedia}/drone-cad.png`,
-      alt: 'Four-rotor ducted drone frame shown in a Fusion 360 CAD workspace',
+      alt: 'Custom helmet shown in a Fusion 360 CAD workspace',
       kind: 'image',
-      caption: 'Supplied CAD capture: drone january v7.',
+      caption: 'Supplied CAD capture: custom helmet study.',
     },
     sections: [
       {
-        heading: 'The idea',
-        body: 'A compact frame with four circular guards and an open center, modeled in Fusion 360.',
+        heading: 'The form',
+        body: 'A custom helmet profile modeled in Fusion 360, balancing a clear silhouette with functional volume.',
       },
       {
-        heading: 'The build',
-        body: 'The supplied photo shows three small ducted drones on a workbench, moving the idea from screen to hand.',
+        heading: 'The study',
+        body: 'The supplied CAD capture documents the helmet as a focused object-design exploration.',
       },
     ],
-    gallery: [
-      {
-        src: `${suppliedMedia}/img-1638.jpeg`,
-        alt: 'Three small ducted quadcopter prototypes arranged on a wooden workbench',
-        kind: 'image',
-        caption: 'Supplied prototype photograph.',
-      },
-    ],
-    nextSlug: 'bamboo-cast-vessel',
+    gallery: [],
   },
   {
-    slug: 'bamboo-cast-vessel',
-    title: 'Bamboo cast vessel',
+    slug: 'bamboo-cast-project',
+    title: 'Bamboo cast project',
     category: 'engineering',
     eyebrow: 'Object / Design',
-    summary: 'A bamboo-inspired vessel, from first sketch to cast test.',
-    role: 'Object design',
+    summary: 'A bamboo-inspired vessel, from first sketch to cast test',
+    year: '2025',
     tools: ['Fusion 360'],
     thumbnail: {
       src: `${suppliedMedia}/bamboo-process.png`,
@@ -103,15 +95,14 @@ export const projects: Project[] = [
       },
     ],
     gallery: [],
-    nextSlug: 'figma-showcase',
   },
   {
     slug: 'figma-showcase',
     title: 'Figma showcase',
     category: 'other',
     eyebrow: 'Interface / Design',
-    summary: 'A short look at a digital product in motion.',
-    role: 'Interface design',
+    summary: 'A short look at a digital product in motion',
+    year: '2025',
     tools: ['Figma', 'Interface', 'Motion'],
     thumbnail: {
       src: `${suppliedMedia}/figma-showcase.mp4`,
@@ -135,15 +126,14 @@ export const projects: Project[] = [
       },
     ],
     gallery: [],
-    nextSlug: 'animation-study',
   },
   {
-    slug: 'animation-study',
-    title: 'Animation study',
+    slug: 'bottle-animation',
+    title: 'Bottle animation',
     category: 'cgi',
     eyebrow: 'Animation / Motion',
-    summary: 'A moving image study built around timing, light, and atmosphere.',
-    role: 'Animation',
+    summary: 'A moving image study built around timing, light, and atmosphere',
+    year: '2026',
     tools: ['Blender', 'Premiere Pro', 'Nuke', 'Photoshop'],
     thumbnail: {
       src: `${suppliedMedia}/animation1.mp4`,
@@ -166,15 +156,46 @@ export const projects: Project[] = [
       },
     ],
     gallery: [],
-    nextSlug: 'mobile-kiosk-render',
   },
   {
-    slug: 'mobile-kiosk-render',
-    title: 'Mobile kiosk render',
+    slug: 'porche-911-gt3-rs-rendering',
+    title: 'Porche 911 GT3 RS Rendering',
+    category: 'cgi',
+    eyebrow: 'Automotive / Rendering',
+    summary: 'A studio render study of the Porche 911 GT3 RS',
+    year: '2026',
+    tools: ['Blender'],
+    thumbnail: {
+      src: `${suppliedMedia}/test4.png`,
+      alt: 'Porche 911 GT3 RS rendering',
+      kind: 'image',
+      caption: 'Porche 911 GT3 RS rendering.',
+    },
+    heroMedia: {
+      src: `${suppliedMedia}/test4.png`,
+      alt: 'Porche 911 GT3 RS rendering',
+      kind: 'image',
+      caption: 'Porche 911 GT3 RS rendering.',
+    },
+    sections: [
+      {
+        heading: 'The render',
+        body: 'A studio-lit automotive rendering study focused on the form and finish of the Porche 911 GT3 RS.',
+      },
+      {
+        heading: 'The image',
+        body: 'The supplied render presents the car as a clean, resolved CGI composition.',
+      },
+    ],
+    gallery: [],
+  },
+  {
+    slug: 'biomedical-cancer-locating-cart',
+    title: 'Biomedical cancer-locating cart',
     category: 'cgi',
     eyebrow: 'Object / 3D image',
-    summary: 'A wheeled kiosk brought to life with light, color, and shape.',
-    role: '3D design',
+    summary: 'A wheeled kiosk brought to life with light, color, and shape',
+    year: '2025',
     tools: ['Blender', 'Premiere Pro', 'Nuke', 'Photoshop'],
     thumbnail: {
       src: `${suppliedMedia}/generic-logo.png`,
@@ -199,15 +220,14 @@ export const projects: Project[] = [
       },
     ],
     gallery: [],
-    nextSlug: 'motion-study-0001',
   },
   {
-    slug: 'motion-study-0001',
-    title: 'Motion study 0001',
+    slug: 'drone-deconstruction-animation',
+    title: 'Drone deconstruction animation',
     category: 'cgi',
     eyebrow: 'Animation / Motion',
-    summary: 'Another moving image study from the archive.',
-    role: 'Animation',
+    summary: 'Another moving image study from the archive',
+    year: '2025',
     tools: ['Blender', 'Premiere Pro', 'Nuke', 'Photoshop'],
     thumbnail: {
       src: `${suppliedMedia}/0001.mp4`,
@@ -235,7 +255,9 @@ export const projects: Project[] = [
 ]
 
 export const getProjectsByCategory = (category: ProjectCategory): Project[] =>
-  projects.filter((project) => project.category === category)
+  projects
+    .filter((project) => project.category === category)
+    .sort((a, b) => Number(b.year ?? 0) - Number(a.year ?? 0))
 
 export const getProjectBySlug = (slug: string | undefined): Project | undefined =>
   projects.find((project) => project.slug === slug)
