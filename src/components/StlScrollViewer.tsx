@@ -23,7 +23,7 @@ export function StlScrollViewer({
   title = 'Tiny Whoop Drone',
   background = false,
   lineOpacity = 0.4,
-  cameraDistance = 1.7,
+  cameraDistance = 1.9,
   edgeThreshold = 18,
   rotationAxis = 'z',
   rotationDirection = 1,
