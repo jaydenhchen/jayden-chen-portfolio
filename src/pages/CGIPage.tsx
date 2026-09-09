@@ -16,7 +16,7 @@ function VideoGrid({ videos }: { videos: ArchiveVideo[] }) {
     <div className="archive-video-grid">
       {videos.map((video) => (
         <Reveal className="project-card-reveal" key={video.src}>
-          <article className={`project-card project-card-cgi archive-video-card${video.orientation === 'portrait' ? ' is-portrait' : ''}`}>
+          <article className={`project-card project-card-cgi archive-video-card${video.orientation === 'portrait' ? ' is-portrait' : ''}${video.thumbnailFit === 'cover' ? ' thumbnail-fit-cover' : ''}`}>
             <Link
               className="project-card-link archive-video-link"
               to={video.href}

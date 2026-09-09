@@ -388,6 +388,7 @@ body::before, body::after { display: none; }
 .cgi-page .media-frame-visual video { object-fit: contain; background: #0e0e0e; }
 .cgi-page .archive-video-card:not(.is-portrait) .media-frame-visual { aspect-ratio: 16 / 9; }
 .cgi-page .archive-video-card.is-portrait .media-frame-visual { aspect-ratio: 9 / 16; }
+.cgi-page .archive-video-card.thumbnail-fit-cover .media-frame-visual video { height: 100%; object-fit: cover; object-position: center; }
 .archive-card-copy h2, .archive-card-copy h3 { margin-bottom: .75rem; }
 
 @media (max-width: 800px) {
