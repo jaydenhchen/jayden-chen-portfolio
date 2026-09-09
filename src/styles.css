@@ -314,6 +314,11 @@ body::before, body::after { display: none; }
 .section-heading h2 { max-width: 12ch; }
 .work-row-heading { padding-bottom: 1rem; }
 .project-card, .archive-video-card { background: rgba(24, 24, 24, .8); }
+:root[data-theme="light"] .project-card,
+:root[data-theme="light"] .archive-video-card,
+:root[data-theme="light"] .contact-panel { background: rgba(255, 255, 255, .82); }
+:root[data-theme="light"] .project-card:hover,
+:root[data-theme="light"] .archive-video-card:hover { background: var(--surface-raised); }
 .project-card-body p { min-height: 0; }
 .tool-list, .capability-tools { display: none; }
 .capability-card { min-height: auto; }
