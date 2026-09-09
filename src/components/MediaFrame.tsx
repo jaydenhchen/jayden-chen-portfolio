@@ -176,8 +176,8 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
               loop={autoplayPreview}
               data-hover-audio={usesHoverAudio ? 'true' : undefined}
               aria-label={asset.alt}
-              onPointerEnter={usesHoverAudio && !isMobile ? playWithHoverAudio : undefined}
-              onPointerLeave={usesHoverAudio && !isMobile ? muteOnLeave : undefined}
+              onMouseEnter={usesHoverAudio && !isMobile ? playWithHoverAudio : undefined}
+              onMouseLeave={usesHoverAudio && !isMobile ? muteOnLeave : undefined}
               onError={() => {
                 setHasError(true)
                 const video = videoRef.current
