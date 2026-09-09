@@ -35,7 +35,7 @@ export function CADPage() {
       </div>
       <section className="archive-hero page-shell text-reveal" aria-labelledby="cad-title">
         <h1 id="cad-title">CAD</h1>
-        <p className="archive-lede">Models, prototypes, and process images from the design archive</p>
+        <p className="archive-lede">Designed in Fusion 360</p>
       </section>
       <section className="stl-section cad-model-intro page-shell" aria-labelledby="stl-title">
         <Link className="project-card project-card-engineering cad-model-link" to="/cad/tiny-whoop-drone">
