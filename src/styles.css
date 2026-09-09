@@ -102,6 +102,8 @@ p { color: var(--muted); font-size: 1rem; line-height: 1.7; }
 .media-frame-card .media-frame-visual { aspect-ratio: 1.45 / 1; min-height: 0; border-color: transparent; border-radius: 0; }
 .media-frame-detail .media-frame-visual { aspect-ratio: 1.75 / 1; }
 .media-frame-corner { position: absolute; right: 1rem; bottom: 1rem; width: .65rem; height: .65rem; border-right: 1px solid var(--lime); border-bottom: 1px solid var(--lime); }
+.media-mute-toggle { position: absolute; bottom: 1rem; left: 1rem; z-index: 1; min-height: 2.35rem; padding: .55rem .8rem; border: 1px solid rgba(255, 255, 255, .5); border-radius: 999px; color: #fff; background: rgba(9, 12, 11, .68); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); font-size: .62rem; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+.media-mute-toggle:hover { border-color: var(--lime); color: var(--lime); }
 .media-fallback { display: grid; min-height: inherit; place-content: center; justify-items: center; gap: .55rem; padding: 2rem; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .7rem; letter-spacing: .12em; text-align: center; text-transform: uppercase; }
 .media-fallback small { max-width: 24rem; color: var(--quiet); font-family: inherit; font-size: .62rem; letter-spacing: .04em; line-height: 1.5; text-transform: none; }
 .fallback-mark { color: var(--lime); font-size: 1.5rem; font-weight: 300; }

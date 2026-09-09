@@ -42,8 +42,7 @@ export function CGIPage() {
           title={bottleStlAsset.title}
           background
           lineOpacity={0.8}
-          cameraDistance={2.2}
-          edgeThreshold={1}
+          edgeThreshold={16}
           rotationAxis="y"
           rotationDirection={1}
           modelOffsetY={-0.08}

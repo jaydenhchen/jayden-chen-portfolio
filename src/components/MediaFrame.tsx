@@ -7,17 +7,20 @@ type MediaFrameProps = {
   autoplayPreview?: boolean
   hoverAudio?: boolean
   controls?: boolean
+  muteToggle?: boolean
   loading?: 'eager' | 'lazy'
 }
 
-export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false, hoverAudio = false, controls = false, loading = 'lazy' }: MediaFrameProps) {
+export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false, hoverAudio = false, controls = false, muteToggle = false, loading = 'lazy' }: MediaFrameProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [hasError, setHasError] = useState(!asset?.src)
   const [posterFailed, setPosterFailed] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
 
   useEffect(() => {
     setHasError(!asset?.src)
     setPosterFailed(false)
+    setIsMuted(true)
   }, [asset?.src, asset?.poster])
 
   const showPoster = hasError && Boolean(asset?.poster) && !posterFailed
@@ -62,25 +65,44 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
             </div>
           )
         ) : asset.kind === 'video' ? (
-          <video
-            ref={videoRef}
-            src={asset.src}
-            preload={variant === 'card' ? 'none' : 'metadata'}
-            poster={asset.poster}
-            muted={autoplayPreview}
-            playsInline
-            controls={controls}
-            autoPlay={autoplayPreview}
-            loop={autoplayPreview}
-            tabIndex={hoverAudio ? 0 : undefined}
-            data-hover-audio={hoverAudio ? 'true' : undefined}
-            aria-label={asset.alt}
-            onPointerEnter={hoverAudio ? playWithHoverAudio : undefined}
-            onPointerLeave={hoverAudio ? muteOnLeave : undefined}
-            onFocus={hoverAudio ? playWithHoverAudio : undefined}
-            onBlur={hoverAudio ? muteOnLeave : undefined}
-            onError={() => setHasError(true)}
-          />
+          <>
+            <video
+              ref={videoRef}
+              src={asset.src}
+              preload={variant === 'card' ? 'none' : 'metadata'}
+              poster={asset.poster}
+              muted={muteToggle ? isMuted : autoplayPreview}
+              playsInline
+              controls={controls && !muteToggle}
+              autoPlay={autoplayPreview}
+              loop={autoplayPreview}
+              tabIndex={hoverAudio ? 0 : undefined}
+              data-hover-audio={hoverAudio ? 'true' : undefined}
+              aria-label={asset.alt}
+              onPointerEnter={hoverAudio ? playWithHoverAudio : undefined}
+              onPointerLeave={hoverAudio ? muteOnLeave : undefined}
+              onFocus={hoverAudio ? playWithHoverAudio : undefined}
+              onBlur={hoverAudio ? muteOnLeave : undefined}
+              onError={() => setHasError(true)}
+            />
+            {muteToggle && (
+              <button
+                className="media-mute-toggle"
+                type="button"
+                aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+                aria-pressed={!isMuted}
+                onClick={() => {
+                  const video = videoRef.current
+                  if (!video) return
+                  const nextMuted = !video.muted
+                  video.muted = nextMuted
+                  setIsMuted(nextMuted)
+                }}
+              >
+                {isMuted ? 'Unmute' : 'Mute'}
+              </button>
+            )}
+          </>
         ) : (
           <img
             src={asset.src}

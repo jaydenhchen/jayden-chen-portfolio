@@ -62,12 +62,6 @@ export function StlScrollViewer({
     const modelGroup = new THREE.Group()
     scene.add(modelGroup)
 
-    const getRotation = () => {
-      if (!mesh) return 0
-      if (rotationAxis === 'x') return mesh.rotation.x
-      if (rotationAxis === 'y') return mesh.rotation.y
-      return mesh.rotation.z
-    }
     const setRotation = (value: number) => {
       if (!mesh) return
       if (rotationAxis === 'x') mesh.rotation.x = value
@@ -104,15 +98,7 @@ export function StlScrollViewer({
       const elapsed = previousFrameTime === undefined ? 0 : Math.min(timestamp - previousFrameTime, 100)
       previousFrameTime = timestamp
       idleRotation += elapsed * 0.00012 * rotationDirection
-      const desiredRotation = targetRotation + idleRotation
-      const rotationDistance = Math.abs(desiredRotation - getRotation())
-      if (rotationDistance < 0.001) {
-        setRotation(desiredRotation)
-        draw()
-        frame = window.requestAnimationFrame(render)
-        return
-      }
-      setRotation(getRotation() + (desiredRotation - getRotation()) * 0.05)
+      setRotation(targetRotation + idleRotation)
       draw()
       frame = window.requestAnimationFrame(render)
     }
