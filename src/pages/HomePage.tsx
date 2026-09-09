@@ -15,7 +15,7 @@ export function HomePage() {
   return (
     <main id="top" className="home-page">
       <div className="home-background-model" aria-label={`Interactive ${legoStlAsset.title} background model`}>
-        <StlScrollViewer src={legoStlAsset.src} alt={legoStlAsset.alt} title={legoStlAsset.title} background lineOpacity={0.68} edgeThreshold={1} modelOffsetY={0.05} />
+        <StlScrollViewer src={legoStlAsset.src} alt={legoStlAsset.alt} title={legoStlAsset.title} background lineOpacity={0.68} edgeThreshold={1} modelOffsetY={-0.08} />
       </div>
       <section className="hero page-shell" aria-labelledby="hero-title">
         <div className="hero-copy">

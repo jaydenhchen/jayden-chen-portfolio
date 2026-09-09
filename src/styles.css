@@ -38,10 +38,8 @@
   --blue: #27738f;
   --blue-rgb: 39, 115, 143;
 }
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; overflow-x: hidden; background: var(--bg); }
+html { scroll-behavior: smooth; overscroll-behavior-y: none; }
+body { margin: 0; min-width: 320px; overflow-x: hidden; overscroll-behavior-y: none; background: var(--bg); }
 body::before { position: fixed; inset: 0; z-index: -2; pointer-events: none; content: ""; opacity: .22; background-image: linear-gradient(rgba(145, 166, 156, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(145, 166, 156, .07) 1px, transparent 1px); background-size: 5rem 5rem; mask-image: linear-gradient(to bottom, black, transparent 85%); }
 body::after { position: fixed; inset: 0; z-index: 10; pointer-events: none; content: ""; opacity: .035; background: repeating-linear-gradient(0deg, transparent 0, transparent 3px, #fff 4px); mix-blend-mode: screen; }
 button, a { font: inherit; }
@@ -49,9 +47,9 @@ a { color: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--lime); outline-offset: 5px; }
 ::selection { color: var(--bg); background: var(--lime); }
-
-.page-shell { width: min(100% - (var(--gutter) * 2), var(--max-width)); margin-inline: auto; }
 .site-nav { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--line); background: rgba(9, 12, 11, .62); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+.site-nav::before { position: absolute; right: 0; bottom: 100%; left: 0; height: 100vh; pointer-events: none; content: ""; background: var(--bg); }
+.page-shell { width: min(100% - (var(--gutter) * 2), var(--max-width)); margin-inline: auto; }
 :root[data-theme="light"] .site-nav { background: rgba(244, 246, 248, .68); }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; width: min(100% - (var(--gutter) * 2), var(--max-width)); min-height: 5.2rem; margin-inline: auto; }
 .wordmark { display: inline-flex; align-items: center; color: var(--ink); font-size: .76rem; font-weight: 700; letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
