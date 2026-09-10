@@ -1,7 +1,8 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { Link, Route, Routes, useLocation } from 'react-router-dom'
+import { Link, Route, Routes, useLocation, useNavigationType } from 'react-router-dom'
 import { Footer } from './components/Footer'
 import { SiteNav } from './components/SiteNav'
+import { SiteEffectsProvider } from './components/SiteEffects'
 import { CGIPage } from './pages/CGIPage'
 import { CGIVideoPage } from './pages/CGIVideoPage'
 import { CADProjectPage } from './pages/CADProjectPage'
@@ -12,6 +13,7 @@ const LazyCADPage = lazy(() => import('./pages/CADPage').then(({ CADPage }) => (
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
+  const navigationType = useNavigationType()
 
   useEffect(() => {
     if (hash) {
@@ -21,9 +23,10 @@ function ScrollToTop() {
       return () => window.cancelAnimationFrame(frame)
     }
 
+    if (navigationType === 'POP') return
     document.documentElement.scrollTop = 0
     document.body.scrollTop = 0
-  }, [pathname, hash])
+  }, [pathname, hash, navigationType])
 
   return null
 }
@@ -43,22 +46,24 @@ function NotFoundPage() {
 
 export default function App() {
   return (
-    <>
-      <ScrollToTop />
-      <SiteNav />
-      <Suspense fallback={<main className="archive-loading page-shell">Loading archive…</main>}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/cad" element={<LazyCADPage />} />
-          <Route path="/cad/:slug" element={<CADProjectPage />} />
-          <Route path="/cgi" element={<CGIPage />} />
-          <Route path="/cgi/:slug" element={<CGIVideoPage />} />
-          <Route path="/other" element={<OtherProjectsPage />} />
-          <Route path="/work/:slug" element={<ProjectPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Suspense>
-      <Footer />
-    </>
+    <SiteEffectsProvider>
+      <>
+        <ScrollToTop />
+        <SiteNav />
+        <Suspense fallback={<main className="archive-loading page-shell">Loading archive…</main>}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/cad" element={<LazyCADPage />} />
+            <Route path="/cad/:slug" element={<CADProjectPage />} />
+            <Route path="/cgi" element={<CGIPage />} />
+            <Route path="/cgi/:slug" element={<CGIVideoPage />} />
+            <Route path="/other" element={<OtherProjectsPage />} />
+            <Route path="/work/:slug" element={<ProjectPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
+        <Footer />
+      </>
+    </SiteEffectsProvider>
   )
 }
