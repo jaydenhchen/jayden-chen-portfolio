@@ -145,7 +145,11 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
 
   return (
     <figure ref={mediaRef} className={`media-frame media-frame-${variant} asset-rise media-scroll-reveal${isVisible ? ' is-visible' : ''}`}>
-      <div className="media-frame-visual">
+      <div
+        className="media-frame-visual"
+        onMouseEnter={usesHoverAudio && !isMobile ? playWithHoverAudio : undefined}
+        onMouseLeave={usesHoverAudio && !isMobile ? muteOnLeave : undefined}
+      >
         {!asset || hasError ? (
           showPoster && asset ? (
             <img
@@ -176,8 +180,6 @@ export function MediaFrame({ asset, variant = 'detail', autoplayPreview = false,
               loop={autoplayPreview}
               data-hover-audio={usesHoverAudio ? 'true' : undefined}
               aria-label={asset.alt}
-              onMouseEnter={usesHoverAudio && !isMobile ? playWithHoverAudio : undefined}
-              onMouseLeave={usesHoverAudio && !isMobile ? muteOnLeave : undefined}
               onError={() => {
                 setHasError(true)
                 const video = videoRef.current
