@@ -1,21 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { siteProfile } from '../content/site'
+import { useSiteEffects } from './SiteEffects'
 
 const links = [
   { label: 'CAD', to: '/cad' },
   { label: 'CGI', to: '/cgi' },
   { label: 'Other projects', to: '/other' },
 ]
-const isCurrentPath = (pathname: string, destination: string) =>
-  pathname === destination || pathname.startsWith(`${destination}/`)
+const isCurrentPath = (pathname: string, destination: string) => pathname === destination || pathname.startsWith(`${destination}/`)
 
 export function SiteNav() {
   const [isOpen, setIsOpen] = useState(false)
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    if (typeof window === 'undefined') return 'dark'
-    return window.localStorage.getItem('portfolio-theme') === 'light' ? 'light' : 'dark'
-  })
+  const { theme, toggleTheme } = useSiteEffects()
   const [isLogoIntro, setIsLogoIntro] = useState(() => {
     if (typeof window === 'undefined') return false
     try {
@@ -25,11 +22,6 @@ export function SiteNav() {
     }
   })
   const location = useLocation()
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme
-    window.localStorage.setItem('portfolio-theme', theme)
-  }, [theme])
 
   useEffect(() => {
     if (!isLogoIntro) return
@@ -76,22 +68,15 @@ export function SiteNav() {
           <span className="wordmark-name">{siteProfile.name}</span>
         </Link>
 
-        <button
-          className="menu-toggle"
-          type="button"
-          aria-expanded={isOpen}
-          aria-controls="primary-navigation"
-          onClick={() => setIsOpen((open) => !open)}
-        >
+        <button className="menu-toggle" type="button" aria-expanded={isOpen} aria-controls="primary-navigation" onClick={() => setIsOpen((open) => !open)}>
           <span className="menu-toggle-label">Menu</span>
-          <span className="menu-toggle-icon" aria-hidden="true"><i /><i /></span>
+          <span className="menu-toggle-icon" aria-hidden="true">
+            <i />
+            <i />
+          </span>
         </button>
 
-        <nav
-          id="primary-navigation"
-          className={`primary-navigation${isOpen ? ' is-open' : ''}`}
-          aria-label="Primary navigation"
-        >
+        <nav id="primary-navigation" className={`primary-navigation${isOpen ? ' is-open' : ''}`} aria-label="Primary navigation">
           {links.map((link) => (
             <Link
               key={link.to}
@@ -111,7 +96,7 @@ export function SiteNav() {
             type="button"
             aria-pressed={theme === 'light'}
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            onClick={() => setTheme((current) => current === 'dark' ? 'light' : 'dark')}
+            onClick={toggleTheme}
           >
             <span className="theme-toggle-swatch" aria-hidden="true" />
             {theme === 'dark' ? 'Light mode' : 'Dark mode'}

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { MediaFrame } from '../components/MediaFrame'
 import { ProjectCard } from '../components/ProjectCard'
@@ -13,20 +13,27 @@ const landscapeVideos = cgiVideos.filter((video) => video.orientation !== 'portr
 const portraitVideos = cgiVideos.filter((video) => video.orientation === 'portrait').sort(sortByYear)
 
 function VideoGrid({ videos }: { videos: ArchiveVideo[] }) {
+  const location = useLocation()
+
   return (
     <div className="archive-video-grid">
       {videos.map((video) => (
         <Reveal className="project-card-reveal" key={video.src}>
-          <article className={`project-card project-card-cgi archive-video-card${video.orientation === 'portrait' ? ' is-portrait' : ''}${video.thumbnailFit === 'cover' ? ' thumbnail-fit-cover' : ''}`}>
+          <article
+            className={`project-card project-card-cgi archive-video-card archive-video-card-${video.slug}${video.orientation === 'portrait' ? ' is-portrait' : ''}${video.thumbnailFit === 'cover' ? ' thumbnail-fit-cover' : ''}`}
+          >
             <Link
               className="project-card-link archive-video-link"
               to={video.href}
+              state={{ from: `${location.pathname}${location.search}${location.hash}` }}
               aria-label={`View ${video.title} details`}
             >
               <MediaFrame asset={{ src: video.src, alt: video.alt, kind: 'video' }} variant="detail" autoplayPreview hoverAudio />
               <div className="project-card-body archive-card-copy text-reveal">
                 <div className="project-card-meta">
-                  <span className="project-arrow" aria-hidden="true">↗</span>
+                  <span className="project-arrow" aria-hidden="true">
+                    ↗
+                  </span>
                 </div>
                 <h3>{video.title}</h3>
                 <p>{video.year}</p>
@@ -38,7 +45,6 @@ function VideoGrid({ videos }: { videos: ArchiveVideo[] }) {
     </div>
   )
 }
-
 
 export function CGIPage() {
   const [backgroundReady, setBackgroundReady] = useState(false)
@@ -57,27 +63,46 @@ export function CGIPage() {
           rotationDirection={1}
           initialRotationX={-Math.PI / 2}
           initialRotationZ={0}
+          readyDelay={250}
           onReady={() => setBackgroundReady(true)}
         />
       </div>
-      {backgroundReady && <>
-      <section className="archive-hero page-shell text-reveal" aria-labelledby="cgi-title">
-        <h1 id="cgi-title">CGI</h1>
-        <p className="archive-lede">Created with Blender, Premiere Pro, and Nuke</p>
-      </section>
-      <section className="archive-video-group page-shell" aria-labelledby="cgi-landscape-title">
-        <div className="text-reveal"><h2 id="cgi-landscape-title" className="archive-group-title">Horizontal videos</h2></div>
-        <VideoGrid videos={landscapeVideos} />
-      </section>
-      <section className="archive-video-group archive-video-group-portrait page-shell" aria-labelledby="cgi-portrait-title">
-        <div className="text-reveal"><h2 id="cgi-portrait-title" className="archive-group-title">Vertical videos</h2></div>
-        <VideoGrid videos={portraitVideos} />
-      </section>
-      <section className="archive-video-group archive-image-group page-shell" aria-labelledby="cgi-image-title">
-        <div className="text-reveal"><h2 id="cgi-image-title" className="archive-group-title">Rendered images</h2></div>
-        <div className="project-grid">{cgiImageProjects.map((project) => <ProjectCard key={project.slug} project={project} />)}</div>
-      </section>
-      </>}
+      {backgroundReady && (
+        <>
+          <section className="archive-hero page-shell text-reveal" aria-labelledby="cgi-title">
+            <h1 id="cgi-title">CGI</h1>
+            <p className="archive-lede">Created with Blender, Premiere Pro, and Nuke</p>
+          </section>
+          <section className="archive-video-group page-shell" aria-labelledby="cgi-landscape-title">
+            <div className="text-reveal">
+              <h2 id="cgi-landscape-title" className="archive-group-title">
+                Horizontal videos
+              </h2>
+            </div>
+            <VideoGrid videos={landscapeVideos} />
+          </section>
+          <section className="archive-video-group archive-video-group-portrait page-shell" aria-labelledby="cgi-portrait-title">
+            <div className="text-reveal">
+              <h2 id="cgi-portrait-title" className="archive-group-title">
+                Vertical videos
+              </h2>
+            </div>
+            <VideoGrid videos={portraitVideos} />
+          </section>
+          <section className="archive-video-group archive-image-group page-shell" aria-labelledby="cgi-image-title">
+            <div className="text-reveal">
+              <h2 id="cgi-image-title" className="archive-group-title">
+                Rendered images
+              </h2>
+            </div>
+            <div className="project-grid">
+              {cgiImageProjects.map((project) => (
+                <ProjectCard key={project.slug} project={project} />
+              ))}
+            </div>
+          </section>
+        </>
+      )}
     </main>
   )
 }

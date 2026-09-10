@@ -4,6 +4,7 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 
+import { useSiteEffects } from './SiteEffects'
 type StlScrollViewerProps = {
   src: string
   alt: string
@@ -20,6 +21,7 @@ type StlScrollViewerProps = {
   initialRotationZ?: number
   showCaption?: boolean
   onReady?: () => void
+  readyDelay?: number
 }
 
 export function StlScrollViewer({
@@ -38,18 +40,17 @@ export function StlScrollViewer({
   initialRotationZ = 0,
   showCaption = true,
   onReady,
+  readyDelay = 0,
 }: StlScrollViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { speedMultiplier } = useSiteEffects()
+  const speedMultiplierRef = useRef(speedMultiplier)
+  speedMultiplierRef.current = speedMultiplier
   const [hasError, setHasError] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const readyNotifiedRef = useRef(false)
   const onReadyRef = useRef(onReady)
   onReadyRef.current = onReady
-  const handleAnimationEnd = () => {
-    if (readyNotifiedRef.current) return
-    readyNotifiedRef.current = true
-    onReadyRef.current?.()
-  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -81,6 +82,12 @@ export function StlScrollViewer({
     const notifyReady = () => {
       if (!mounted || readyNotifiedRef.current) return
       readyNotifiedRef.current = true
+      if (readyDelay > 0) {
+        window.setTimeout(() => {
+          if (mounted) onReadyRef.current?.()
+        }, readyDelay)
+        return
+      }
       onReadyRef.current?.()
     }
     const scene = new THREE.Scene()
@@ -105,15 +112,13 @@ export function StlScrollViewer({
     }
 
     const draw = () => renderer.render(scene, camera)
-    const getModelColor = () => document.documentElement.dataset.theme === 'light' ? 0x14213d : 0xffffff
+    const getModelColor = () => (document.documentElement.dataset.theme === 'light' ? 0x14213d : 0xffffff)
     const updateModelColor = () => {
       material?.color.set(getModelColor())
       draw()
     }
 
-    const themeObserver = 'MutationObserver' in window
-      ? new MutationObserver(updateModelColor)
-      : undefined
+    const themeObserver = 'MutationObserver' in window ? new MutationObserver(updateModelColor) : undefined
 
     themeObserver?.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
 
@@ -133,7 +138,7 @@ export function StlScrollViewer({
       }
       const elapsed = previousFrameTime === undefined ? 0 : Math.min(timestamp - previousFrameTime, 100)
       previousFrameTime = timestamp
-      idleRotation += elapsed * 0.00012 * rotationDirection
+      idleRotation += elapsed * 0.00012 * rotationDirection * speedMultiplierRef.current
       setRotation(targetRotation + idleRotation)
       draw()
       frame = window.requestAnimationFrame(render)
@@ -144,7 +149,6 @@ export function StlScrollViewer({
       if (!reducedMotion && frame === null) frame = window.requestAnimationFrame(render)
       else draw()
     }
-
 
     const resize = () => {
       const width = canvas.clientWidth || 1
@@ -168,13 +172,17 @@ export function StlScrollViewer({
       startAnimation()
     }
 
-    const visibilityObserver = 'IntersectionObserver' in window
-      ? new IntersectionObserver(([entry]) => {
-          isVisible = entry.isIntersecting
-          if (isVisible) startAnimation()
-          else stopAnimation()
-        }, { threshold: 0.01 })
-      : undefined
+    const visibilityObserver =
+      'IntersectionObserver' in window
+        ? new IntersectionObserver(
+            ([entry]) => {
+              isVisible = entry.isIntersecting
+              if (isVisible) startAnimation()
+              else stopAnimation()
+            },
+            { threshold: 0.01 },
+          )
+        : undefined
 
     if (visibilityObserver) visibilityObserver.observe(canvas)
     else isVisible = true
@@ -192,7 +200,7 @@ export function StlScrollViewer({
       mesh.rotation.z = initialRotationZ
       modelGroup.add(mesh)
       setIsLoaded(true)
-      if (reducedMotion) notifyReady()
+      notifyReady()
       camera.position.set(0, 0, radius * cameraDistance)
       camera.near = Math.max(radius / 100, 0.01)
       camera.far = radius * 20
@@ -282,10 +290,24 @@ export function StlScrollViewer({
       }
       renderer.dispose()
     }
-  }, [src, background, lineOpacity, cameraDistance, edgeThreshold, scrollRotationScale, modelScale, rotationAxis, rotationDirection, modelOffsetY, initialRotationX, initialRotationZ])
+  }, [
+    src,
+    background,
+    lineOpacity,
+    cameraDistance,
+    edgeThreshold,
+    scrollRotationScale,
+    modelScale,
+    rotationAxis,
+    rotationDirection,
+    modelOffsetY,
+    initialRotationX,
+    initialRotationZ,
+    readyDelay,
+  ])
 
   return (
-    <figure className={`stl-viewer${isLoaded ? ' is-loaded' : ''}`} onAnimationEnd={isLoaded ? handleAnimationEnd : undefined}>
+    <figure className={`stl-viewer${isLoaded ? ' is-loaded' : ''}`}>
       <div className="stl-canvas-wrap">
         <canvas ref={canvasRef} role="img" aria-label={alt} />
         {hasError && (
