@@ -100,7 +100,6 @@ export const cgiVideos: ArchiveVideo[] = [
     tools: cgiOnlyTools,
     youtubeUrl: 'https://www.youtube.com/watch?v=LMruuUC5wAw',
   }),
-  createProjectVideo('carbon-fiber-tiny-whoop-product-animation'),
   defineArchiveVideo({
     slug: 'lego-bomb',
     src: `${streamMedia}/bomb-final.mp4`,
@@ -112,6 +111,7 @@ export const cgiVideos: ArchiveVideo[] = [
     tools: cgiOnlyTools,
     youtubeUrl: 'https://www.youtube.com/watch?v=8mdvX56404U',
   }),
+  createProjectVideo('carbon-fiber-tiny-whoop-product-animation'),
   defineArchiveVideo({
     slug: 'shortform',
     src: `${streamMedia}/shortform.mp4`,
