@@ -101,7 +101,7 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.dataset.mediaViewerOpen = String(mediaViewerOpen)
     if (mediaViewerOpen) {
-      document.querySelectorAll<HTMLVideoElement>('video').forEach((video) => {
+      document.querySelectorAll<HTMLVideoElement>('.media-frame video').forEach((video) => {
         video.muted = true
       })
     }

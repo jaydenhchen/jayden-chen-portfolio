@@ -168,7 +168,7 @@ export function MediaFrame({
   useEffect(() => {
     if (!isMediaViewerOpen) return
     const previousMuteStates = new Map<HTMLVideoElement, boolean>()
-    document.querySelectorAll<HTMLVideoElement>('video').forEach((video) => {
+    document.querySelectorAll<HTMLVideoElement>('.media-frame video').forEach((video) => {
       previousMuteStates.set(video, video.muted)
       video.muted = true
     })
@@ -241,6 +241,7 @@ export function MediaFrame({
       <figure
         ref={mediaRef}
         className={`media-frame media-frame-${variant} asset-rise media-scroll-reveal${isVisible ? ' is-visible' : ''}`}
+        onContextMenu={(event) => event.preventDefault()}
         onMouseEnter={usesHoverAudio && !isMobile ? () => setIsHovered(true) : undefined}
         onMouseLeave={
           usesHoverAudio && !isMobile
@@ -254,7 +255,7 @@ export function MediaFrame({
         <div className="media-frame-visual">
           {!asset || hasError ? (
             showPoster && asset ? (
-              <img src={asset.poster} alt={asset.alt} loading={loading} decoding="async" onError={() => setPosterFailed(true)} />
+              <img draggable={false} src={asset.poster} alt={asset.alt} loading={loading} decoding="async" onError={() => setPosterFailed(true)} />
             ) : (
               <div className="media-fallback" role="img" aria-label="Media unavailable">
                 <span className="fallback-mark" aria-hidden="true">
@@ -267,6 +268,7 @@ export function MediaFrame({
           ) : asset.kind === 'video' ? (
             <>
               <video
+                draggable={false}
                 ref={videoRef}
                 src={asset.src}
                 preload={variant === 'card' ? 'none' : 'metadata'}
@@ -276,6 +278,8 @@ export function MediaFrame({
                 }
                 playsInline
                 controls={controls && !muteToggle}
+                controlsList="nodownload"
+                disablePictureInPicture
                 autoPlay={autoplayPreview}
                 loop={autoplayPreview}
                 data-hover-audio={usesHoverAudio ? 'true' : undefined}
@@ -319,10 +323,10 @@ export function MediaFrame({
             </>
           ) : expandMedia ? (
             <button className="media-expand-trigger" type="button" aria-label={`Expand image: ${asset.alt}`} onClick={openExpandedMedia}>
-              <img src={asset.src} alt={asset.alt} loading={loading} decoding="async" onError={() => setHasError(true)} />
+              <img draggable={false} src={asset.src} alt={asset.alt} loading={loading} decoding="async" onError={() => setHasError(true)} />
             </button>
           ) : (
-            <img src={asset.src} alt={asset.alt} loading={loading} decoding="async" onError={() => setHasError(true)} />
+            <img draggable={false} src={asset.src} alt={asset.alt} loading={loading} decoding="async" onError={() => setHasError(true)} />
           )}
         </div>
         {showCaption && asset?.caption && variant !== 'card' && <figcaption>{asset.caption}</figcaption>}
@@ -335,6 +339,7 @@ export function MediaFrame({
             role="dialog"
             aria-modal="true"
             aria-label={`Expanded ${expandedAsset.kind} ${expandedIndex + 1} of ${expandedAssets.length}: ${expandedAsset.alt}`}
+            onContextMenu={(event) => event.preventDefault()}
             onClick={() => setExpandedIndex(null)}
           >
             <button
@@ -375,13 +380,16 @@ export function MediaFrame({
               </>
             )}
             {expandedAsset.kind === 'image' ? (
-              <img src={expandedAsset.src} alt={expandedAsset.alt} onClick={(event) => event.stopPropagation()} />
+              <img draggable={false} src={expandedAsset.src} alt={expandedAsset.alt} onClick={(event) => event.stopPropagation()} />
             ) : (
               <video
-                muted={siteMuted || mediaViewerOpen || isMediaViewerOpen}
+                draggable={false}
+                muted={siteMuted}
                 src={expandedAsset.src}
                 poster={expandedAsset.poster}
                 controls
+                controlsList="nodownload"
+                disablePictureInPicture
                 autoPlay
                 playsInline
                 onClick={(event) => event.stopPropagation()}

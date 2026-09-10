@@ -307,9 +307,9 @@ export function StlScrollViewer({
   ])
 
   return (
-    <figure className={`stl-viewer${isLoaded ? ' is-loaded' : ''}`}>
+    <figure className={`stl-viewer${isLoaded ? ' is-loaded' : ''}`} onContextMenu={(event) => event.preventDefault()}>
       <div className="stl-canvas-wrap">
-        <canvas ref={canvasRef} role="img" aria-label={alt} />
+        <canvas draggable={false} ref={canvasRef} role="img" aria-label={alt} />
         {hasError && (
           <div className="stl-status stl-status-error" aria-live="polite">
             3D preview unavailable
