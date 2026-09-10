@@ -225,7 +225,9 @@ dd { margin: 0; color: var(--ink); font-size: .9rem; line-height: 1.5; }
   0% { opacity: 0; transform: translateY(2.1rem); }
   100% { opacity: 1; transform: none; }
 }
-.asset-rise, .stl-viewer { animation: asset-rise .8s cubic-bezier(.2, .8, .2, 1) both; }
+.asset-rise { animation: asset-rise .8s cubic-bezier(.2, .8, .2, 1) both; }
+.stl-viewer { opacity: 0; transform: translateY(2.1rem); }
+.stl-viewer.is-loaded { animation: asset-rise .8s cubic-bezier(.2, .8, .2, 1) both; opacity: 1; transform: none; }
 @keyframes asset-rise-up {
   0% { transform: translateY(2.1rem); }
   100% { transform: none; }
@@ -434,7 +436,6 @@ body::before, body::after { display: none; }
 .other-background-model .stl-canvas-wrap::after { display: none; }
 .other-background-model .stl-status { display: none; }
 .other-background-model figcaption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.home-background-model .stl-viewer, .cgi-background-model .stl-viewer, .cad-background-model .stl-viewer, .other-background-model .stl-viewer { animation: none; }
 .cad-page .archive-hero { min-height: min(56svh, 42rem); }
 .cad-model-intro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem; min-height: 0; }
 .cad-model-intro .cad-model-link { display: block; width: auto; max-width: none; border-color: var(--line-strong); color: inherit; text-decoration: none; }

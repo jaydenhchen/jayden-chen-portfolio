@@ -19,6 +19,7 @@ type StlScrollViewerProps = {
   initialRotationX?: number
   initialRotationZ?: number
   showCaption?: boolean
+  onReady?: () => void
 }
 
 export function StlScrollViewer({
@@ -36,19 +37,34 @@ export function StlScrollViewer({
   initialRotationX = -Math.PI / 4,
   initialRotationZ = 0,
   showCaption = true,
+  onReady,
 }: StlScrollViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [hasError, setHasError] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const readyNotifiedRef = useRef(false)
+  const onReadyRef = useRef(onReady)
+  onReadyRef.current = onReady
+  const handleAnimationEnd = () => {
+    if (readyNotifiedRef.current) return
+    readyNotifiedRef.current = true
+    onReadyRef.current?.()
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
+    readyNotifiedRef.current = false
+    setIsLoaded(false)
 
     let renderer: THREE.WebGLRenderer
     try {
       renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
     } catch {
       setHasError(true)
+      setIsLoaded(true)
+      readyNotifiedRef.current = true
+      onReadyRef.current?.()
       return
     }
 
@@ -62,6 +78,11 @@ export function StlScrollViewer({
     let isVisible = false
     let mounted = true
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const notifyReady = () => {
+      if (!mounted || readyNotifiedRef.current) return
+      readyNotifiedRef.current = true
+      onReadyRef.current?.()
+    }
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 100)
     const modelGroup = new THREE.Group()
@@ -170,6 +191,8 @@ export function StlScrollViewer({
       mesh.rotation.x = initialRotationX
       mesh.rotation.z = initialRotationZ
       modelGroup.add(mesh)
+      setIsLoaded(true)
+      if (reducedMotion) notifyReady()
       camera.position.set(0, 0, radius * cameraDistance)
       camera.near = Math.max(radius / 100, 0.01)
       camera.far = radius * 20
@@ -178,7 +201,10 @@ export function StlScrollViewer({
       startAnimation()
     }
     const loadError = () => {
-      if (mounted) setHasError(true)
+      if (!mounted) return
+      setHasError(true)
+      setIsLoaded(true)
+      notifyReady()
     }
 
     if (src.toLowerCase().endsWith('.obj')) {
@@ -259,7 +285,7 @@ export function StlScrollViewer({
   }, [src, background, lineOpacity, cameraDistance, edgeThreshold, scrollRotationScale, modelScale, rotationAxis, rotationDirection, modelOffsetY, initialRotationX, initialRotationZ])
 
   return (
-    <figure className="stl-viewer">
+    <figure className={`stl-viewer${isLoaded ? ' is-loaded' : ''}`} onAnimationEnd={isLoaded ? handleAnimationEnd : undefined}>
       <div className="stl-canvas-wrap">
         <canvas ref={canvasRef} role="img" aria-label={alt} />
         {hasError && (
