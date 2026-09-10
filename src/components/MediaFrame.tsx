@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
 import type { MediaAsset } from '../content/projects'
 import { useSiteEffects } from './SiteEffects'
 
@@ -67,11 +67,14 @@ export function MediaFrame({
   const { isMuted: siteMuted, mediaViewerOpen, setMediaViewerOpen } = useSiteEffects()
   const mediaRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const lightboxVideoRef = useRef<HTMLVideoElement>(null)
+  const magnifierVideoRef = useRef<HTMLVideoElement>(null)
   const [hasError, setHasError] = useState(!asset?.src)
   const [posterFailed, setPosterFailed] = useState(false)
   const [isMuted, setIsMuted] = useState(autoplayMuted)
   const [isVisible, setIsVisible] = useState(false)
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
+  const [magnifierPosition, setMagnifierPosition] = useState<{ x: number; y: number } | null>(null)
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 800px)').matches)
   const [isHovered, setIsHovered] = useState(false)
 
@@ -163,7 +166,18 @@ export function MediaFrame({
     if (expandedAssets.length === 0) return
     setExpandedIndex(Math.min(expandIndex, expandedAssets.length - 1))
   }
+  const updateMagnifierPosition = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === 'touch') return
+    const bounds = event.currentTarget.getBoundingClientRect()
+    setMagnifierPosition({
+      x: Math.max(0, Math.min(bounds.width, event.clientX - bounds.left)),
+      y: Math.max(0, Math.min(bounds.height, event.clientY - bounds.top)),
+    })
+  }
   const isMediaViewerOpen = expandedIndex !== null
+  useEffect(() => {
+    setMagnifierPosition(null)
+  }, [expandedIndex])
 
   useEffect(() => {
     if (!isMediaViewerOpen) return
@@ -240,7 +254,7 @@ export function MediaFrame({
     <>
       <figure
         ref={mediaRef}
-        className={`media-frame media-frame-${variant} asset-rise media-scroll-reveal${isVisible ? ' is-visible' : ''}`}
+        className={`media-frame media-frame-${variant}${expandMedia ? ' media-frame-clickable' : ''} asset-rise media-scroll-reveal${isVisible ? ' is-visible' : ''}`}
         onContextMenu={(event) => event.preventDefault()}
         onMouseEnter={usesHoverAudio && !isMobile ? () => setIsHovered(true) : undefined}
         onMouseLeave={
@@ -379,22 +393,73 @@ export function MediaFrame({
                 </button>
               </>
             )}
-            {expandedAsset.kind === 'image' ? (
-              <img draggable={false} src={expandedAsset.src} alt={expandedAsset.alt} onClick={(event) => event.stopPropagation()} />
-            ) : (
-              <video
-                draggable={false}
-                muted={siteMuted}
-                src={expandedAsset.src}
-                poster={expandedAsset.poster}
-                controls
-                controlsList="nodownload"
-                disablePictureInPicture
-                autoPlay
-                playsInline
-                onClick={(event) => event.stopPropagation()}
-              />
-            )}
+            <div
+              className="media-lightbox-media"
+              onPointerMove={updateMagnifierPosition}
+              onPointerLeave={() => setMagnifierPosition(null)}
+              onClick={(event) => event.stopPropagation()}
+              style={
+                magnifierPosition
+                  ? ({
+                      '--magnifier-x': `${magnifierPosition.x}px`,
+                      '--magnifier-y': `${magnifierPosition.y}px`,
+                    } as CSSProperties)
+                  : undefined
+              }
+            >
+              {expandedAsset.kind === 'image' ? (
+                <img draggable={false} src={expandedAsset.src} alt={expandedAsset.alt} />
+              ) : (
+                <video
+                  ref={lightboxVideoRef}
+                  draggable={false}
+                  muted={siteMuted}
+                  src={expandedAsset.src}
+                  poster={expandedAsset.poster}
+                  controls
+                  controlsList="nodownload"
+                  disablePictureInPicture
+                  autoPlay
+                  playsInline
+                  onTimeUpdate={(event) => {
+                    const magnifierVideo = magnifierVideoRef.current
+                    if (!magnifierVideo) return
+                    const currentTime = event.currentTarget.currentTime
+                    if (Math.abs(magnifierVideo.currentTime - currentTime) > 0.05) magnifierVideo.currentTime = currentTime
+                  }}
+                  onPlay={() => {
+                    const magnifierVideo = magnifierVideoRef.current
+                    if (magnifierVideo) void magnifierVideo.play().catch(() => undefined)
+                  }}
+                  onPause={() => magnifierVideoRef.current?.pause()}
+                />
+              )}
+              {magnifierPosition && (
+                <>
+                  <div className="media-lightbox-magnifier-layer" aria-hidden="true">
+                    {expandedAsset.kind === 'image' ? (
+                      <img draggable={false} src={expandedAsset.src} alt="" />
+                    ) : (
+                      <video
+                        ref={magnifierVideoRef}
+                        draggable={false}
+                        muted
+                        src={expandedAsset.src}
+                        poster={expandedAsset.poster}
+                        autoPlay
+                        loop
+                        playsInline
+                        onLoadedMetadata={(event) => {
+                          const sourceVideo = lightboxVideoRef.current
+                          if (sourceVideo) event.currentTarget.currentTime = sourceVideo.currentTime
+                        }}
+                      />
+                    )}
+                  </div>
+                  <span className="media-lightbox-magnifier-ring" aria-hidden="true" />
+                </>
+              )}
+            </div>
           </div>,
           document.body,
         )}
