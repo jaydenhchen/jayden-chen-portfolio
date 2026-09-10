@@ -153,7 +153,7 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (isEditableTarget(event.target)) return
+      if (isEditableTarget(event.target) || event.metaKey || event.ctrlKey || event.altKey) return
       if (event.key === 'm' || event.key === 'M') {
         event.preventDefault()
         toggleMute()
