@@ -4,6 +4,7 @@ import { MediaFrame } from '../components/MediaFrame'
 import { StlScrollViewer } from '../components/StlScrollViewer'
 import { Reveal } from '../components/Reveal'
 import { getCadProjectBySlug } from '../content/archive'
+import { getProjectBackLabel, getProjectBySlug, getProjectPath } from '../content/projects'
 
 function MissingCadProject() {
   return (
@@ -25,10 +26,13 @@ export function CADProjectPage() {
   const project = getCadProjectBySlug(slug)
 
   if (!project) return <MissingCadProject />
-  if (project.href !== `/cad/${project.slug}`) return <Navigate to={project.href} replace />
+  const canonicalProject = getProjectBySlug(project.slug)
+  const canonicalPath = canonicalProject ? getProjectPath(canonicalProject.slug) : project.href
+  if (canonicalPath !== project.href) return <Navigate to={canonicalPath} replace state={location.state} />
 
   const fromPath = typeof location.state?.from === 'string' && location.state.from.startsWith('/') ? location.state.from : undefined
   const backPath = fromPath ?? '/cad'
+  const backLabel = getProjectBackLabel(fromPath, 'Back to CAD')
   const handleBack = fromPath
     ? (event: MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault()
@@ -42,7 +46,7 @@ export function CADProjectPage() {
     <main className={`project-page project-page-engineering project-page-${project.slug} cad-project-detail`}>
       <section className={`project-hero page-shell${isUniformImageProject ? ' project-hero-images' : ''}`} aria-labelledby="cad-project-title">
         <Link className="back-link" to={backPath} onClick={handleBack}>
-          <span aria-hidden="true">←</span> Back to CAD archive
+          <span aria-hidden="true">←</span> {backLabel}
         </Link>
         {isUniformImageProject ? (
           <div className="project-hero-copy text-reveal">

@@ -3,6 +3,7 @@ import { Navigate, Link, useLocation, useNavigate, useParams } from 'react-route
 import { MediaFrame } from '../components/MediaFrame'
 import { Reveal } from '../components/Reveal'
 import { getArchiveVideoBySlug } from '../content/archive'
+import { getProjectBackLabel } from '../content/projects'
 
 function MissingVideo() {
   return (
@@ -28,6 +29,7 @@ export function CGIVideoPage() {
 
   const fromPath = typeof location.state?.from === 'string' && location.state.from.startsWith('/') ? location.state.from : undefined
   const backPath = fromPath ?? '/cgi'
+  const backLabel = getProjectBackLabel(fromPath, 'Back to CGI archive')
   const handleBack = fromPath
     ? (event: MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault()
@@ -42,7 +44,7 @@ export function CGIVideoPage() {
     >
       <section className="project-hero page-shell" aria-labelledby="cgi-video-title">
         <Link className="back-link" to={backPath} onClick={handleBack}>
-          <span aria-hidden="true">←</span> Back to CGI archive
+          <span aria-hidden="true">←</span> {backLabel}
         </Link>
         <div className="project-hero-copy text-reveal">
           <div>

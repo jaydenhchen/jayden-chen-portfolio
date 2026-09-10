@@ -1,4 +1,4 @@
-import { cgiOnlyTools, fusion360Tools, getProjectBySlug, getProjectPath, type MediaAsset, type ThumbnailFit, type VideoOrientation } from './projects'
+import { cgiOnlyTools, fusion360Tools, getProjectBySlug, type MediaAsset, type ThumbnailFit, type VideoOrientation } from './projects'
 
 export type ArchiveVideo = {
   slug: string
