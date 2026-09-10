@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { MediaFrame } from '../components/MediaFrame'
 import { Reveal } from '../components/Reveal'
 import { StlScrollViewer } from '../components/StlScrollViewer'
@@ -28,11 +29,19 @@ function renderCadProjectCard(project: CadProject) {
 const mediaCadProjects = cadProjects.filter((project) => project.media).sort((a, b) => Number(b.year ?? 0) - Number(a.year ?? 0))
 
 export function CADPage() {
+  const [backgroundReady, setBackgroundReady] = useState(false)
   return (
     <main className="archive-page cad-page">
       <div className="cad-background-model" aria-label={`Interactive ${stlAsset.title} background model`}>
-        <StlScrollViewer src={stlAsset.src} alt={stlAsset.alt} background lineOpacity={0.8} />
+        <StlScrollViewer
+          src={stlAsset.src}
+          alt={stlAsset.alt}
+          background
+          lineOpacity={0.8}
+          onReady={() => setBackgroundReady(true)}
+        />
       </div>
+      {backgroundReady && <>
       <section className="archive-hero page-shell text-reveal" aria-labelledby="cad-title">
         <h1 id="cad-title">CAD</h1>
         <p className="archive-lede">Designed in Fusion 360 and SolidWorks</p>
@@ -51,6 +60,7 @@ export function CADPage() {
       <section className="archive-image-grid page-shell" aria-label="CAD project images">
         {mediaCadProjects.map(renderCadProjectCard)}
       </section>
+      </>}
     </main>
   )
 }

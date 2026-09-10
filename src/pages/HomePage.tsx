@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { MediaFrame } from '../components/MediaFrame'
 import { StlScrollViewer } from '../components/StlScrollViewer'
 import { ProjectCard } from '../components/ProjectCard'
@@ -14,11 +15,21 @@ const homeCgiProjects = cgiProjects.filter((project) => !['bottle-animation', 'b
 const featuredProject = cgiProjects[0] ?? projects[0]
 
 export function HomePage() {
+  const [backgroundReady, setBackgroundReady] = useState(false)
   return (
     <main className="home-page">
       <div className="home-background-model" aria-label={`Interactive ${legoStlAsset.title} background model`}>
-        <StlScrollViewer src={legoStlAsset.src} alt={legoStlAsset.alt} background lineOpacity={0.8} edgeThreshold={1} modelOffsetY={-0.08} />
+        <StlScrollViewer
+          src={legoStlAsset.src}
+          alt={legoStlAsset.alt}
+          background
+          lineOpacity={0.8}
+          edgeThreshold={1}
+          modelOffsetY={-0.08}
+          onReady={() => setBackgroundReady(true)}
+        />
       </div>
+      {backgroundReady && <>
       <section className="hero page-shell" aria-labelledby="hero-title">
         <div className="hero-copy text-reveal">
           <h1 id="hero-title">{siteProfile.headline}</h1>
@@ -79,6 +90,7 @@ export function HomePage() {
         </Reveal>
       </section>
 
+      </>}
     </main>
   )
 }

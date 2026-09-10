@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { MediaFrame } from '../components/MediaFrame'
 import { ProjectCard } from '../components/ProjectCard'
 import { Reveal } from '../components/Reveal'
@@ -40,6 +41,7 @@ function VideoGrid({ videos }: { videos: ArchiveVideo[] }) {
 
 
 export function CGIPage() {
+  const [backgroundReady, setBackgroundReady] = useState(false)
   return (
     <main className="archive-page cgi-page">
       <div className="cgi-background-model" aria-label={`Interactive ${bottleModelAsset.title} background model`}>
@@ -55,8 +57,10 @@ export function CGIPage() {
           rotationDirection={1}
           initialRotationX={-Math.PI / 2}
           initialRotationZ={0}
+          onReady={() => setBackgroundReady(true)}
         />
       </div>
+      {backgroundReady && <>
       <section className="archive-hero page-shell text-reveal" aria-labelledby="cgi-title">
         <h1 id="cgi-title">CGI</h1>
         <p className="archive-lede">Created with Blender, Premiere Pro, and Nuke</p>
@@ -73,6 +77,7 @@ export function CGIPage() {
         <div className="text-reveal"><h2 id="cgi-image-title" className="archive-group-title">Rendered images</h2></div>
         <div className="project-grid">{cgiImageProjects.map((project) => <ProjectCard key={project.slug} project={project} />)}</div>
       </section>
+      </>}
     </main>
   )
 }
