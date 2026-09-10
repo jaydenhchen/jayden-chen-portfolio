@@ -435,8 +435,10 @@ p {
 }
 .hero-media-label {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.7rem;
+  justify-content: flex-end;
+  margin-top: 0.7rem;
+  margin-bottom: 0;
+  text-align: right;
 }
 .media-frame {
   margin: 0;
@@ -478,8 +480,23 @@ p {
   place-items: center;
   max-width: calc(100vw - 3rem);
   max-height: calc(100svh - 3rem);
-  overflow: hidden;
+  overflow: visible;
+  border-radius: var(--radius);
   cursor: none;
+}
+.media-lightbox-media-video {
+  cursor: default;
+}
+.media-lightbox-media-sized {
+  width: min(calc(100vw - 3rem), calc((100svh - 3rem) * var(--media-aspect-ratio)));
+  aspect-ratio: var(--media-aspect-ratio);
+}
+.media-lightbox-media-sized > img,
+.media-lightbox-media-sized > video {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
 }
 .media-lightbox-media > img,
 .media-lightbox-media > video {
@@ -489,6 +506,7 @@ p {
   width: auto;
   height: auto;
   object-fit: contain;
+  border-radius: var(--radius);
 }
 .media-lightbox-magnifier-layer {
   position: absolute;
@@ -518,13 +536,12 @@ p {
   z-index: 2;
   width: 10.625rem;
   height: 10.625rem;
-  border: 2px solid var(--accent);
+  border: 1px solid var(--line-strong);
   border-radius: 50%;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.5),
-    0 0.45rem 0.9rem rgba(0, 0, 0, 0.18);
+  background: transparent;
   pointer-events: none;
   transform: translate(-50%, -50%);
+  box-shadow: 0 0.3rem 0.85rem rgba(0, 0, 0, 0.35);
 }
 .media-lightbox-close,
 .media-lightbox-nav {
@@ -1792,8 +1809,8 @@ figcaption,
 }
 
 .archive-video-page .media-frame-detail .media-frame-visual video {
-  object-fit: cover;
-  background: transparent;
+  object-fit: contain;
+  background: #0e0e0e;
 }
 .archive-video-page-portrait .project-hero-media {
   max-width: 34rem;
@@ -1903,6 +1920,29 @@ figcaption,
 }
 .cgi-page .archive-video-card-carbon-fiber-tiny-whoop-product-animation .media-frame-visual video {
   transform: translateY(-5%) scale(1.2);
+}
+.project-page .project-hero-media .media-frame-detail .media-frame-visual video,
+.project-page .project-gallery .media-frame-detail .media-frame-visual video,
+.archive-video-page .project-hero-media .media-frame-detail .media-frame-visual video,
+.archive-video-page .project-gallery .media-frame-detail .media-frame-visual video {
+  object-fit: contain;
+  object-position: center;
+}
+.project-page .project-hero-media .media-frame-detail .media-frame-visual-video,
+.project-page .project-gallery .media-frame-detail .media-frame-visual-video,
+.archive-video-page .project-hero-media .media-frame-detail .media-frame-visual-video,
+.archive-video-page .project-gallery .media-frame-detail .media-frame-visual-video {
+  aspect-ratio: auto;
+  min-height: 0;
+}
+.project-page .project-hero-media .media-frame-detail .media-frame-visual-video > video,
+.project-page .project-gallery .media-frame-detail .media-frame-visual-video > video,
+.archive-video-page .project-hero-media .media-frame-detail .media-frame-visual-video > video,
+.archive-video-page .project-gallery .media-frame-detail .media-frame-visual-video > video {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  background: transparent;
 }
 .project-page .project-hero-media .media-frame-detail .media-expand-trigger,
 .project-page .project-gallery .media-frame-detail .media-expand-trigger {

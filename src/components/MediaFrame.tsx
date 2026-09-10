@@ -10,6 +10,10 @@ type MobileAudioCandidate = {
 
 const mobileAudioCandidates = new Map<HTMLVideoElement, MobileAudioCandidate>()
 let activeMobileAudioVideo: HTMLVideoElement | null = null
+type MagnifierPosition = {
+  x: number
+  y: number
+}
 
 const updateMobileAudio = () => {
   if (document.documentElement.dataset.siteMuted === 'true' || document.documentElement.dataset.mediaViewerOpen === 'true') {
@@ -68,13 +72,15 @@ export function MediaFrame({
   const mediaRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const lightboxVideoRef = useRef<HTMLVideoElement>(null)
-  const magnifierVideoRef = useRef<HTMLVideoElement>(null)
+  const magnifierFrameRef = useRef<number | null>(null)
+  const magnifierTargetRef = useRef<MagnifierPosition | null>(null)
   const [hasError, setHasError] = useState(!asset?.src)
   const [posterFailed, setPosterFailed] = useState(false)
   const [isMuted, setIsMuted] = useState(autoplayMuted)
   const [isVisible, setIsVisible] = useState(false)
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
-  const [magnifierPosition, setMagnifierPosition] = useState<{ x: number; y: number } | null>(null)
+  const [magnifierPosition, setMagnifierPosition] = useState<MagnifierPosition | null>(null)
+  const [lightboxAspectRatio, setLightboxAspectRatio] = useState<number | null>(null)
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 800px)').matches)
   const [isHovered, setIsHovered] = useState(false)
 
@@ -156,6 +162,9 @@ export function MediaFrame({
   }, [asset?.src, isMobile, usesHoverAudio])
   const expandedAssets = expandGallery?.length ? expandGallery : asset ? [asset] : []
   const expandedAsset = expandedAssets[expandedIndex ?? expandIndex]
+  useEffect(() => {
+    setLightboxAspectRatio(null)
+  }, [expandedAsset?.src])
   const navigateExpandedImage = (direction: 1 | -1) => {
     setExpandedIndex((index) => {
       if (index === null || expandedAssets.length < 2) return index
@@ -169,15 +178,28 @@ export function MediaFrame({
   const updateMagnifierPosition = (event: PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === 'touch') return
     const bounds = event.currentTarget.getBoundingClientRect()
-    setMagnifierPosition({
-      x: Math.max(0, Math.min(bounds.width, event.clientX - bounds.left)),
-      y: Math.max(0, Math.min(bounds.height, event.clientY - bounds.top)),
+    magnifierTargetRef.current = {
+      x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
+      y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)),
+    }
+    if (magnifierFrameRef.current !== null) return
+    magnifierFrameRef.current = window.requestAnimationFrame(() => {
+      magnifierFrameRef.current = null
+      if (magnifierTargetRef.current) setMagnifierPosition(magnifierTargetRef.current)
     })
   }
-  const isMediaViewerOpen = expandedIndex !== null
-  useEffect(() => {
+  const clearMagnifierPosition = () => {
+    if (magnifierFrameRef.current !== null) {
+      window.cancelAnimationFrame(magnifierFrameRef.current)
+      magnifierFrameRef.current = null
+    }
+    magnifierTargetRef.current = null
     setMagnifierPosition(null)
-  }, [expandedIndex])
+  }
+  useEffect(() => () => {
+    if (magnifierFrameRef.current !== null) window.cancelAnimationFrame(magnifierFrameRef.current)
+  }, [])
+  const isMediaViewerOpen = expandedIndex !== null
 
   useEffect(() => {
     if (!isMediaViewerOpen) return
@@ -266,7 +288,7 @@ export function MediaFrame({
             : undefined
         }
       >
-        <div className="media-frame-visual">
+        <div className={`media-frame-visual${asset?.kind ? ` media-frame-visual-${asset.kind}` : ''}`}>
           {!asset || hasError ? (
             showPoster && asset ? (
               <img draggable={false} src={asset.poster} alt={asset.alt} loading={loading} decoding="async" onError={() => setPosterFailed(true)} />
@@ -394,21 +416,30 @@ export function MediaFrame({
               </>
             )}
             <div
-              className="media-lightbox-media"
-              onPointerMove={updateMagnifierPosition}
-              onPointerLeave={() => setMagnifierPosition(null)}
+              className={`media-lightbox-media${expandedAsset.kind === 'video' ? ' media-lightbox-media-video' : ''}${lightboxAspectRatio ? ' media-lightbox-media-sized' : ''}`}
+              onPointerMove={expandedAsset.kind === 'image' ? updateMagnifierPosition : undefined}
+              onPointerLeave={expandedAsset.kind === 'image' ? clearMagnifierPosition : undefined}
               onClick={(event) => event.stopPropagation()}
               style={
-                magnifierPosition
+                magnifierPosition || lightboxAspectRatio
                   ? ({
-                      '--magnifier-x': `${magnifierPosition.x}px`,
-                      '--magnifier-y': `${magnifierPosition.y}px`,
+                      '--magnifier-x': magnifierPosition ? `${magnifierPosition.x * 100}%` : undefined,
+                      '--magnifier-y': magnifierPosition ? `${magnifierPosition.y * 100}%` : undefined,
+                      '--media-aspect-ratio': lightboxAspectRatio ?? undefined,
                     } as CSSProperties)
                   : undefined
               }
             >
               {expandedAsset.kind === 'image' ? (
-                <img draggable={false} src={expandedAsset.src} alt={expandedAsset.alt} />
+                <img
+                  draggable={false}
+                  src={expandedAsset.src}
+                  alt={expandedAsset.alt}
+                  onLoad={(event) => {
+                    const { naturalWidth, naturalHeight } = event.currentTarget
+                    if (naturalWidth > 0 && naturalHeight > 0) setLightboxAspectRatio(naturalWidth / naturalHeight)
+                  }}
+                />
               ) : (
                 <video
                   ref={lightboxVideoRef}
@@ -421,40 +452,16 @@ export function MediaFrame({
                   disablePictureInPicture
                   autoPlay
                   playsInline
-                  onTimeUpdate={(event) => {
-                    const magnifierVideo = magnifierVideoRef.current
-                    if (!magnifierVideo) return
-                    const currentTime = event.currentTarget.currentTime
-                    if (Math.abs(magnifierVideo.currentTime - currentTime) > 0.05) magnifierVideo.currentTime = currentTime
+                  onLoadedMetadata={(event) => {
+                    const { videoWidth, videoHeight } = event.currentTarget
+                    if (videoWidth > 0 && videoHeight > 0) setLightboxAspectRatio(videoWidth / videoHeight)
                   }}
-                  onPlay={() => {
-                    const magnifierVideo = magnifierVideoRef.current
-                    if (magnifierVideo) void magnifierVideo.play().catch(() => undefined)
-                  }}
-                  onPause={() => magnifierVideoRef.current?.pause()}
                 />
               )}
-              {magnifierPosition && (
+              {magnifierPosition && expandedAsset.kind === 'image' && (
                 <>
                   <div className="media-lightbox-magnifier-layer" aria-hidden="true">
-                    {expandedAsset.kind === 'image' ? (
-                      <img draggable={false} src={expandedAsset.src} alt="" />
-                    ) : (
-                      <video
-                        ref={magnifierVideoRef}
-                        draggable={false}
-                        muted
-                        src={expandedAsset.src}
-                        poster={expandedAsset.poster}
-                        autoPlay
-                        loop
-                        playsInline
-                        onLoadedMetadata={(event) => {
-                          const sourceVideo = lightboxVideoRef.current
-                          if (sourceVideo) event.currentTarget.currentTime = sourceVideo.currentTime
-                        }}
-                      />
-                    )}
+                    <img draggable={false} src={expandedAsset.src} alt="" />
                   </div>
                   <span className="media-lightbox-magnifier-ring" aria-hidden="true" />
                 </>
