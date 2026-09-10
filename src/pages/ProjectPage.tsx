@@ -1,8 +1,8 @@
 import { type MouseEvent } from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Navigate, Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { MediaFrame } from '../components/MediaFrame'
 import { Reveal } from '../components/Reveal'
-import { getProjectBySlug, type ProjectCategory } from '../content/projects'
+import { getProjectBackLabel, getProjectBySlug, getProjectPath, type ProjectCategory } from '../content/projects'
 
 const uniformImageProjectSlugs = new Set(['clone-trooper-helmet', 'wood-carving-panel'])
 
@@ -32,10 +32,13 @@ export function ProjectPage() {
   const project = getProjectBySlug(slug)
 
   if (!project) return <MissingProject />
+  const canonicalPath = getProjectPath(project.slug)
+  if (canonicalPath !== `/work/${project.slug}`) return <Navigate to={canonicalPath} replace state={location.state} />
 
   const fromPath = typeof location.state?.from === 'string' && location.state.from.startsWith('/') ? location.state.from : undefined
   const backPath = fromPath ?? (project.category === 'engineering' ? '/cad' : project.category === 'cgi' ? '/cgi' : '/other')
-  const backLabel = fromPath?.startsWith('/other') ? 'Back to other projects' : 'Back to work'
+  const fallbackBackLabel = project.category === 'engineering' ? 'Back to CAD' : project.category === 'cgi' ? 'Back to CGI archive' : 'Back to other projects'
+  const backLabel = getProjectBackLabel(fromPath, fallbackBackLabel)
   const handleBack = fromPath
     ? (event: MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault()

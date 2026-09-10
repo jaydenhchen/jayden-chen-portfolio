@@ -56,7 +56,21 @@ const suppliedMedia = `${import.meta.env.BASE_URL}media/stream`
 export const fusion360Tools = ['Fusion 360']
 export const cgiOnlyTools = ['Blender', 'Premiere Pro', 'Nuke', 'Photoshop']
 export const sharedCadCgiTools = [...fusion360Tools, ...cgiOnlyTools]
-export const getProjectPath = (slug: string) => `/work/${slug}`
+export const getProjectPath = (slug: string) => {
+  const project = projects.find((candidate) => candidate.slug === slug)
+  if (!project) return `/work/${slug}`
+  if (project.category === 'engineering') return `/cad/${slug}`
+  if (project.category === 'cgi' && project.thumbnail.kind === 'video') return `/cgi/${slug}`
+  return `/work/${slug}`
+}
+export const getProjectBackLabel = (fromPath: string | undefined, fallback: string) => {
+  if (!fromPath) return fallback
+  if (fromPath === '/' || fromPath.startsWith('/?') || fromPath.startsWith('/#')) return 'Back to work'
+  if (fromPath.startsWith('/cad')) return 'Back to CAD'
+  if (fromPath.startsWith('/cgi')) return 'Back to CGI archive'
+  if (fromPath.startsWith('/other')) return 'Back to other projects'
+  return fallback
+}
 
 export const projects: Project[] = [
   defineProject({

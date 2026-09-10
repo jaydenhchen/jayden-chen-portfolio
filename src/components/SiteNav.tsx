@@ -22,6 +22,10 @@ export function SiteNav() {
     }
   })
   const location = useLocation()
+  const originPath = typeof location.state?.from === 'string' && location.state.from.startsWith('/') ? location.state.from : undefined
+  const homeOrigin = originPath === '/' || originPath?.startsWith('/?') || originPath?.startsWith('/#')
+  const homeIsCurrent = location.pathname === '/' || homeOrigin
+  const navigationPath = homeOrigin ? '/' : originPath ?? location.pathname
 
   useEffect(() => {
     if (!isLogoIntro) return
@@ -60,10 +64,10 @@ export function SiteNav() {
     <header id="top" className="site-nav">
       <div className="nav-inner">
         <Link
-          className={`wordmark${isLogoIntro ? ' logo-intro' : ''}${location.pathname === '/' ? ' is-current' : ''}`}
+          className={`wordmark${isLogoIntro ? ' logo-intro' : ''}${homeIsCurrent ? ' is-current' : ''}`}
           to="/"
           aria-label={`${siteProfile.name} home`}
-          aria-current={location.pathname === '/' ? 'page' : undefined}
+          aria-current={homeIsCurrent ? 'page' : undefined}
         >
           <span className="wordmark-name">{siteProfile.name}</span>
         </Link>
@@ -80,9 +84,9 @@ export function SiteNav() {
           {links.map((link) => (
             <Link
               key={link.to}
-              className={isCurrentPath(location.pathname, link.to) ? 'is-current' : undefined}
+              className={isCurrentPath(navigationPath, link.to) ? 'is-current' : undefined}
               to={link.to}
-              aria-current={isCurrentPath(location.pathname, link.to) ? 'page' : undefined}
+              aria-current={isCurrentPath(navigationPath, link.to) ? 'page' : undefined}
               onClick={() => {
                 setIsOpen(false)
                 if (link.to === '/' && location.pathname === '/') window.scrollTo({ top: 0, behavior: 'auto' })
