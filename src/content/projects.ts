@@ -232,7 +232,7 @@ export const projects: Project[] = [
       { src: `${suppliedMedia}/wood-carving-0292.jpg`, alt: 'Detailed wood carving in progress', kind: 'image' },
       { src: `${suppliedMedia}/wood-carving-0300.jpg`, alt: 'Wood carving with the textured background developed', kind: 'image' },
       { src: `${suppliedMedia}/wood-carving-0303.jpg`, alt: 'Wood carving panel nearing completion', kind: 'image' },
-      { src: `${suppliedMedia}/wood-carving-0832.jpg`, alt: 'Finished wood carving panel with a Clone Trooper helmet', kind: 'image' },
+      { src: `${suppliedMedia}/wood-carving-helmet-final.webp`, alt: 'Finished wood carving panel with a Clone Trooper helmet', kind: 'image' },
     ],
   }),
   defineProject({

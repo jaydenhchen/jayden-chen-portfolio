@@ -54,9 +54,6 @@ export function HomePage() {
               <p className="eyebrow hero-name asset-rise">Jayden Chen</p>
             </div>
             <Reveal className="hero-media-wrap">
-              <div className="hero-media-label">
-                <span>Featured work</span>
-              </div>
               <Link
                 className="featured-work-link"
                 to={getProjectPath(featuredProject.slug)}
@@ -71,6 +68,9 @@ export function HomePage() {
                   loading="eager"
                 />
               </Link>
+              <div className="hero-media-label">
+                <span>Featured work</span>
+              </div>
             </Reveal>
           </section>
 
