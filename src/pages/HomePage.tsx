@@ -5,20 +5,28 @@ import { StlScrollViewer } from '../components/StlScrollViewer'
 import { ProjectCard } from '../components/ProjectCard'
 import { Reveal } from '../components/Reveal'
 import { SectionHeading } from '../components/SectionHeading'
-import { getProjectPath, getProjectsByCategory, projects } from '../content/projects'
-import { legoStlAsset } from '../content/archive'
+import { getProjectPath, getProjectBySlug, getProjectsByCategory, projects } from '../content/projects'
+import { getArchiveVideoBySlug, legoStlAsset } from '../content/archive'
 import { siteProfile } from '../content/site'
 
-const engineeringProjects = getProjectsByCategory('engineering')
+const getRequiredProject = (slug: string) => {
+  const project = getProjectBySlug(slug)
+  if (!project) throw new Error(`Expected homepage project "${slug}"`)
+  return project
+}
+
+const getRequiredArchiveVideo = (slug: string) => {
+  const video = getArchiveVideoBySlug(slug)
+  if (!video) throw new Error(`Expected homepage archive video "${slug}"`)
+  return video
+}
+
 const cgiProjects = getProjectsByCategory('cgi')
-const cancerCartProject = projects.find((project) => project.slug === 'biomedical-cancer-locating-cart')
-const homeEngineeringProjects = engineeringProjects.flatMap((project) => {
-  if (project.slug !== 'bamboo-cast-project') return [project]
-  return cancerCartProject ? [cancerCartProject] : []
-})
-const homeCgiProjects = cgiProjects.filter(
-  (project) => !['bottle-animation', 'biomedical-cancer-locating-cart', 'carbon-fiber-tiny-whoop-product-animation'].includes(project.slug),
-)
+const homeEngineeringProjects = [
+  getRequiredProject('biomedical-cancer-locating-cart'),
+  getRequiredProject('carbon-fiber-tiny-whoop-product-animation'),
+]
+const homeCgiProjects = [getRequiredProject('porche-911-gt3-rs-rendering'), getRequiredArchiveVideo('lego-field-trip')]
 const featuredProject = cgiProjects[0] ?? projects[0]
 
 export function HomePage() {
