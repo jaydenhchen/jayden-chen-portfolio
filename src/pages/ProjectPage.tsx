@@ -4,7 +4,11 @@ import { MediaFrame } from '../components/MediaFrame'
 import { Reveal } from '../components/Reveal'
 import { getProjectBackLabel, getProjectBySlug, getProjectPath, type ProjectCategory } from '../content/projects'
 
-const uniformImageProjectSlugs = new Set(['clone-trooper-helmet', 'wood-carving-panel'])
+const uniformImageProjectSlugs: Record<string, true> = {
+  'clone-trooper-helmet': true,
+  'clone-trooper-helmet-collection': true,
+  'wood-carving-panel': true,
+}
 
 function getCategoryLabel(category: ProjectCategory) {
   if (category === 'cgi') return 'CGI / Animation'
@@ -46,7 +50,7 @@ export function ProjectPage() {
       }
     : undefined
   const categoryLabel = getCategoryLabel(project.category)
-  const isUniformImageProject = uniformImageProjectSlugs.has(project.slug)
+  const isUniformImageProject = uniformImageProjectSlugs[project.slug] === true
   const projectImages = [project.heroMedia, ...project.gallery]
   const heroHasAudio = project.heroMedia.kind === 'video'
 
