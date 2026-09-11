@@ -473,20 +473,6 @@ export function MediaFrame({
                   }}
                 />
               )}
-              {expandedAsset.kind === 'video' && (
-                <label className="media-lightbox-volume" onClick={(event) => event.stopPropagation()}>
-                  <span className="media-lightbox-volume-label">Volume {volume}/10</span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="10"
-                    step="1"
-                    value={volume}
-                    aria-label="Volume"
-                    onChange={(event) => setVolumeLevel(Number(event.currentTarget.value))}
-                  />
-                </label>
-              )}
               {magnifierEnabled && magnifierPosition && expandedAsset.kind === 'image' && (
                 <>
                   <div className="media-lightbox-magnifier-layer" aria-hidden="true">
