@@ -1,14 +1,40 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { siteProfile } from '../content/site'
 import { useSiteEffects } from './SiteEffects'
 
-const marqueeItems = Array.from({ length: 10 }, (_, index) => index)
+const initialMarqueeItemCount = 10
 const copyrightText = `© 2026 ${siteProfile.name}`
 
 function MarqueeTrack({ reverse = false }: { reverse?: boolean }) {
   const trackRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<Animation | null>(null)
   const directionRef = useRef(reverse)
+  const [itemCount, setItemCount] = useState(initialMarqueeItemCount)
+
+  useLayoutEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+
+    const ensureViewportCoverage = () => {
+      const content = track.querySelector<HTMLElement>('.footer-marquee-content')
+      const item = content?.querySelector<HTMLElement>('.footer-marquee-item')
+      if (!content || !item) return
+
+      const gap = Number.parseFloat(window.getComputedStyle(content).columnGap) || 0
+      const contentWidth = content.getBoundingClientRect().width
+      const itemWidth = item.getBoundingClientRect().width
+      if (itemWidth === 0 || contentWidth >= window.innerWidth) return
+
+      const additionalItems = Math.ceil((window.innerWidth - contentWidth) / (itemWidth + gap))
+      if (additionalItems > 0) {
+        setItemCount(content.children.length + additionalItems)
+      }
+    }
+
+    ensureViewportCoverage()
+    window.addEventListener('resize', ensureViewportCoverage)
+    return () => window.removeEventListener('resize', ensureViewportCoverage)
+  }, [])
 
   useEffect(() => {
     const track = trackRef.current
@@ -34,19 +60,17 @@ function MarqueeTrack({ reverse = false }: { reverse?: boolean }) {
     directionRef.current = reverse
   }, [reverse])
 
-  const renderItems = (prefix: string) =>
-    marqueeItems.map((index) => (
-      <span className="footer-marquee-item" key={`${prefix}-${index}`}>
-        {copyrightText}
-      </span>
-    ))
-
   return (
     <div ref={trackRef} className="footer-marquee-track">
-      <div className="footer-marquee-content">{renderItems('first')}</div>
-      <div className="footer-marquee-content" aria-hidden="true">
-        {renderItems('second')}
-      </div>
+      {[0, 1].map((copy) => (
+        <div className="footer-marquee-content" aria-hidden={copy === 1} key={copy}>
+          {Array.from({ length: itemCount }, (_, index) => (
+            <span className="footer-marquee-item" key={`${copy}-${index}`}>
+              {copyrightText}
+            </span>
+          ))}
+        </div>
+      ))}
     </div>
   )
 }
