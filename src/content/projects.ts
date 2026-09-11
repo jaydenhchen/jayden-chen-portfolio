@@ -171,8 +171,44 @@ export const projects: Project[] = [
     gallery: [],
   }),
   defineProject({
+    slug: 'clone-trooper-helmet-collection',
+    title: 'Animated Phase II Clone Helmet',
+    category: 'other',
+    eyebrow: 'Helmet / Fabrication',
+    summary: 'A collection of 3D-printed Clone Trooper helmets taken from raw print to painted finish',
+    year: '2024',
+    tools: ['3D Printing', 'Sanding', 'Spray Paint', 'Painting'],
+    thumbnail: {
+      src: `${suppliedMedia}/clone-helmet-final.webp`,
+      alt: 'Finished blue-striped Clone Trooper helmet',
+      kind: 'image',
+    },
+    heroMedia: {
+      src: `${suppliedMedia}/clone-helmet-collection.webp`,
+      alt: 'Collection of finished Clone Trooper helmets',
+      kind: 'image',
+    },
+    sections: [
+      {
+        heading: 'The collection',
+        body: 'A group of Clone Trooper helmets explores different finishes while keeping the same printed form.',
+      },
+      {
+        heading: 'The process',
+        body: 'Raw prints are sanded, spray painted, masked, and hand painted into finished display pieces.',
+      },
+    ],
+    gallery: [
+      { src: `${suppliedMedia}/clone-helmet-raw-print.webp`, alt: 'Raw 3D-printed Clone Trooper helmet on a post', kind: 'image' },
+      { src: `${suppliedMedia}/clone-helmet-mask-process.webp`, alt: 'Clone Trooper helmet masked during painting', kind: 'image' },
+      { src: `${suppliedMedia}/clone-helmet-tape-process.webp`, alt: 'Clone Trooper helmet covered with masking tape during detail work', kind: 'image' },
+      { src: `${suppliedMedia}/clone-helmet-paint-process.webp`, alt: 'Clone Trooper helmet during blue paint masking', kind: 'image' },
+      { src: `${suppliedMedia}/clone-helmet-final.webp`, alt: 'Finished blue-striped Clone Trooper helmet', kind: 'image' },
+    ],
+  }),
+  defineProject({
     slug: 'clone-trooper-helmet',
-    title: 'Clone Trooper Helmet',
+    title: 'Live Action Phase II Clone Helmet',
     category: 'other',
     eyebrow: 'Helmet / Fabrication',
     summary: 'A 3D-printed Clone Trooper helmet finished by hand through sanding, spray paint, and detail painting',
