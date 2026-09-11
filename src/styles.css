@@ -946,7 +946,21 @@ figcaption {
 .contact-action .empty-note {
   margin-bottom: 0;
 }
-.contact-action.text-reveal .button-primary:hover {
+.reveal.is-visible .contact-action.text-reveal .button-primary,
+.reveal.reduced-motion .contact-action.text-reveal .button-primary {
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+  transition-delay: 0s;
+}
+.contact-action.text-reveal .button-primary:hover,
+.reveal.is-visible .contact-action.text-reveal .button-primary:hover,
+.reveal.reduced-motion .contact-action.text-reveal .button-primary:hover {
+  transition-delay: 0s;
+  transition-duration: 0.25s;
   border-color: var(--line-strong);
   color: var(--lime);
   background: var(--surface-raised);
