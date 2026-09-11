@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 
 type Theme = 'dark' | 'light'
 
@@ -88,6 +88,11 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
     } catch {
       // Local storage is optional; theme changes still apply for this visit.
     }
+  }, [theme])
+  useLayoutEffect(() => {
+    const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]')
+    if (!favicon) return
+    favicon.href = `${import.meta.env.BASE_URL}favicon${theme === 'light' ? '-light' : ''}.svg`
   }, [theme])
 
   useEffect(() => {
