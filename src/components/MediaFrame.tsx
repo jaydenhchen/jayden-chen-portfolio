@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom'
-import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
 import type { MediaAsset } from '../content/projects'
 import { useSiteEffects } from './SiteEffects'
 
@@ -13,6 +13,10 @@ let activeMobileAudioVideo: HTMLVideoElement | null = null
 type MagnifierPosition = {
   x: number
   y: number
+}
+type PointerPosition = {
+  clientX: number
+  clientY: number
 }
 
 const updateMobileAudio = () => {
@@ -72,6 +76,9 @@ export function MediaFrame({
   const mediaRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const lightboxVideoRef = useRef<HTMLVideoElement>(null)
+  const lightboxMediaRef = useRef<HTMLDivElement>(null)
+  const magnifierPointerRef = useRef<PointerPosition | null>(null)
+  const expandedNavigationRequestRef = useRef(0)
   const magnifierFrameRef = useRef<number | null>(null)
   const magnifierTargetRef = useRef<MagnifierPosition | null>(null)
   const [hasError, setHasError] = useState(!asset?.src)
@@ -162,18 +169,86 @@ export function MediaFrame({
   }, [asset?.src, isMobile, usesHoverAudio])
   const expandedAssets = expandGallery?.length ? expandGallery : asset ? [asset] : []
   const expandedAsset = expandedAssets[expandedIndex ?? expandIndex]
-  useEffect(() => {
-    setLightboxAspectRatio(null)
-  }, [expandedAsset?.src])
+  useLayoutEffect(() => {
+    if (!magnifierEnabled || expandedAsset?.kind !== 'image') return
+    const media = lightboxMediaRef.current
+    if (!media) return
+
+    const updateMagnifierToPointer = () => {
+      const pointer = magnifierPointerRef.current
+      if (!pointer) return
+
+      const bounds = media.getBoundingClientRect()
+      if (bounds.width === 0 || bounds.height === 0) return
+
+      const nextPosition = {
+        x: Math.max(0, Math.min(1, (pointer.clientX - bounds.left) / bounds.width)),
+        y: Math.max(0, Math.min(1, (pointer.clientY - bounds.top) / bounds.height)),
+      }
+      setMagnifierPosition((current) => {
+        if (current?.x === nextPosition.x && current?.y === nextPosition.y) return current
+        return nextPosition
+      })
+    }
+
+    updateMagnifierToPointer()
+    const resizeObserver = new ResizeObserver(updateMagnifierToPointer)
+    resizeObserver.observe(media)
+    return () => resizeObserver.disconnect()
+  }, [expandedAsset?.kind, expandedAsset?.src, lightboxAspectRatio, magnifierEnabled])
   useEffect(() => {
     const normalizedVolume = volume / 10
     if (videoRef.current) videoRef.current.volume = normalizedVolume
     if (lightboxVideoRef.current) lightboxVideoRef.current.volume = normalizedVolume
   }, [expandedAsset?.src, volume])
+  const preloadExpandedAsset = (target: MediaAsset) =>
+    new Promise<number | null>((resolve) => {
+      if (target.kind === 'image') {
+        const image = new Image()
+        let settled = false
+        const finish = () => {
+          if (settled) return
+          settled = true
+          resolve(image.naturalWidth > 0 && image.naturalHeight > 0 ? image.naturalWidth / image.naturalHeight : null)
+        }
+        image.onload = finish
+        image.onerror = finish
+        image.src = target.src
+        if (image.complete) finish()
+        return
+      }
+
+      const video = document.createElement('video')
+      let settled = false
+      const finish = () => {
+        if (settled) return
+        settled = true
+        const aspectRatio = video.videoWidth > 0 && video.videoHeight > 0 ? video.videoWidth / video.videoHeight : null
+        video.onloadedmetadata = null
+        video.onerror = null
+        video.removeAttribute('src')
+        video.load()
+        resolve(aspectRatio)
+      }
+      video.preload = 'metadata'
+      video.onloadedmetadata = finish
+      video.onerror = finish
+      video.src = target.src
+      video.load()
+    })
+
   const navigateExpandedImage = (direction: 1 | -1) => {
-    setExpandedIndex((index) => {
-      if (index === null || expandedAssets.length < 2) return index
-      return Math.max(0, Math.min(expandedAssets.length - 1, index + direction))
+    if (expandedIndex === null || expandedAssets.length < 2) return
+    const nextIndex = Math.max(0, Math.min(expandedAssets.length - 1, expandedIndex + direction))
+    if (nextIndex === expandedIndex) return
+
+    const targetAsset = expandedAssets[nextIndex]
+    const requestId = expandedNavigationRequestRef.current + 1
+    expandedNavigationRequestRef.current = requestId
+    void preloadExpandedAsset(targetAsset).then((aspectRatio) => {
+      if (requestId !== expandedNavigationRequestRef.current) return
+      if (aspectRatio !== null) setLightboxAspectRatio(aspectRatio)
+      setExpandedIndex(nextIndex)
     })
   }
   const openExpandedMedia = () => {
@@ -182,6 +257,7 @@ export function MediaFrame({
   }
   const updateMagnifierPosition = (event: PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === 'touch') return
+    magnifierPointerRef.current = { clientX: event.clientX, clientY: event.clientY }
     const bounds = event.currentTarget.getBoundingClientRect()
     magnifierTargetRef.current = {
       x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
@@ -194,6 +270,7 @@ export function MediaFrame({
     })
   }
   const clearMagnifierPosition = () => {
+    magnifierPointerRef.current = null
     if (magnifierFrameRef.current !== null) {
       window.cancelAnimationFrame(magnifierFrameRef.current)
       magnifierFrameRef.current = null
@@ -214,6 +291,14 @@ export function MediaFrame({
     if (magnifierFrameRef.current !== null) window.cancelAnimationFrame(magnifierFrameRef.current)
   }, [])
   const isMediaViewerOpen = expandedIndex !== null
+  useEffect(() => {
+    if (isMediaViewerOpen) return
+    expandedNavigationRequestRef.current += 1
+    magnifierPointerRef.current = null
+    magnifierTargetRef.current = null
+    setMagnifierPosition(null)
+    setLightboxAspectRatio(null)
+  }, [isMediaViewerOpen])
 
   useEffect(() => {
     if (!isMediaViewerOpen) return
@@ -430,9 +515,10 @@ export function MediaFrame({
               </>
             )}
             <div
+              ref={lightboxMediaRef}
               className={`media-lightbox-media${expandedAsset.kind === 'video' ? ' media-lightbox-media-video' : ''}${expandedAsset.kind === 'image' && !magnifierEnabled ? ' media-lightbox-media-no-magnifier' : ''}${lightboxAspectRatio ? ' media-lightbox-media-sized' : ''}`}
-              onPointerMove={expandedAsset.kind === 'image' && magnifierEnabled ? updateMagnifierPosition : undefined}
-              onPointerLeave={expandedAsset.kind === 'image' && magnifierEnabled ? clearMagnifierPosition : undefined}
+              onPointerMove={expandedAsset.kind === 'image' ? updateMagnifierPosition : undefined}
+              onPointerLeave={expandedAsset.kind === 'image' ? clearMagnifierPosition : undefined}
               onClick={(event) => event.stopPropagation()}
               style={
                 magnifierPosition || lightboxAspectRatio
