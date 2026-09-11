@@ -4,11 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0a0d0c" />
+    <script>
+      (() => {
+        let theme = 'dark'
+        try {
+          theme = window.localStorage.getItem('portfolio-theme') === 'light' ? 'light' : 'dark'
+        } catch {}
+        document.documentElement.dataset.theme = theme
+        const favicon = document.createElement('link')
+        favicon.rel = 'icon'
+        favicon.type = 'image/svg+xml'
+        favicon.href = theme === 'light' ? '%BASE_URL%favicon-light.svg' : '%BASE_URL%favicon.svg'
+        document.head.appendChild(favicon)
+      })()
+    </script>
+    <noscript><link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" /></noscript>
     <meta name="description" content="Jayden Chen — mechanical engineering, product design, and animation across CAD, code, and Blender-led motion." />
-    <meta property="og:title" content="Jayden Chen — Engineering × CGI" />
+    <meta property="og:title" content="Jayden Chen's Portfolio" />
     <meta property="og:description" content="Mechanical engineering, product design, and animation across CAD, code, and Blender-led motion." />
     <meta property="og:type" content="website" />
-    <title>Jayden Chen — Engineering × CGI</title>
+    <title>Jayden Chen's Portfolio</title>
   </head>
   <body>
     <div id="root"></div>
