@@ -250,6 +250,37 @@ export const projects: Project[] = [
     ],
   }),
   defineProject({
+    slug: 'doodle-4-google',
+    title: 'Google Hand-Drawn Animation',
+    category: 'other',
+    eyebrow: 'Illustration / Animation',
+    summary: 'A hand-drawn animation built from illustrated plant forms and lettering',
+    year: '2024',
+    tools: ['Procreate', 'Premiere Pro'],
+    thumbnail: {
+      src: `${suppliedMedia}/doodle-4-google.mp4`,
+      alt: 'Google hand-drawn animation with colorful illustrated plant forms',
+      kind: 'video',
+    },
+    heroMedia: {
+      src: `${suppliedMedia}/doodle-4-google.mp4`,
+      alt: 'Google hand-drawn animation',
+      kind: 'video',
+      caption: 'Hand-drawn animation made in Procreate and edited in Premiere Pro.',
+    },
+    sections: [
+      {
+        heading: 'The drawing',
+        body: 'Illustrated plant forms and lettering develop across the frame in a hand-drawn animation.',
+      },
+      {
+        heading: 'The edit',
+        body: 'Procreate drawings are assembled and timed in Premiere Pro.',
+      },
+    ],
+    gallery: [],
+  }),
+  defineProject({
     slug: 'bottle-animation',
     title: 'Bottle Animation',
     category: 'cgi',
