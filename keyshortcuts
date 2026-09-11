@@ -6,6 +6,6 @@ L — Toggle light/dark mode
 S — Reverse the copyright marquee direction
 1 — Lower volume by one level
 2 — Raise volume by one level
-= — Increase idle model speed, up to 4x (3D assets only)
-- — Decrease idle model speed, down to 1/4x (3D assets only)
+= — Increase idle model speed, up to 5x (3D assets only)
+- — Decrease idle model speed, down to 1/5x (3D assets only)
 0 — Reset idle model speed to 1x (3D assets only)
