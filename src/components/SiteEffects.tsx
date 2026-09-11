@@ -4,6 +4,8 @@ type Theme = 'dark' | 'light'
 
 const speedLevels = [0.2, 0.25, 1 / 3, 0.5, 1, 2, 3, 4, 5] as const
 const defaultSpeed = 1
+const maxVolume = 10
+const defaultVolume = maxVolume
 type Feedback = {
   id: number
   text: string
@@ -14,8 +16,14 @@ type SiteEffectsValue = {
   toggleTheme: () => void
   isMuted: boolean
   toggleMute: () => void
+  magnifierEnabled: boolean
+  toggleMagnifier: () => void
   mediaViewerOpen: boolean
   setMediaViewerOpen: (open: boolean) => void
+  volume: number
+  setVolumeLevel: (level: number) => void
+  increaseVolume: () => void
+  decreaseVolume: () => void
   marqueeReversed: boolean
   toggleMarqueeDirection: () => void
   speedMultiplier: number
@@ -29,8 +37,14 @@ const defaultValue: SiteEffectsValue = {
   toggleTheme: () => undefined,
   isMuted: false,
   toggleMute: () => undefined,
+  magnifierEnabled: true,
+  toggleMagnifier: () => undefined,
   mediaViewerOpen: false,
   setMediaViewerOpen: () => undefined,
+  volume: defaultVolume,
+  setVolumeLevel: () => undefined,
+  increaseVolume: () => undefined,
+  decreaseVolume: () => undefined,
   marqueeReversed: false,
   toggleMarqueeDirection: () => undefined,
   speedMultiplier: defaultSpeed,
@@ -60,7 +74,9 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
     return window.localStorage.getItem('portfolio-theme') === 'light' ? 'light' : 'dark'
   })
   const [isMuted, setIsMuted] = useState(false)
+  const [magnifierEnabled, setMagnifierEnabled] = useState(true)
   const [mediaViewerOpen, setMediaViewerOpen] = useState(false)
+  const [volume, setVolume] = useState(defaultVolume)
   const [speedMultiplier, setSpeedMultiplier] = useState(defaultSpeed)
   const [marqueeReversed, setMarqueeReversed] = useState(false)
   const [feedback, setFeedback] = useState<Feedback | null>(null)
@@ -104,6 +120,12 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
     }
   }, [isMuted])
   useEffect(() => {
+    const normalizedVolume = volume / maxVolume
+    document.querySelectorAll<HTMLVideoElement>('video').forEach((video) => {
+      video.volume = normalizedVolume
+    })
+  }, [volume])
+  useEffect(() => {
     document.documentElement.dataset.mediaViewerOpen = String(mediaViewerOpen)
     if (mediaViewerOpen) {
       document.querySelectorAll<HTMLVideoElement>('.media-frame video').forEach((video) => {
@@ -127,6 +149,39 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
       return next
     })
   }, [showFeedback])
+  const toggleMagnifier = useCallback(() => {
+    if (!mediaViewerOpen) return
+    setMagnifierEnabled((current) => {
+      const next = !current
+      showFeedback(next ? 'Magnifier on' : 'Magnifier off')
+      return next
+    })
+  }, [mediaViewerOpen, showFeedback])
+
+  const setVolumeLevel = useCallback(
+    (level: number) => {
+      setVolume((current) => {
+        const next = Math.max(0, Math.min(maxVolume, Math.round(level)))
+        if (next !== current) showFeedback(`Volume ${next}/10`)
+        return next
+      })
+    },
+    [showFeedback],
+  )
+
+  const changeVolume = useCallback(
+    (direction: 1 | -1) => {
+      setVolume((current) => {
+        const next = Math.max(0, Math.min(maxVolume, current + direction))
+        showFeedback(`Volume ${next}/10`)
+        return next
+      })
+    },
+    [showFeedback],
+  )
+
+  const increaseVolume = useCallback(() => changeVolume(1), [changeVolume])
+  const decreaseVolume = useCallback(() => changeVolume(-1), [changeVolume])
 
   const toggleMarqueeDirection = useCallback(() => {
     setMarqueeReversed((current) => {
@@ -162,28 +217,33 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
       if (event.key === 'm' || event.key === 'M') {
         event.preventDefault()
         toggleMute()
+      } else if (event.key === 'g' || event.key === 'G') {
+        event.preventDefault()
+        toggleMagnifier()
       } else if (event.key === 'l' || event.key === 'L') {
         event.preventDefault()
         toggleTheme()
       } else if (event.key === 's' || event.key === 'S') {
         event.preventDefault()
         toggleMarqueeDirection()
-      } else if (event.key === '=') {
+      } else if (event.key === '1') {
         event.preventDefault()
-        increaseSpeed()
-      } else if (event.key === '-' || event.code === 'NumpadSubtract') {
+        decreaseVolume()
+      } else if (event.key === '2') {
         event.preventDefault()
-        decreaseSpeed()
-      } else if (event.key === '0') {
+        increaseVolume()
+      } else if (event.key === '=' || event.key === '-' || event.code === 'NumpadSubtract' || event.key === '0') {
+        if (!document.querySelector('.stl-viewer')) return
         event.preventDefault()
-        resetSpeed()
+        if (event.key === '=') increaseSpeed()
+        else if (event.key === '0') resetSpeed()
+        else decreaseSpeed()
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [decreaseSpeed, increaseSpeed, resetSpeed, toggleMarqueeDirection, toggleMute, toggleTheme])
-
+  }, [decreaseSpeed, decreaseVolume, increaseSpeed, increaseVolume, resetSpeed, toggleMagnifier, toggleMarqueeDirection, toggleMute, toggleTheme])
   return (
     <SiteEffectsContext.Provider
       value={{
@@ -191,8 +251,14 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
         toggleTheme,
         isMuted,
         toggleMute,
+        magnifierEnabled,
+        toggleMagnifier,
         mediaViewerOpen,
         setMediaViewerOpen,
+        volume,
+        setVolumeLevel,
+        increaseVolume,
+        decreaseVolume,
         marqueeReversed,
         toggleMarqueeDirection,
         speedMultiplier,

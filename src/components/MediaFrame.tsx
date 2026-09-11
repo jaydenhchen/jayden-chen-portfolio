@@ -68,7 +68,7 @@ export function MediaFrame({
   showCaption = true,
   loading = 'lazy',
 }: MediaFrameProps) {
-  const { isMuted: siteMuted, mediaViewerOpen, setMediaViewerOpen } = useSiteEffects()
+  const { isMuted: siteMuted, magnifierEnabled, mediaViewerOpen, setMediaViewerOpen, setVolumeLevel, volume } = useSiteEffects()
   const mediaRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const lightboxVideoRef = useRef<HTMLVideoElement>(null)
@@ -165,6 +165,11 @@ export function MediaFrame({
   useEffect(() => {
     setLightboxAspectRatio(null)
   }, [expandedAsset?.src])
+  useEffect(() => {
+    const normalizedVolume = volume / 10
+    if (videoRef.current) videoRef.current.volume = normalizedVolume
+    if (lightboxVideoRef.current) lightboxVideoRef.current.volume = normalizedVolume
+  }, [expandedAsset?.src, volume])
   const navigateExpandedImage = (direction: 1 | -1) => {
     setExpandedIndex((index) => {
       if (index === null || expandedAssets.length < 2) return index
@@ -196,6 +201,15 @@ export function MediaFrame({
     magnifierTargetRef.current = null
     setMagnifierPosition(null)
   }
+  useEffect(() => {
+    if (magnifierEnabled) return
+    if (magnifierFrameRef.current !== null) {
+      window.cancelAnimationFrame(magnifierFrameRef.current)
+      magnifierFrameRef.current = null
+    }
+    magnifierTargetRef.current = null
+    setMagnifierPosition(null)
+  }, [magnifierEnabled])
   useEffect(() => () => {
     if (magnifierFrameRef.current !== null) window.cancelAnimationFrame(magnifierFrameRef.current)
   }, [])
@@ -416,9 +430,9 @@ export function MediaFrame({
               </>
             )}
             <div
-              className={`media-lightbox-media${expandedAsset.kind === 'video' ? ' media-lightbox-media-video' : ''}${lightboxAspectRatio ? ' media-lightbox-media-sized' : ''}`}
-              onPointerMove={expandedAsset.kind === 'image' ? updateMagnifierPosition : undefined}
-              onPointerLeave={expandedAsset.kind === 'image' ? clearMagnifierPosition : undefined}
+              className={`media-lightbox-media${expandedAsset.kind === 'video' ? ' media-lightbox-media-video' : ''}${expandedAsset.kind === 'image' && !magnifierEnabled ? ' media-lightbox-media-no-magnifier' : ''}${lightboxAspectRatio ? ' media-lightbox-media-sized' : ''}`}
+              onPointerMove={expandedAsset.kind === 'image' && magnifierEnabled ? updateMagnifierPosition : undefined}
+              onPointerLeave={expandedAsset.kind === 'image' && magnifierEnabled ? clearMagnifierPosition : undefined}
               onClick={(event) => event.stopPropagation()}
               style={
                 magnifierPosition || lightboxAspectRatio
@@ -452,13 +466,28 @@ export function MediaFrame({
                   disablePictureInPicture
                   autoPlay
                   playsInline
+                  onVolumeChange={(event) => setVolumeLevel(event.currentTarget.volume * 10)}
                   onLoadedMetadata={(event) => {
                     const { videoWidth, videoHeight } = event.currentTarget
                     if (videoWidth > 0 && videoHeight > 0) setLightboxAspectRatio(videoWidth / videoHeight)
                   }}
                 />
               )}
-              {magnifierPosition && expandedAsset.kind === 'image' && (
+              {expandedAsset.kind === 'video' && (
+                <label className="media-lightbox-volume" onClick={(event) => event.stopPropagation()}>
+                  <span className="media-lightbox-volume-label">Volume {volume}/10</span>
+                  <input
+                    type="range"
+                    min="0"
+                    max="10"
+                    step="1"
+                    value={volume}
+                    aria-label="Volume"
+                    onChange={(event) => setVolumeLevel(Number(event.currentTarget.value))}
+                  />
+                </label>
+              )}
+              {magnifierEnabled && magnifierPosition && expandedAsset.kind === 'image' && (
                 <>
                   <div className="media-lightbox-magnifier-layer" aria-hidden="true">
                     <img draggable={false} src={expandedAsset.src} alt="" />
