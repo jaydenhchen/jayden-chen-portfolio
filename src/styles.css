@@ -551,7 +551,7 @@ p {
   cursor: pointer;
 }
 .media-lightbox img {
-  border-radius: 0;
+  border-radius: var(--radius);
 }
 .media-lightbox-close {
   position: absolute;
