@@ -1242,13 +1242,13 @@ dd {
 .footer-marquee-content {
   display: flex;
   flex-shrink: 0;
-  min-width: 100vw;
-  justify-content: space-around;
+  width: max-content;
+  column-gap: 0.5rem;
+  padding-inline-end: 0.5rem;
 }
 .footer-marquee-item {
   display: block;
   flex-shrink: 0;
-  padding: 0.04375rem 0.125rem 0.04375rem 0;
   color: var(--quiet);
   font-family: inherit;
   font-size: 0.68rem;
