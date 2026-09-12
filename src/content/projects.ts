@@ -114,8 +114,8 @@ export const projects: Project[] = [
     year: '2025',
     tools: fusion360Tools,
     thumbnail: {
-      src: `${suppliedMedia}/bamboo-1420.jpg`,
-      alt: 'Finished bamboo vessel project detail',
+      src: `${suppliedMedia}/bamboo-thumbnail.jpg`,
+      alt: 'Finished bamboo vessel cast project',
       kind: 'image',
     },
     heroMedia: {
@@ -137,6 +137,7 @@ export const projects: Project[] = [
     gallery: [
       { src: `${suppliedMedia}/bamboo-1860.jpg`, alt: 'Bamboo vessel project detail', kind: 'image' },
       { src: `${suppliedMedia}/bamboo-1420.jpg`, alt: 'Finished bamboo vessel project detail', kind: 'image' },
+      { src: `${suppliedMedia}/bamboo-user.webp`, alt: 'Finished bamboo vessel cast project', kind: 'image' },
     ],
   }),
   defineProject({
@@ -145,7 +146,7 @@ export const projects: Project[] = [
     category: 'other',
     eyebrow: 'Interface / Design',
     summary: 'A short look at a digital product in motion',
-    year: '2025',
+    year: '2024',
     tools: ['Figma'],
     thumbnail: {
       src: `${suppliedMedia}/figma-showcase.mp4`,
@@ -179,8 +180,8 @@ export const projects: Project[] = [
     year: '2024',
     tools: ['3D Printing', 'Sanding', 'Spray Paint', 'Painting'],
     thumbnail: {
-      src: `${suppliedMedia}/clone-helmet-final.webp`,
-      alt: 'Finished blue-striped Clone Trooper helmet',
+      src: `${suppliedMedia}/animated-phase-ii-thumbnail.jpg`,
+      alt: 'Finished animated Phase II Clone Trooper helmet',
       kind: 'image',
     },
     heroMedia: {
@@ -204,6 +205,7 @@ export const projects: Project[] = [
       { src: `${suppliedMedia}/clone-helmet-tape-process.webp`, alt: 'Clone Trooper helmet covered with masking tape during detail work', kind: 'image' },
       { src: `${suppliedMedia}/clone-helmet-paint-process.webp`, alt: 'Clone Trooper helmet during blue paint masking', kind: 'image' },
       { src: `${suppliedMedia}/clone-helmet-final.webp`, alt: 'Finished blue-striped Clone Trooper helmet', kind: 'image' },
+      { src: `${suppliedMedia}/animated-phase-ii-user.webp`, alt: 'Finished animated Phase II Clone Trooper helmet', kind: 'image' },
     ],
   }),
   defineProject({
@@ -215,13 +217,13 @@ export const projects: Project[] = [
     year: '2023',
     tools: ['3D Printing', 'Sanding', 'Spray Paint', 'Painting'],
     thumbnail: {
-      src: `${suppliedMedia}/clone-trooper-0998.jpg`,
+      src: `${suppliedMedia}/live-action-phase-ii-user.webp`,
       alt: 'Finished weathered Clone Trooper helmet',
       kind: 'image',
     },
     heroMedia: {
-      src: `${suppliedMedia}/clone-trooper-4303.jpg`,
-      alt: 'White Clone Trooper helmet after painting',
+      src: `${suppliedMedia}/live-action-phase-ii-user.webp`,
+      alt: 'Finished weathered Clone Trooper helmet',
       kind: 'image',
     },
     sections: [
@@ -243,7 +245,7 @@ export const projects: Project[] = [
       { src: `${suppliedMedia}/clone-trooper-4444.jpg`, alt: 'Glossy white Clone Trooper helmet with visor', kind: 'image' },
       { src: `${suppliedMedia}/clone-trooper-4449.jpg`, alt: 'Unpainted Clone Trooper helmet on a work surface', kind: 'image' },
       { src: `${suppliedMedia}/clone-trooper-4452.jpg`, alt: 'Gray 3D-printed Clone Trooper helmet', kind: 'image' },
-      { src: `${suppliedMedia}/clone-trooper-0998.jpg`, alt: 'Finished weathered Clone Trooper helmet', kind: 'image' },
+      { src: `${suppliedMedia}/live-action-phase-ii-user.webp`, alt: 'Finished weathered Clone Trooper helmet', kind: 'image' },
     ],
   }),
   defineProject({
@@ -255,7 +257,7 @@ export const projects: Project[] = [
     year: '2026',
     tools: ['Chiseling', 'Milling', 'Finishing'],
     thumbnail: {
-      src: `${suppliedMedia}/wood-carving-0832.jpg`,
+      src: `${suppliedMedia}/wood-carving-panel-thumbnail.webp`,
       alt: 'Finished wood carving panel with a Clone Trooper helmet',
       kind: 'image',
     },
@@ -388,7 +390,7 @@ export const projects: Project[] = [
     category: 'cgi',
     eyebrow: 'Object / 3D image',
     summary: 'A wheeled kiosk brought to life with light, color, and shape',
-    year: '2025',
+    year: '2024',
     tools: sharedCadCgiTools,
     thumbnail: {
       src: `${suppliedMedia}/generic-logo.png`,

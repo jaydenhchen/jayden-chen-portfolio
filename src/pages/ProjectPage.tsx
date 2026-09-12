@@ -9,6 +9,9 @@ const uniformImageProjectSlugs: Record<string, true> = {
   'clone-trooper-helmet-collection': true,
   'wood-carving-panel': true,
 }
+const galleryOnlyProjectSlugs: Record<string, true> = {
+  'clone-trooper-helmet': true,
+}
 
 function getCategoryLabel(category: ProjectCategory) {
   if (category === 'cgi') return 'CGI / Animation'
@@ -51,7 +54,7 @@ export function ProjectPage() {
     : undefined
   const categoryLabel = getCategoryLabel(project.category)
   const isUniformImageProject = uniformImageProjectSlugs[project.slug] === true
-  const projectImages = [project.heroMedia, ...project.gallery]
+  const projectImages = galleryOnlyProjectSlugs[project.slug] === true ? project.gallery : [project.heroMedia, ...project.gallery]
   const heroHasAudio = project.heroMedia.kind === 'video'
 
   return (
