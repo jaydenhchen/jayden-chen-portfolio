@@ -1019,21 +1019,25 @@ figcaption {
   line-height: 0.95;
 }
 .project-page-clone-trooper-helmet .project-hero-images,
+.project-page-clone-trooper-helmet-collection .project-hero-images,
 .project-page-wood-carving-panel .project-hero-images,
 .project-page-bamboo-cast-project .project-hero-images {
   padding-bottom: 0;
 }
 .project-page-clone-trooper-helmet .project-image-gallery,
+.project-page-clone-trooper-helmet-collection .project-image-gallery,
 .project-page-wood-carving-panel .project-image-gallery,
 .project-page-bamboo-cast-project .project-image-gallery {
   padding-top: 0;
 }
 .project-page-clone-trooper-helmet .project-image-gallery .gallery-grid,
+.project-page-clone-trooper-helmet-collection .project-image-gallery .gallery-grid,
 .project-page-wood-carving-panel .project-image-gallery .gallery-grid,
 .project-page-bamboo-cast-project .project-image-gallery .gallery-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .project-page-clone-trooper-helmet .project-image-gallery .media-frame-detail .media-frame-visual,
+.project-page-clone-trooper-helmet-collection .project-image-gallery .media-frame-detail .media-frame-visual,
 .project-page-bamboo-cast-project .project-image-gallery .media-frame-detail .media-frame-visual {
   aspect-ratio: 4 / 3;
 }
@@ -1044,6 +1048,7 @@ figcaption {
   background: var(--bg);
 }
 .project-page-clone-trooper-helmet .project-image-gallery .media-frame-detail .media-frame-visual img,
+.project-page-clone-trooper-helmet-collection .project-image-gallery .media-frame-detail .media-frame-visual img,
 .project-page-bamboo-cast-project .project-image-gallery .media-frame-detail .media-frame-visual img {
   width: 100%;
   height: 100%;
@@ -1067,6 +1072,7 @@ figcaption {
   inset: 0;
 }
 .project-page-clone-trooper-helmet .project-image-gallery .media-scroll-reveal,
+.project-page-clone-trooper-helmet-collection .project-image-gallery .media-scroll-reveal,
 .project-page-wood-carving-panel .project-image-gallery .media-scroll-reveal,
 .project-page-bamboo-cast-project .project-image-gallery .media-scroll-reveal {
   animation: none;
@@ -1541,6 +1547,12 @@ dd {
   .gallery-grid {
     grid-template-columns: 1fr;
   }
+.project-page-clone-trooper-helmet .project-image-gallery .gallery-grid,
+.project-page-clone-trooper-helmet-collection .project-image-gallery .gallery-grid,
+.project-page-wood-carving-panel .project-image-gallery .gallery-grid,
+.project-page-bamboo-cast-project .project-image-gallery .gallery-grid {
+  grid-template-columns: 1fr;
+}
   .project-card-body p {
     min-height: 0;
   }
