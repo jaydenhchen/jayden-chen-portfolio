@@ -41,7 +41,7 @@ const defaultValue: SiteEffectsValue = {
   toggleMute: () => undefined,
   magnifierEnabled: true,
   toggleMagnifier: () => undefined,
-  liquidGlassEnabled: true,
+  liquidGlassEnabled: false,
   toggleLiquidGlass: () => undefined,
   mediaViewerOpen: false,
   setMediaViewerOpen: () => undefined,
@@ -79,7 +79,7 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
   })
   const [isMuted, setIsMuted] = useState(false)
   const [magnifierEnabled, setMagnifierEnabled] = useState(true)
-  const [liquidGlassEnabled, setLiquidGlassEnabled] = useState(true)
+  const [liquidGlassEnabled, setLiquidGlassEnabled] = useState(false)
   const [mediaViewerOpen, setMediaViewerOpen] = useState(false)
   const [volume, setVolume] = useState(defaultVolume)
   const [speedMultiplier, setSpeedMultiplier] = useState(defaultSpeed)
