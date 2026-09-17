@@ -18,6 +18,8 @@ type SiteEffectsValue = {
   toggleMute: () => void
   magnifierEnabled: boolean
   toggleMagnifier: () => void
+  liquidGlassEnabled: boolean
+  toggleLiquidGlass: () => void
   mediaViewerOpen: boolean
   setMediaViewerOpen: (open: boolean) => void
   volume: number
@@ -39,6 +41,8 @@ const defaultValue: SiteEffectsValue = {
   toggleMute: () => undefined,
   magnifierEnabled: true,
   toggleMagnifier: () => undefined,
+  liquidGlassEnabled: true,
+  toggleLiquidGlass: () => undefined,
   mediaViewerOpen: false,
   setMediaViewerOpen: () => undefined,
   volume: defaultVolume,
@@ -75,6 +79,7 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
   })
   const [isMuted, setIsMuted] = useState(false)
   const [magnifierEnabled, setMagnifierEnabled] = useState(true)
+  const [liquidGlassEnabled, setLiquidGlassEnabled] = useState(true)
   const [mediaViewerOpen, setMediaViewerOpen] = useState(false)
   const [volume, setVolume] = useState(defaultVolume)
   const [speedMultiplier, setSpeedMultiplier] = useState(defaultSpeed)
@@ -157,6 +162,14 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
       return next
     })
   }, [mediaViewerOpen, showFeedback])
+  const toggleLiquidGlass = useCallback(() => {
+    if (!mediaViewerOpen) return
+    setLiquidGlassEnabled((current) => {
+      const next = !current
+      showFeedback(next ? 'Liquid glass on' : 'Liquid glass off')
+      return next
+    })
+  }, [mediaViewerOpen, showFeedback])
 
   const setVolumeLevel = useCallback(
     (level: number) => {
@@ -220,6 +233,9 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
       } else if (event.key === 'g' || event.key === 'G') {
         event.preventDefault()
         toggleMagnifier()
+      } else if (event.key === 't' || event.key === 'T') {
+        event.preventDefault()
+        toggleLiquidGlass()
       } else if (event.key === 'l' || event.key === 'L') {
         event.preventDefault()
         toggleTheme()
@@ -243,7 +259,7 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [decreaseSpeed, decreaseVolume, increaseSpeed, increaseVolume, resetSpeed, toggleMagnifier, toggleMarqueeDirection, toggleMute, toggleTheme])
+  }, [decreaseSpeed, decreaseVolume, increaseSpeed, increaseVolume, resetSpeed, toggleLiquidGlass, toggleMagnifier, toggleMarqueeDirection, toggleMute, toggleTheme])
   return (
     <SiteEffectsContext.Provider
       value={{
@@ -253,6 +269,8 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
         toggleMute,
         magnifierEnabled,
         toggleMagnifier,
+        liquidGlassEnabled,
+        toggleLiquidGlass,
         mediaViewerOpen,
         setMediaViewerOpen,
         volume,
