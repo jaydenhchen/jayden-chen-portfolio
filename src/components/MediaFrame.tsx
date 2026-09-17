@@ -1,4 +1,5 @@
 import { createPortal } from 'react-dom'
+import { LiquidGlass } from 'quick-liquid/react'
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
 import type { MediaAsset } from '../content/projects'
 import { useSiteEffects } from './SiteEffects'
@@ -17,6 +18,23 @@ type MagnifierPosition = {
 type PointerPosition = {
   clientX: number
   clientY: number
+}
+const magnifierGlassConfig = {
+  borderRadius: 999,
+  blur: 0,
+  refractionStrength: 32,
+  chromaticAberration: 0.34,
+  thickness: 30,
+  bezelWidth: 72,
+  ior: 1.52,
+  tintOpacity: 0,
+  specularStrength: 0.18,
+  edgeHighlight: 0.38,
+  fresnelPower: 2.1,
+  elevation: 0,
+  appearance: 'light' as const,
+  quality: 'high' as const,
+  refractionMode: 'auto' as const,
 }
 
 const updateMobileAudio = () => {
@@ -72,7 +90,7 @@ export function MediaFrame({
   showCaption = true,
   loading = 'lazy',
 }: MediaFrameProps) {
-  const { isMuted: siteMuted, magnifierEnabled, mediaViewerOpen, setMediaViewerOpen, setVolumeLevel, volume } = useSiteEffects()
+  const { isMuted: siteMuted, liquidGlassEnabled, magnifierEnabled, mediaViewerOpen, setMediaViewerOpen, setVolumeLevel, volume } = useSiteEffects()
   const mediaRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const lightboxVideoRef = useRef<HTMLVideoElement>(null)
@@ -564,7 +582,11 @@ export function MediaFrame({
                   <div className="media-lightbox-magnifier-layer" aria-hidden="true">
                     <img draggable={false} src={expandedAsset.src} alt="" />
                   </div>
-                  <span className="media-lightbox-magnifier-ring" aria-hidden="true" />
+                  {liquidGlassEnabled ? (
+                    <LiquidGlass className="media-lightbox-magnifier-glass" config={magnifierGlassConfig} aria-hidden="true" />
+                  ) : (
+                    <span className="media-lightbox-magnifier-ring" aria-hidden="true" />
+                  )}
                 </>
               )}
             </div>

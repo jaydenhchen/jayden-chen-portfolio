@@ -532,6 +532,25 @@ p {
   transform: scale(1.75);
   transform-origin: var(--magnifier-x) var(--magnifier-y);
 }
+.media-lightbox-magnifier-glass {
+  position: absolute;
+  top: var(--magnifier-y);
+  left: var(--magnifier-x);
+  z-index: 2;
+  width: 10.625rem;
+  height: 10.625rem;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.018);
+  box-shadow: 0.45rem 0.55rem 1rem rgba(0, 0, 0, 0.44) !important;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .media-lightbox-magnifier-glass {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
 .media-lightbox-magnifier-ring {
   position: absolute;
   top: var(--magnifier-y);
@@ -544,7 +563,7 @@ p {
   background: transparent;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0.3rem 0.85rem rgba(0, 0, 0, 0.35);
+  box-shadow: 0.45rem 0.55rem 1rem rgba(0, 0, 0, 0.44);
 }
 .media-lightbox-close,
 .media-lightbox-nav {
