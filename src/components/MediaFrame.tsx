@@ -367,8 +367,23 @@ export function MediaFrame({
     document.querySelectorAll<HTMLVideoElement>('[data-hover-audio="true"]').forEach((otherVideo) => {
       if (otherVideo !== video) otherVideo.muted = true
     })
-    video.muted = false
+
+    video.muted = true
     await video.play().catch(() => undefined)
+    if (video.paused || siteMuted || mediaViewerOpen) return
+
+    video.muted = false
+    try {
+      await video.play()
+    } catch {
+      video.muted = true
+      await video.play().catch(() => undefined)
+    }
+
+    if (video.paused) {
+      video.muted = true
+      await video.play().catch(() => undefined)
+    }
   }
   useEffect(() => {
     if (siteMuted || mediaViewerOpen || !isHovered || !usesHoverAudio) return
@@ -452,6 +467,10 @@ export function MediaFrame({
                 }
                 onCanPlay={() => {
                   if (!autoplayPreview) return
+                  if (isHovered && usesHoverAudio) {
+                    void playWithHoverAudio()
+                    return
+                  }
                   videoRef.current?.play().catch(() => undefined)
                 }}
                 onError={() => {

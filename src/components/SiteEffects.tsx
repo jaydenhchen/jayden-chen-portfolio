@@ -104,6 +104,7 @@ export function SiteEffectsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
+    document.documentElement.style.setProperty('--initial-page-background', theme === 'light' ? '#f4f6f8' : '#101010')
     try {
       window.localStorage.setItem('portfolio-theme', theme)
     } catch {

@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      html {
+        background: var(--initial-page-background, #101010);
+      }
+    </style>
     <meta name="theme-color" content="#0a0d0c" />
     <script>
       (() => {
@@ -10,6 +15,7 @@
         try {
           theme = window.localStorage.getItem('portfolio-theme') === 'light' ? 'light' : 'dark'
         } catch {}
+        document.documentElement.style.setProperty('--initial-page-background', theme === 'light' ? '#f4f6f8' : '#101010')
         document.documentElement.dataset.theme = theme
         const favicon = document.createElement('link')
         favicon.rel = 'icon'
