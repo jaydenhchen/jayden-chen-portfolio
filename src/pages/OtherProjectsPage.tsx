@@ -7,20 +7,34 @@ import { otherStlAsset } from '../content/archive'
 const otherProjects = getProjectsByCategory('other')
 
 export function OtherProjectsPage() {
-  const [backgroundReady, setBackgroundReady] = useState(false)
+  const [firstBackgroundReady, setFirstBackgroundReady] = useState(false)
+  const [secondBackgroundReady, setSecondBackgroundReady] = useState(false)
+  const backgroundReady = firstBackgroundReady && secondBackgroundReady
   return (
     <main className="archive-page other-page">
-      <div className="other-background-model" aria-label={`Interactive ${otherStlAsset.title} background model`}>
-        <StlScrollViewer
-          src={otherStlAsset.src}
-          alt={otherStlAsset.alt}
-          background
-          lineOpacity={0.8}
-          cameraDistance={3.2}
-          rotationDirection={1}
-          readyDelay={250}
-          onReady={() => setBackgroundReady(true)}
-        />
+      <div className="other-background-model" aria-label={`Interactive ${otherStlAsset.title} background models`}>
+        <div className="other-background-model-pair">
+          <StlScrollViewer
+            src={otherStlAsset.src}
+            alt={`${otherStlAsset.alt} clockwise`}
+            background
+            lineOpacity={0.8}
+            cameraDistance={3.2}
+            rotationDirection={1}
+            readyDelay={250}
+            onReady={() => setFirstBackgroundReady(true)}
+          />
+          <StlScrollViewer
+            src={otherStlAsset.src}
+            alt={`${otherStlAsset.alt} counterclockwise`}
+            background
+            lineOpacity={0.8}
+            cameraDistance={3.2}
+            rotationDirection={-1}
+            readyDelay={250}
+            onReady={() => setSecondBackgroundReady(true)}
+          />
+        </div>
       </div>
       {backgroundReady && (
         <>

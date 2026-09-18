@@ -24,6 +24,107 @@ type StlScrollViewerProps = {
   readyDelay?: number
 }
 
+type PreparedOutline = {
+  geometry: THREE.BufferGeometry
+  radius: number
+}
+
+type OutlineCacheEntry = {
+  promise: Promise<PreparedOutline>
+  refCount: number
+}
+
+const outlineCache = new Map<string, OutlineCacheEntry>()
+
+function createOutline(src: string, edgeThreshold: number) {
+  return new Promise<PreparedOutline>((resolve, reject) => {
+    if (src.toLowerCase().endsWith('.obj')) {
+      new OBJLoader().load(
+        src,
+        (object) => {
+          object.updateMatrixWorld(true)
+          const outlineGeometries: THREE.BufferGeometry[] = []
+          object.traverse((child) => {
+            if (!(child instanceof THREE.Mesh)) return
+            const sourceGeometry = child.geometry.clone()
+            sourceGeometry.applyMatrix4(child.matrixWorld)
+            outlineGeometries.push(new THREE.EdgesGeometry(sourceGeometry, edgeThreshold))
+            sourceGeometry.dispose()
+          })
+          const outlineGeometry = outlineGeometries.length > 0 ? mergeGeometries(outlineGeometries) : null
+          outlineGeometries.forEach((geometry) => geometry.dispose())
+          object.traverse((child) => {
+            if (!(child instanceof THREE.Mesh)) return
+            child.geometry.dispose()
+            const childMaterial = child.material
+            if (Array.isArray(childMaterial)) childMaterial.forEach((item) => item.dispose())
+            else childMaterial.dispose()
+          })
+          if (!outlineGeometry) {
+            reject(new Error(`No mesh geometry found in ${src}`))
+            return
+          }
+          outlineGeometry.computeBoundingBox()
+          const center = outlineGeometry.boundingBox?.getCenter(new THREE.Vector3()) || new THREE.Vector3()
+          outlineGeometry.translate(-center.x, -center.y, -center.z)
+          outlineGeometry.computeBoundingSphere()
+          resolve({ geometry: outlineGeometry, radius: outlineGeometry.boundingSphere?.radius || 1 })
+        },
+        undefined,
+        () => reject(new Error(`Unable to load ${src}`)),
+      )
+      return
+    }
+
+    new STLLoader().load(
+      src,
+      (geometry) => {
+        geometry.center()
+        geometry.computeBoundingSphere()
+        const radius = geometry.boundingSphere?.radius || 1
+        const outlineGeometry = new THREE.EdgesGeometry(geometry, edgeThreshold)
+        geometry.dispose()
+        resolve({ geometry: outlineGeometry, radius })
+      },
+      undefined,
+      () => reject(new Error(`Unable to load ${src}`)),
+    )
+  })
+}
+
+function acquireOutline(src: string, edgeThreshold: number) {
+  const key = `${src}\u0000${edgeThreshold}`
+  let entry = outlineCache.get(key)
+  if (!entry) {
+    entry = { promise: createOutline(src, edgeThreshold), refCount: 0 }
+    outlineCache.set(key, entry)
+    entry.promise.catch(() => {
+      if (outlineCache.get(key) === entry) outlineCache.delete(key)
+    })
+  }
+  entry.refCount += 1
+  let released = false
+  return {
+    promise: entry.promise,
+    release: () => {
+      if (released) return
+      released = true
+      entry!.refCount -= 1
+      if (entry!.refCount > 0) return
+      entry!.promise.then(
+        ({ geometry }) => {
+          if (entry!.refCount === 0 && outlineCache.get(key) === entry) {
+            geometry.dispose()
+            outlineCache.delete(key)
+          }
+        },
+        () => {
+          if (outlineCache.get(key) === entry) outlineCache.delete(key)
+        },
+      )
+    },
+  }
+}
 export function StlScrollViewer({
   src,
   alt,
@@ -72,6 +173,7 @@ export function StlScrollViewer({
     let frame: number | null = null
     let mesh: THREE.LineSegments | undefined
     let material: THREE.LineBasicMaterial | undefined
+    let releaseSharedOutline: (() => void) | undefined
     let modelRadius = 1
     let targetRotation = 0
     let idleRotation = 0
@@ -189,7 +291,8 @@ export function StlScrollViewer({
 
     const addOutline = (outlineGeometry: THREE.BufferGeometry, radius: number) => {
       if (!mounted) {
-        outlineGeometry.dispose()
+        releaseSharedOutline?.()
+        if (!releaseSharedOutline) outlineGeometry.dispose()
         return
       }
       modelRadius = radius
@@ -215,66 +318,16 @@ export function StlScrollViewer({
       notifyReady()
     }
 
-    if (src.toLowerCase().endsWith('.obj')) {
-      new OBJLoader().load(
-        src,
-        (object) => {
-          if (!mounted) return
-          object.updateMatrixWorld(true)
-          const outlineGeometries: THREE.BufferGeometry[] = []
-          object.traverse((child) => {
-            if (!(child instanceof THREE.Mesh)) return
-            const sourceGeometry = child.geometry.clone()
-            sourceGeometry.applyMatrix4(child.matrixWorld)
-            outlineGeometries.push(new THREE.EdgesGeometry(sourceGeometry, edgeThreshold))
-            sourceGeometry.dispose()
-          })
-          const outlineGeometry = outlineGeometries.length > 0 ? mergeGeometries(outlineGeometries) : null
-          outlineGeometries.forEach((geometry) => geometry.dispose())
-          object.traverse((child) => {
-            if (!(child instanceof THREE.Mesh)) return
-            child.geometry.dispose()
-            const childMaterial = child.material
-            if (Array.isArray(childMaterial)) childMaterial.forEach((item) => item.dispose())
-            else childMaterial.dispose()
-          })
-          if (!outlineGeometry) {
-            loadError()
-            return
-          }
-          outlineGeometry.computeBoundingBox()
-          const center = outlineGeometry.boundingBox?.getCenter(new THREE.Vector3()) || new THREE.Vector3()
-          outlineGeometry.translate(-center.x, -center.y, -center.z)
-          outlineGeometry.computeBoundingSphere()
-          addOutline(outlineGeometry, outlineGeometry.boundingSphere?.radius || 1)
-        },
-        undefined,
-        loadError,
-      )
-    } else {
-      new STLLoader().load(
-        src,
-        (geometry) => {
-          if (!mounted) {
-            geometry.dispose()
-            return
-          }
-          geometry.center()
-          geometry.computeBoundingSphere()
-          const radius = geometry.boundingSphere?.radius || 1
-          const outlineGeometry = new THREE.EdgesGeometry(geometry, edgeThreshold)
-          geometry.dispose()
-          addOutline(outlineGeometry, radius)
-        },
-        undefined,
-        loadError,
-      )
-    }
+    const sharedOutline = acquireOutline(src, edgeThreshold)
+    releaseSharedOutline = sharedOutline.release
+    sharedOutline.promise.then(
+      ({ geometry, radius }) => addOutline(geometry, radius),
+      loadError,
+    )
 
     resize()
     window.addEventListener('resize', resize)
     window.addEventListener('scroll', updateScrollTarget, { passive: true })
-
     return () => {
       mounted = false
       stopAnimation()
@@ -282,8 +335,9 @@ export function StlScrollViewer({
       themeObserver?.disconnect()
       window.removeEventListener('resize', resize)
       window.removeEventListener('scroll', updateScrollTarget)
+      if (releaseSharedOutline) releaseSharedOutline()
+      else if (mesh) mesh.geometry.dispose()
       if (mesh) {
-        mesh.geometry.dispose()
         const material = mesh.material
         if (Array.isArray(material)) material.forEach((item) => item.dispose())
         else material.dispose()
