@@ -424,7 +424,7 @@ export function MediaFrame({
                 draggable={false}
                 ref={videoRef}
                 src={asset.src}
-                preload={variant === 'card' ? 'none' : 'metadata'}
+                preload={variant === 'hero' ? 'auto' : variant === 'card' ? 'none' : 'metadata'}
                 poster={asset.poster}
                 muted={
                   siteMuted || mediaViewerOpen || isMediaViewerOpen || (muteToggle ? isMuted : Boolean((autoplayPreview && autoplayMuted) || usesHoverAudio))
@@ -450,6 +450,10 @@ export function MediaFrame({
                       }
                     : undefined
                 }
+                onCanPlay={() => {
+                  if (!autoplayPreview) return
+                  videoRef.current?.play().catch(() => undefined)
+                }}
                 onError={() => {
                   setHasError(true)
                   const video = videoRef.current
