@@ -432,12 +432,9 @@ p {
   display: block;
   color: inherit;
   text-decoration: none;
-  transition:
-    transform 0.25s ease,
-    background 0.25s ease;
+  transition: transform 0.25s ease;
 }
 .featured-work-link:hover {
-  background: var(--surface-raised);
   transform: translateY(-4px);
 }
 .featured-work-link .media-frame-visual {
